@@ -1,0 +1,21 @@
+.container {
+    width: 30%;
+    margin: 100px auto;
+}
+
+.headTitleContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.headTitle {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}

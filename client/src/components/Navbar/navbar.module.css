@@ -1,0 +1,48 @@
+.container {
+    height: 70px;
+    background-color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: white;
+    background-color: red;
+    margin-left: 20px;
+}
+
+.searchBox {
+    color: white;
+}
+
+.searchBoxInput {
+    border-radius: 20px;
+    text-align: center;
+    height: 35px;
+    width: 400px;
+    border: none;
+    outline: none;
+}
+
+.searchButton {
+    padding: 7px 10px;
+    margin-left: 10px;
+    border-radius: 10px;
+    background-color: rgb(241, 248, 23);
+    color:black;
+    font-weight: bold;
+    transition: 0.3s;
+
+}
+
+.searchButton:hover {
+    background-color: black;
+    color: white;
+}
+
+.menu {
+    color: white;
+    background-color: green;
+    margin-right: 20px;
+}

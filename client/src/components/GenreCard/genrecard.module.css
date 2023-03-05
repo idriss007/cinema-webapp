@@ -1,0 +1,14 @@
+.container {
+    margin-right: 10px;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 5px 13px;
+    color: black;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+
+.container:hover {
+    background-color: lightgray;
+}
