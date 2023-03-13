@@ -1,5 +1,5 @@
 const User = require("../../models/user");
-// const passport = require("passport");
+const passport = require("passport");
 
 const Register = async (req, res, next) => {
     const input = req.body;
@@ -7,25 +7,26 @@ const Register = async (req, res, next) => {
     
     if(isExist) {console.log("Email already exists. Please sign up with a different email."); return;}
 
-    try {
-        const user =  await User.create(input);
-        console.log(user);
-        res.send(user);
-    } catch (err) {console.log(err.message);}
+    // try {
+    //     const user =  await User.create(input);
+    //     console.log(user);
+    //     res.send(user);
+    // } catch (err) {console.log(err.message);}
 
-    // const newUser = new User({username: input.email, password: input.password});
+    // const newUser = new User({email: input.email, password: input.password});
     // console.log(newUser);
+    console.log(input);
 
-    // User.register(newUser, newUser.password, function(err, user) {
-    //     if(err) {
-    //         console.log(err);
-    //         //res.redirect("/register");
-    //     } else {
-    //         passport.authenticate("local")(req, res, function() {
-    //             //res.redirect("/");
-    //         });
-    //     }
-    // })
+    User.register({email: input.email, password: input.password}, input.password, function(err, user) { // function'da kullanılan user, yeni kaydedilmiş olan kullanıcıyı temsil eder.
+        if(err) {
+            console.log(err);
+            res.send("http://localhost:3000/register");
+        } else {
+            passport.authenticate("local")(req, res, function() {
+                res.send(user);
+            });
+        }
+    })
     
 }
 
