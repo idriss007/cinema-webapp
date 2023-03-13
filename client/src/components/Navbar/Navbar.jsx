@@ -1,9 +1,13 @@
 import React, { useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 import StatesContext from "../../context/StatesContext";
 import styles from "./navbar.module.css";
 
 function Navbar() {
+
+    const { user } = useContext(AuthContext);
+    console.log(user);
 
     const navigate = useNavigate();
     const searchBoxInput = useRef(null);

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./signup.module.css";
 import { useFormik } from "formik";
 import validationSchema from "./validations";
 import { fetchRegister } from "../../../api";
+import AuthContext from "../../../context/AuthContext";
 
 function Signup() {
+
+    const { login } = useContext(AuthContext);
 
     const formik = useFormik({
         initialValues: {
@@ -16,7 +19,8 @@ function Signup() {
         onSubmit: async (values, bag) => {
             try {
                 const response = await fetchRegister({email: values.email, password: values.password})
-                console.log(response);
+                // console.log(response);
+                login(response);
             } catch (e) {}
         },
     });
