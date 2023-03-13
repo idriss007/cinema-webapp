@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { getGenreList } from "../../api";
-import Detail from "../Detail/Detail";
+import Detail from "../../pages/Detail";
 import Genre from "../Genre/Genre";
 import style from "./moviecard.module.css";
 

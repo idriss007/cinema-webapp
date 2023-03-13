@@ -31,13 +31,14 @@ function Navbar() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.logo}>Logo</div>
+            <div className={styles.logo}><Link className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/" >Ana Sayfa</Link></div>
             <div className={styles.searchBox}>
                 <input ref={searchBoxInput} onKeyDown={handleKeyPress} value={searchQuery} onChange={handleChange} className={styles.searchBoxInput} placeholder="Arama yap..." />
                 <button onClick={handleClick} className={styles.searchButton} >Ara</button>
             </div>
             <div className={styles.menu}>
-                <Link style={{textDecoration: "none", color: "inherit",}} to="/signup" >Menu</Link>
+                <div className={styles.authButton}><Link className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/login" >Login</Link></div>
+                <div className={styles.authButton}><Link className={"btn btn-primary"} style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/signup" >Sign Up</Link></div>
             </div>
         </div>
     );

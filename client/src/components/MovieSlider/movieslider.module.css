@@ -1,0 +1,13 @@
+/* .container {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    background-color: black;
+    padding: 50px;
+} */
+
+.container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    /* grid-template-columns: repeat(20, 20%); */
+}

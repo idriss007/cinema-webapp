@@ -1,0 +1,20 @@
+.container {
+    /* margin-right: 20px; */
+    /* display: flex;
+    flex-direction: column; */
+}
+
+.posterContainer {
+
+}
+
+.poster {
+    width: 180px;
+    border-radius: 10px;
+    border: 1px solid white;
+}
+
+.title {
+    color: white;
+    margin-top: 20px;
+}

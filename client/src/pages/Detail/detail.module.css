@@ -1,0 +1,125 @@
+.container {
+    margin: 0 auto;
+    margin-top: 40px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    padding:20px;
+}
+
+.headContainer {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 5px;
+}
+
+/*.leftInnerContainer {
+    display: flex;
+    flex-direction: column;
+}*/
+
+.title {
+    font-size: 2.3rem;
+    font-weight: bold;
+    /*padding: 0;
+    margin: 0;*/
+}
+
+/*.releaseDate {
+    margin: 0;
+    padding: 0;
+}*/
+
+.rightInnerContainer {
+    display: flex;
+}
+
+.usersRatingText {
+    font-weight: bold;
+    font-size: 0.85rem;
+    color:dimgrey;
+    margin-bottom: 6px;
+}
+
+.vote {
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.voteCount {
+    font-size: 0.75rem;
+    line-height: 0.6rem;
+}
+
+.yourRatingText {
+    margin-left: 20px;
+    font-weight: bold;
+    color:dimgrey;
+    font-size: 0.85rem;
+}
+
+.middleContainer {
+    height: fit-content;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    order: 1;
+}
+
+.poster {
+    min-width: 0;
+    max-height: 100%;
+    object-fit: contain;  
+    align-items: center;/*resmin boyut küçülünce ona göre küçülmesini sağlıyor. */
+    flex: 1;
+}
+
+.slider {
+    margin-left: 20px;
+    min-width: 0;
+    max-height: 100%;
+    object-fit: contain;  
+    align-items: center;/*resmin boyut küçülünce ona göre küçülmesini sağlıyor. */
+    flex: 2.67;
+}
+
+.bottomContainer {
+    margin-top: 20px;
+    margin-bottom: 100px;
+    display: flex;
+    order: 2;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/*@media (max-width: 1250px) {
+ .container {
+    width: 950px;
+ }
+
+ .middleContainer {
+    height: 382px;
+ }
+}
+
+@media (max-width: 1000px) {
+    .container {
+        width: 600px;
+    }
+
+    .middleContainer {
+        height: 240px;
+    }
+        
+}
+
+@media (max-width: 650px) {
+    .container {
+        width: 450px;
+    }
+
+    .middleContainer {
+        height: 160px;
+    }
+        
+}*/
