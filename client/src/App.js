@@ -7,6 +7,7 @@ import Movies from "./pages/Movies/Movies";
 import Signup from "./pages/Auth/Signup/Signup";
 import Signin from "./pages/Auth/Signin/Signin";
 import Home from "./pages/Home/Home";
+import Profile from "./pages/Profile/Profile";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             </Route>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Signin />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </AuthProvider>
       </StatesProvider>

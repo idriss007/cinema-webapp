@@ -4,7 +4,7 @@ import styles from "./moviecardsmall.module.css";
 
 function MovieCardSmall({ movie }) {
 
-    const poster = "https://www.themoviedb.org/t/p/original/" + movie?.poster_path;
+    const poster = "https://www.themoviedb.org/t/p/w500/" + movie?.poster_path;
 
     return (
         <div className={styles.container}>

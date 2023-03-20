@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const passportLocalMongoose = require("passport-local-mongoose");
+// const passportLocalMongoose = require("passport-local-mongoose");
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -14,8 +14,8 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-userSchema.plugin(passportLocalMongoose, {
-    usernameField: "email"
-}); //Şifreleri hashing yapmak ve kullanıcıları veritabanımıza kaydetmek için bunu kullanıyoruz.
+// userSchema.plugin(passportLocalMongoose, {
+//     usernameField: "email"
+// }); //Şifreleri hashing yapmak ve kullanıcıları veritabanımıza kaydetmek için bunu kullanıyoruz.
 
 module.exports = mongoose.model("user", userSchema);

@@ -18,10 +18,12 @@ function Signup() {
         validationSchema,
         onSubmit: async (values, bag) => {
             try {
-                const response = await fetchRegister({email: values.email, password: values.password})
-                // console.log(response);
-                login(response);
-            } catch (e) {}
+                const registerResponse = await fetchRegister({email: values.email, password: values.password});
+                console.log(registerResponse);
+                login(registerResponse);
+            } catch (e) {
+                
+            }
         },
     });
 

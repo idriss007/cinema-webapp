@@ -6,8 +6,7 @@ import styles from "./navbar.module.css";
 
 function Navbar() {
 
-    const { user } = useContext(AuthContext);
-    console.log(user);
+    const { loggedIn } = useContext(AuthContext);
 
     const navigate = useNavigate();
     const searchBoxInput = useRef(null);
@@ -41,8 +40,19 @@ function Navbar() {
                 <button onClick={handleClick} className={styles.searchButton} >Ara</button>
             </div>
             <div className={styles.menu}>
-                <div className={styles.authButton}><Link className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/login" >Login</Link></div>
-                <div className={styles.authButton}><Link className={"btn btn-primary"} style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/signup" >Sign Up</Link></div>
+                {!loggedIn && (
+                    <>
+                        <div className={styles.authButton}><Link className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/login" >Login</Link></div>
+                        <div className={styles.authButton}><Link className={"btn btn-primary"} style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/signup" >Sign Up</Link></div>
+                    </>
+                )}
+
+                {loggedIn && (
+                    <>
+                        <div className={styles.authButton}><Link className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/profile" >Profile</Link></div>
+                    </>
+                )}
+                
             </div>
         </div>
     );
