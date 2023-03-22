@@ -1,26 +1,8 @@
 const jwt = require("jsonwebtoken");
 
 function signAccessToken(data) {
-    // return new Promise((resolve, reject) => {
-    //     const payload = {
-    //         ...data,
-    //     };
-
-    //     const options = {
-    //         expiresIn: "50s",
-    //     };
-
-    //     jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, (err, token) => {
-    //         if(err) {
-    //             console.log(err);
-    //             reject(err);
-    //         }
-
-    //         resolve(token);
-    //     });
-    // });
-
-    const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET);
+    const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "5s"});
+    // const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET);
     // res.json({accessToken});
     return accessToken;
 };
@@ -30,7 +12,7 @@ function verifyAccessToken(req, res, next) {
     
     if(!token) {
         // next(res.sendStatus(401));
-        res.sendStatus(401);
+        res.sendStatus(400);
     } else {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
             if(err) {
@@ -41,9 +23,6 @@ function verifyAccessToken(req, res, next) {
             next();
         });
     }
-
-    
-    
 }
 
 function signRefreshToken(data) {
@@ -51,31 +30,33 @@ function signRefreshToken(data) {
     return refreshToken;
 }
 
-function verifyRefreshToken(req, res, next) {
-    const token = req.headers["authorization"];
+function verifyRefreshToken(refresh_token) {
+    return new Promise((resolve, reject) => {
+        jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
+            if(err) {
+                return reject(res.sendStatus(401));
+            } else {
+                const { user_id } = payload;
+                return resolve(user_id);
+            }
+        })
+    })
 
+    
 }
 
-// function verifyAccessToken(req, res, next) {
+// function verifyTokens(req, res, next) {
+//     const data = req.headers["authorization"];
+//     const tokens = data.split(",");
+//     const token = tokens[0];
+//     const refreshToken = tokens[1];
+
+//     console.log(token);
+//     console.log(refreshToken);
+
+//     // res.sendStatus(401);
+//     return next();
     
-//     const token = req.headers["authorization"];
-
-//     if (!authorizationToken) {
-// 		return "Bir hata oluştu!!!";
-// 	}
-
-//     const authorizationToken = token && token.split(" ")[1];
-
-//     console.log(authorizationToken);
-
-//     jwt.verify(authorizationToken, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-// 		if (err) {
-// 			res.send(err.message);
-// 		}
-
-// 		req.payload = payload;
-// 		next();
-// 	});
 // }
 
-module.exports = { signAccessToken, verifyAccessToken, signRefreshToken };
+module.exports = { signAccessToken, verifyAccessToken, signRefreshToken, verifyRefreshToken };

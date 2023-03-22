@@ -9,6 +9,7 @@ import Signin from "./pages/Auth/Signin/Signin";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
   return (
@@ -26,7 +27,9 @@ function App() {
             </Route>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Signin />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<Profile />} />
+            </Route>
           </Routes>
         </AuthProvider>
       </StatesProvider>

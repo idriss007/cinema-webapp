@@ -6,6 +6,8 @@ import Genre from "../../components/Genre";
 import Slider from "../../components/Slider";
 import moment from "moment";
 
+import { MdAddBox } from "react-icons/md";
+
 import styles from "./detail.module.css";
 
 function Detail() {
@@ -56,6 +58,10 @@ function Detail() {
 
                     <div>
                         <p className={styles.yourRatingText}>YOUR RATING</p>
+                    </div>
+
+                    <div className={styles.addToWatchlistBtnContainer}>
+                        <button className={"btn btn-success " + styles.addToWatchlistBtn} onClick={() => console.log(details.original_title + ", Added to watchlist.")} >+ Add to watchlist</button>
                     </div>
                 </div>
             </div>

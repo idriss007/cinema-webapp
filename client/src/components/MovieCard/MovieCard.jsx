@@ -8,7 +8,7 @@ import style from "./moviecard.module.css";
 
 function MovieCard(props) {
 
-    const url = "https://image.tmdb.org/t/p/original/" + props.movie.poster_path;
+    const url = "https://image.tmdb.org/t/p/w500/" + props.movie.poster_path;
 
     return (
         <div className={style.container}>

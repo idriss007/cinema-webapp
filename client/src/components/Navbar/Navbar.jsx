@@ -49,7 +49,7 @@ function Navbar() {
 
                 {loggedIn && (
                     <>
-                        <div className={styles.authButton}><Link className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/profile" >Profile</Link></div>
+                        <div className={styles.authButton + " " + styles.profileBtn}><Link className="btn btn-light" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/profile" >Profile</Link></div>
                     </>
                 )}
                 

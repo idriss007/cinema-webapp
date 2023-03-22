@@ -1,0 +1,13 @@
+.container {
+    width: 90%;
+    margin: 30px auto;
+}
+
+.profileTxt {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.logoutBtn {
+    margin-top: 10px;
+}

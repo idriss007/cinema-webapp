@@ -90,6 +90,16 @@ export async function fetchMe() {
     return data;
 }
 
+export async function fetchAccessTokenByRefreshToken() {
+    const url = "http://localhost:4000/auth/refresh_token";
+
+    const { data } = await axios.post(url, {
+        refresh_token: localStorage.getItem("refresh-token"),
+    });
+
+    return data;
+}
+
 export async function fetchLogout() {
     const url = "http://localhost:4000/auth/logout";
 

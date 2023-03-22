@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { fetchLogout, fetchMe } from "../api";
-import {useNavigate} from "react-router-dom"; 
+import { fetchLogout, fetchMe, fetchAccessTokenByRefreshToken } from "../api";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
 
     const navigate = useNavigate();
 
@@ -16,18 +16,35 @@ export function AuthProvider({children}) {
         (async () => {
             try {
                 const me = await fetchMe();
-                
+
                 setLoggedIn(true);
                 setUser(me);
 
-                console.log("me " + me);
+                console.log("me " + JSON.stringify(me));
                 setLoading(false);
-            } catch(err) {
+            } catch (err) {
+                
+                //Kullanıcı eğer giriş yapmamışsa veya giriş yapılmış fakat access token kullanım süresi...
+                //....bitmişse aşağıdaki kodlar çalışacaktır. 
+                //------------------------------------------------
+                try {
+                    const data = await fetchAccessTokenByRefreshToken();
+                    login(data);
+                    setLoading(false);
+                    return;
+                } catch(err) {
+                    setLoading(false);
+                }
+                //-----------------------------------------------
+
+                localStorage.removeItem("access-token");
+                localStorage.removeItem("refresh-token");
                 setLoading(false);
-                console.log(err);
             }
         })();
     }, []);
+
+
 
     function login(data) {
         setLoggedIn(true);
@@ -57,7 +74,7 @@ export function AuthProvider({children}) {
         logout
     };
 
-    if(loading) {
+    if (loading) {
         return (
             <p>Yükleniyor...</p>
         );

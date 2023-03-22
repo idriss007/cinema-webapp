@@ -1,5 +1,5 @@
 const User = require("../../models/user");
-const { signAccessToken, signRefreshToken } = require("../../helpers/jwt");
+const { signAccessToken, signRefreshToken, verifyRefreshToken } = require("../../helpers/jwt");
 const user = require("../../models/user");
 
 const Register = async (req, res, next) => {
@@ -32,7 +32,7 @@ const Login = async (req, res, next) => {
     const input = req.body;
     
     try{
-        const findUser = await User.findOne({email: input.email, password: input.password});
+        const findUser = await User.findOne({email: input.email, password: input.password}).select("--password");
         // if(findUser.length >= 1) {
         //     console.log(findUser);
         //     res.send("Successfully logged in.");
@@ -46,6 +46,11 @@ const Login = async (req, res, next) => {
         } else {
             const accessToken = await signAccessToken({ user_id: findUser._id });
             const refreshToken = await signRefreshToken({ user_id: findUser._id });
+
+            // const userData = findUser.toObject();
+            // delete userData.password;
+		    // delete userData.__v;
+
             res.json({
                 user: findUser,
                 accessToken,
@@ -54,7 +59,25 @@ const Login = async (req, res, next) => {
         }
         
     } catch(err) {console.log(err.message);}
+}
 
+const RefreshToken = async (req, res, next) => {
+    const { refresh_token } = req.body;
+
+    if(!refresh_token) {
+        console.log("There is no refresh token");
+        return res.sendStatus(400);
+    }
+
+    try {
+        const user_id = await verifyRefreshToken(refresh_token);
+        const user = await User.findById(user_id);
+        const accessToken = await signAccessToken({user_id});
+	    const refreshToken = await signRefreshToken({user_id});
+        res.json({ user, accessToken, refreshToken });
+    } catch(err) {
+        res.send(err);
+    }
 }
 
 const Me = async (req, res, next) => {
@@ -62,7 +85,7 @@ const Me = async (req, res, next) => {
     try {
         const user = await User.findById(user_id);
         // console.log(user);
-        res.json(JSON.stringify(user));
+        res.json(user);
     } catch(err) {
         res.send(err.message);
     }
@@ -73,17 +96,4 @@ const Logout = (req, res, next) => {
     res.json({ message: "success" })
 }
 
-// const Me = async (req, res, next) => {
-//     const { user_id } = req.payload;
-//     console.log(user_id);
-
-// 	try {
-// 		const user = await User.findById(user_id).select("-password -__v");
-
-// 		res.json(user);
-// 	} catch (err) {
-// 		res.send(err);
-// 	}
-// }
-
-module.exports = { Register, Login, Me, Logout };
+module.exports = { Register, Login, Me, Logout, RefreshToken };
