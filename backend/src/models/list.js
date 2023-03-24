@@ -11,12 +11,9 @@ const listSchema = new mongoose.Schema({
         ref: "user",
         required: true
     },
-    movieIds: [
-        {
-            type: String,
-            // required: true
-        }
-    ]
+    movies: [{
+        movie: Object
+    }]
 });
 
 module.exports = mongoose.model("list", listSchema);

@@ -22,13 +22,24 @@ function Detail() {
 
     const { id } = useParams();
 
-    let isContainInList = null;
-
     useEffect(() => {
         (async () => {
-
+            
+            // console.log();
+            // const { data: listData } = await axios.get("http://localhost:4000/list/" + user._id);
             const { data: listData } = await axios.get("http://localhost:4000/list/" + user._id);
-            isContainInList = listData[0].movieIds.find(Id => Id === id);
+            // console.log(listData[0].movies[0].movie.id);
+
+            // const isContainInList = listData[0].movies.find(movie => movie.movie.id === id);
+            const isContainInList = listData[0].movies.find(movie => movie.movie.id === parseInt(id));
+
+            // if (list.movies.length > 0) {
+                // listData.movies.map(movie => {
+                //     console.log(movie);
+                //     // if (movie.movie.id === id) { isContainInList = true } else { isContainInList = false };
+                    
+                // });
+            // }
             if(isContainInList) {setIsInList(true)} else {setIsInList(false)}
 
         })();
@@ -93,8 +104,8 @@ function Detail() {
 
                     <div className={styles.addToWatchlistBtnContainer}>
                         <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")} 
-                        onClick={isInList === false ? () => addToList(lists[0], details.id) : () => removeFromList(lists[0], details.id)} >
-                            {isInList ? "Kaldır" : "+ Add to watchlist"}
+                        onClick={isInList === false ? () => addToList(lists[0], details) : () => removeFromList(lists[0], details)} >
+                            {isInList ? "— Kaldır" : "+ Add to watchlist"}
                         </button>
                     </div>
                 </div>

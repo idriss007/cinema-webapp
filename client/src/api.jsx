@@ -132,18 +132,22 @@ export async function fetchLists(user_id) {
 
 }
 
-export async function AddToList(list_id, movie_id) {
+export async function AddToList(list_id, movieData) {
+    const movie_id = movieData.id;
+
     const url = "http://localhost:4000/list/add/" + list_id + "/" + movie_id;
 
-    const {data} = await axios.get(url);
+    const {data} = await axios.post(url, {movieData});
 
     return data;
 }
 
-export async function RemoveFromList(list_id, movie_id) {
+export async function RemoveFromList(list_id, movieData) {
+    const movie_id = movieData.id;
+
     const url = "http://localhost:4000/list/delete/" + list_id + "/" + movie_id;
 
-    const {data} = await axios.get(url);
+    const {data} = await axios.post(url, {movieData});
 
     return data;
 }

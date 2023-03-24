@@ -7,17 +7,17 @@ export function ListProvider({ children }) {
 
     const [isInList, setIsInList] = useState();
 
-    async function addToList(list, movie_id) {
+    async function addToList(list, movieData) {
 
-        if (list.movieIds.length !== 0) {
+        if (list.movies.length !== 0) {
 
-            console.log(isInList);
+            // console.log(isInList);
 
             if (isInList === false) {
                 try {
-                    await AddToList(list._id, movie_id);
+                    const response = await AddToList(list._id, movieData);
                     setIsInList(true);
-                    return console.log("Film eklendi");
+                    // return console.log(response);
                 } catch (err) {
                     return console.log(err);
                 }
@@ -25,26 +25,26 @@ export function ListProvider({ children }) {
 
         } else {
             try {
-                await AddToList(list._id, movie_id);
+                const response = await AddToList(list._id, movieData);
                 setIsInList(true);
-                return console.log("Film eklendi");
+                return console.log(response);
             } catch (err) {
                 return console.log(err);
             }
         }
     };
 
-    async function removeFromList(list, movie_id) {
+    async function removeFromList(list, movieData) {
 
-        if (list.movieIds.length !== 0) {
+        if (list.movies.length !== 0) {
 
-            console.log(isInList);
+            // console.log(isInList);
 
             if (isInList === true) {
                 try {
-                    await RemoveFromList(list._id, movie_id);
+                    await RemoveFromList(list._id, movieData);
                     setIsInList(false);
-                    return console.log("Film çıkarıldı");
+                    // return console.log("Film çıkarıldı");
                 } catch (err) {
                     return console.log(err);
                 }
