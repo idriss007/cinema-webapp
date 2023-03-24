@@ -1,28 +1,56 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { getDetail, getImages } from "../../api";
+import { AddToList, fetchLists, getDetail, getImages } from "../../api";
 import Genre from "../../components/Genre";
 import Slider from "../../components/Slider";
 import moment from "moment";
 
-import { MdAddBox } from "react-icons/md";
-
 import styles from "./detail.module.css";
 
+import AuthContext from "../../context/AuthContext";
+import ListContext from "../../context/ListContext";
+import WatchlistCard from "../../components/WatchlistCard/WatchlistCard";
+import axios from "axios";
+
 function Detail() {
+
+    const { user } = useContext(AuthContext)
+    const { addToList, removeFromList, isInList, setIsInList } = useContext(ListContext);
+
     const imageURL = "https://www.themoviedb.org/t/p/original";
 
     const { id } = useParams();
 
+    let isContainInList = null;
+
+    useEffect(() => {
+        (async () => {
+
+            const { data: listData } = await axios.get("http://localhost:4000/list/" + user._id);
+            isContainInList = listData[0].movieIds.find(Id => Id === id);
+            if(isContainInList) {setIsInList(true)} else {setIsInList(false)}
+
+        })();
+
+    });
+
+    //Get movie information
     const { isLoading: statusDetails, error: errorDetails, data: details } = useQuery(["movieDetail", parseInt(id)], () => getDetail(id));
+    //Get Movie images
     const { isLoading: statusImages, error: errorImages, data: images } = useQuery({ enabled: details?.original_title !== null, queryKey: ["images", parseInt(id)], queryFn: () => getImages(id), });
+    //Get User Lists
+    const { isLoading: statusLists, error: errorLists, data: lists } = useQuery(["lists", parseInt(id)], () => fetchLists(user._id));
+
 
     if (statusImages) return 'Loading...'
     if (errorImages) return 'An error has occurred: ' + errorImages.message
 
     if (statusDetails) return 'Loading...'
     if (errorDetails) return 'An error has occurred: ' + errorDetails.message
+
+    if (statusLists) return 'Loading...'
+    if (errorLists) return 'An error has occurred: ' + errorLists.message
 
     const allImages = images?.images?.backdrops?.map(item => imageURL + item.file_path);
 
@@ -32,10 +60,11 @@ function Detail() {
         genreList.push(details.genres[i].id);
     }
 
+    // const isContainInList = lists[0].movieIds.find(Id => Id === JSON.stringify(details.id));
+
     return (
 
         <div className={styles.container}>
-            {/*console.log(details)*/}
             <div className={styles.headContainer}>
                 <div className={styles.leftInnerContainer}>
                     <div className={styles.titleInnerContainer}>
@@ -60,8 +89,13 @@ function Detail() {
                         <p className={styles.yourRatingText}>YOUR RATING</p>
                     </div>
 
+                    {/* <WatchlistCard lists={lists} user={user} details={details} /> */}
+
                     <div className={styles.addToWatchlistBtnContainer}>
-                        <button className={"btn btn-success " + styles.addToWatchlistBtn} onClick={() => console.log(details.original_title + ", Added to watchlist.")} >+ Add to watchlist</button>
+                        <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")} 
+                        onClick={isInList === false ? () => addToList(lists[0], details.id) : () => removeFromList(lists[0], details.id)} >
+                            {isInList ? "Kaldır" : "+ Add to watchlist"}
+                        </button>
                     </div>
                 </div>
             </div>

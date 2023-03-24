@@ -21,8 +21,8 @@ function Genre(props) {
             
     }
 
-    function renderGenres(genre) {
-        return <GenreCard item={genre} />
+    function renderGenres(genre, key) {
+        return <GenreCard key={key} item={genre} />
     }
 
     return (

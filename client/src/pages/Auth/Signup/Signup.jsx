@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import styles from "./signup.module.css";
 import { useFormik } from "formik";
 import validationSchema from "./validations";
-import { fetchRegister } from "../../../api";
+import { fetchRegister, postList } from "../../../api";
 import AuthContext from "../../../context/AuthContext";
 
 function Signup() {
@@ -22,8 +22,17 @@ function Signup() {
                 const registerResponse = await fetchRegister({name: values.name, email: values.email, password: values.password});
                 console.log(registerResponse);
                 login(registerResponse);
-            } catch (e) {
-                
+
+                //Kullanıcı kayıt olunca default olarak her kullanıcıya watchlist listesi oluştur.
+                const listResponse = await postList({
+                    name: "Watchlist",
+                    user: registerResponse.user._id
+                });
+
+                console.log(listResponse);
+
+            } catch (err) {
+                console.log(err);
             }
         },
     });

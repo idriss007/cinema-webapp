@@ -2,7 +2,7 @@ import axios, { all } from "axios";
 
 axios.interceptors.request.use(function (config) {
     const token = localStorage.getItem("access-token");
-    config.headers.Authorization =  token;
+    config.headers.Authorization = token;
     // console.log("axios interceptor: " + token);
     return config;
 });
@@ -13,7 +13,7 @@ axios.interceptors.request.use(function (config) {
 
 //         const allowedOrigins = ["http://localhost:4000/"];
 //         const token = localStorage.getItem("access-token");
-        
+
 //         if(allowedOrigins.includes(origin)) {
 //             config.headers.authorization = token;
 //         }
@@ -105,9 +105,45 @@ export async function fetchLogout() {
 
     const { data } = await axios.post(url,
         {
-			refresh_token: localStorage.getItem("refresh-token"),
-		}
-	);
+            refresh_token: localStorage.getItem("refresh-token"),
+        }
+    );
 
-	return data;
+    return data;
+}
+
+export async function postList(input) {
+
+    const url = "http://localhost:4000/list";
+
+    const { data } = await axios.post(url, input);
+
+    return data;
+
+}
+
+export async function fetchLists(user_id) {
+
+    const url = "http://localhost:4000/list/" + user_id;
+
+    const { data } = await axios.get(url);
+
+    return data;
+
+}
+
+export async function AddToList(list_id, movie_id) {
+    const url = "http://localhost:4000/list/add/" + list_id + "/" + movie_id;
+
+    const {data} = await axios.get(url);
+
+    return data;
+}
+
+export async function RemoveFromList(list_id, movie_id) {
+    const url = "http://localhost:4000/list/delete/" + list_id + "/" + movie_id;
+
+    const {data} = await axios.get(url);
+
+    return data;
 }
