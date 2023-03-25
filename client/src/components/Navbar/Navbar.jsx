@@ -34,7 +34,7 @@ function Navbar() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.logo}><Link className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/" >Ana Sayfa</Link></div>
+            <div className={styles.logo}><Link reloadDocument className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/" >Ana Sayfa</Link></div>
             <div className={styles.searchBox}>
                 <input ref={searchBoxInput} onKeyDown={handleKeyPress} value={searchQuery} onChange={handleChange} className={styles.searchBoxInput} placeholder="Arama yap..." />
                 <button onClick={handleClick} className={styles.searchButton} >Ara</button>
@@ -42,14 +42,14 @@ function Navbar() {
             <div className={styles.menu}>
                 {!loggedIn && (
                     <>
-                        <div className={styles.authButton}><Link className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/login" >Login</Link></div>
-                        <div className={styles.authButton}><Link className={"btn btn-primary"} style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/signup" >Sign Up</Link></div>
+                        <div className={styles.authButton}><Link reloadDocument className="btn btn-primary" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/login" >Login</Link></div>
+                        <div className={styles.authButton}><Link reloadDocument className={"btn btn-primary"} style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/signup" >Sign Up</Link></div>
                     </>
                 )}
 
                 {loggedIn && (
                     <>
-                        <div className={styles.authButton + " " + styles.profileBtn}><Link className="btn btn-light" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/profile" >Profile</Link></div>
+                        <div className={styles.authButton + " " + styles.profileBtn}><Link reloadDocument className="btn btn-light" style={{textDecoration: "none", color: "inherit", fontWeight: "bold"}} to="/profile" >Profile</Link></div>
                     </>
                 )}
                 

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AddToList, fetchLists, getDetail, getImages } from "../../api";
 import Genre from "../../components/Genre";
 import Slider from "../../components/Slider";

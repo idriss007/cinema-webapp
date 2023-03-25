@@ -16,7 +16,7 @@ function MovieCard(props) {
                 <img loading="lazy" className={style.image} src={url} />
             </div>
             <div className={style.cardDetail}>
-                <Link style={{textDecoration: "none", color: "inherit",}} to={"/detail/" + props.movie.id}> <p className={style.title}> {props.movie.title} </p> </Link>
+                <Link style={{ textDecoration: "none", color: "inherit", }} to={"/detail/" + props.movie.id}> <p className={style.title}> {props.movie.title} </p> </Link>
                 <p className={style.detail}>{props.movie.overview}</p>
                 <Genre genres={props.movie.genre_ids} />
             </div>
