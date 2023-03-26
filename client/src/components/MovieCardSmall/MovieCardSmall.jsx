@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import StarCard from "../StarCard/StarCard";
 import styles from "./moviecardsmall.module.css";
 
 function MovieCardSmall({ movie }) {

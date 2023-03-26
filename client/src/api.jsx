@@ -151,3 +151,45 @@ export async function RemoveFromList(list_id, movieData) {
 
     return data;
 }
+
+//RatingList Methods
+
+export async function createRatingList(input) {
+
+    const url = "http://localhost:4000/rating";
+
+    const { data } = await axios.post(url, input);
+
+    return data;
+
+}
+
+export async function addRating(input) {
+
+    const url = "http://localhost:4000/rating/add";
+
+    const { data } = await axios.post(url, input);
+
+    return data;
+
+}
+
+export async function DeleteRating(input) {
+
+    const url = "http://localhost:4000/rating/delete";
+
+    const { data } = await axios.post(url, input);
+    
+    return data;
+
+}
+
+export async function GetRating({user_id, movie_id}) {
+
+    const url = "http://localhost:4000/rating/" + user_id + "/" + movie_id;
+
+    const { data } = await axios.get(url);
+
+    return data;
+
+}

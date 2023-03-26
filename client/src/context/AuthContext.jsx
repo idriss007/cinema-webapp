@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
 
     const navigate = useNavigate();
+    const prevLocation = useLocation();
 
     const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -31,6 +32,8 @@ export function AuthProvider({ children }) {
                     const data = await fetchAccessTokenByRefreshToken();
                     login(data);
                     setLoading(false);
+                    // navigate("/");
+                    // navigate(prevLocation.pathname);
                     return;
                 } catch(err) {
                     setLoading(false);

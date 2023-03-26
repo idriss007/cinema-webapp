@@ -34,6 +34,10 @@
     display: flex;
 }
 
+.userRatingContainer {
+
+}
+
 .usersRatingText {
     font-weight: bold;
     font-size: 0.85rem;
@@ -51,11 +55,25 @@
     line-height: 0.6rem;
 }
 
-.yourRatingText {
+.yourRatingContainer {
     margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.yourRatingText {
+    /* margin-left: 20px; */
     font-weight: bold;
     color: dimgrey;
     font-size: 0.85rem;
+}
+
+.starContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex:1;
+    /* font-size: 2rem; */
 }
 
 .addToWatchlistBtnContainer {

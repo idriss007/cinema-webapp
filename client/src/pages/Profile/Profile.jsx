@@ -57,7 +57,7 @@ function Profile() {
             <p>Email adresin: {user?.email}</p>
             <p>Şifren: {user?.password}</p>
             {/* <p>{JSON.stringify(user)}</p> */}
-            {lists[0].movies[0] && (<div className={styles.listContainer}>
+            {(lists && lists[0]?.movies[0]) && (<div className={styles.listContainer}>
                 {/* <div className={styles.listTxt}>{lists[0].movies[0] && "Film Listelerin"}</div> */}
                 {lists.map(renderLists)}
             </div>)}

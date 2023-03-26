@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import { AddToList, fetchLists, getDetail, getImages } from "../../api";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { fetchLists, getDetail, getImages } from "../../api";
 import Genre from "../../components/Genre";
 import Slider from "../../components/Slider";
 import moment from "moment";
@@ -10,37 +10,29 @@ import styles from "./detail.module.css";
 
 import AuthContext from "../../context/AuthContext";
 import ListContext from "../../context/ListContext";
-import WatchlistCard from "../../components/WatchlistCard/WatchlistCard";
 import axios from "axios";
+import StarCard from "../../components/StarCard/StarCard";
 
 function Detail() {
 
-    const { user } = useContext(AuthContext)
+    const { user, loggedIn } = useContext(AuthContext)
     const { addToList, removeFromList, isInList, setIsInList } = useContext(ListContext);
 
     const imageURL = "https://www.themoviedb.org/t/p/original";
 
     const { id } = useParams();
+    const navigate = useNavigate();
+    const prevLocation = useLocation();
 
     useEffect(() => {
-        (async () => {
-            
-            // console.log();
-            // const { data: listData } = await axios.get("http://localhost:4000/list/" + user._id);
-            const { data: listData } = await axios.get("http://localhost:4000/list/" + user._id);
-            // console.log(listData[0].movies[0].movie.id);
+        loggedIn && (async () => {
 
-            // const isContainInList = listData[0].movies.find(movie => movie.movie.id === id);
+            const { data: listData } = await axios.get("http://localhost:4000/list/" + user._id);
+
             const isContainInList = listData[0].movies.find(movie => movie.movie.id === parseInt(id));
 
-            // if (list.movies.length > 0) {
-                // listData.movies.map(movie => {
-                //     console.log(movie);
-                //     // if (movie.movie.id === id) { isContainInList = true } else { isContainInList = false };
-                    
-                // });
-            // }
-            if(isContainInList) {setIsInList(true)} else {setIsInList(false)}
+            if (isContainInList) { setIsInList(true); }
+            if (!isContainInList) { setIsInList(false); }
 
         })();
 
@@ -60,8 +52,8 @@ function Detail() {
     if (statusDetails) return 'Loading...'
     if (errorDetails) return 'An error has occurred: ' + errorDetails.message
 
-    if (statusLists) return 'Loading...'
-    if (errorLists) return 'An error has occurred: ' + errorLists.message
+    if (loggedIn && statusLists) return 'Loading...'
+    if (loggedIn && errorLists) return 'An error has occurred: ' + errorLists.message
 
     const allImages = images?.images?.backdrops?.map(item => imageURL + item.file_path);
 
@@ -73,38 +65,80 @@ function Detail() {
 
     // const isContainInList = lists[0].movieIds.find(Id => Id === JSON.stringify(details.id));
 
+    function handleAddWatchlistClicked() {
+
+        //Kullanıcı giriş yapmışsa izleme listesine film ekleyip çıkarabilsin
+        if(loggedIn === true) {
+            if(isInList) {
+                removeFromList(lists[0], details);
+            }
+
+            if(!isInList) {
+                addToList(lists[0], details);
+            }
+        }
+
+        //Kullanıcı giriş yapmamışsa login sayfasına yönlendirilsin
+        if(!loggedIn) {
+            return (navigate("/login"));
+        }
+    }
+
     return (
 
         <div className={styles.container}>
+
             <div className={styles.headContainer}>
+
                 <div className={styles.leftInnerContainer}>
+
                     <div className={styles.titleInnerContainer}>
                         <p className={styles.title}>{details.original_title}</p>
                     </div>
+
                     <div className={styles.releaseDateInnerContainer}>
                         <p className={styles.releaseDate}>{moment(details.release_date).format("YYYY")}</p>
                     </div>
+
                 </div>
+
                 <div className={styles.rightInnerContainer}>
-                    <div>
+
+                    <div className={styles.userRatingContainer}>
+
                         <p className={styles.usersRatingText}>USERS RATING</p>
+
                         <div className={styles.voteInnerContainer}>
                             <p className={styles.vote}>{parseFloat(details.vote_average).toFixed(1)}/10</p>
                         </div>
+
                         <div className={styles.voteCountInnerContainer}>
                             <p className={styles.voteCount}>{details.vote_count}</p>
                         </div>
+
                     </div>
 
-                    <div>
-                        <p className={styles.yourRatingText}>YOUR RATING</p>
+                    <div className={styles.yourRatingContainer}>
+
+                        <div className={styles.yourRatingTextContainer}>
+                            <p className={styles.yourRatingText}>YOUR RATING</p>
+                        </div>
+
+                        <div className={styles.starContainer}>
+                            <StarCard movie={details} />
+                            {/* <button type="button" data-toggle="modal" data-target="#exampleModal" style={{ background: "inherit", border: "none" }}>
+                                <BsStar />
+                            </button> */}
+                        </div>
+
                     </div>
 
                     {/* <WatchlistCard lists={lists} user={user} details={details} /> */}
 
                     <div className={styles.addToWatchlistBtnContainer}>
-                        <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")} 
-                        onClick={isInList === false ? () => addToList(lists[0], details) : () => removeFromList(lists[0], details)} >
+                        <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")}
+                            onClick={handleAddWatchlistClicked} >
+                            {/* onClick={isInList === false ? () => addToList(lists[0], details) : () => removeFromList(lists[0], details)} > */}
                             {isInList ? "— Kaldır" : "+ Add to watchlist"}
                         </button>
                     </div>

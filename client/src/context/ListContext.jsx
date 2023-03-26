@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 import { AddToList, RemoveFromList } from "../api";
 
 const ListContext = createContext();
@@ -9,25 +9,35 @@ export function ListProvider({ children }) {
 
     async function addToList(list, movieData) {
 
-        if (list.movies.length !== 0) {
+        // if (list.movies.length !== 0) {
 
-            // console.log(isInList);
+        //     // console.log(isInList);
 
-            if (isInList === false) {
-                try {
-                    const response = await AddToList(list._id, movieData);
-                    setIsInList(true);
-                    // return console.log(response);
-                } catch (err) {
-                    return console.log(err);
-                }
-            }
+        //     if (isInList === false) {
+        //         try {
+        //             const response = await AddToList(list._id, movieData);
+        //             setIsInList(true);
+        //             // return console.log(response);
+        //         } catch (err) {
+        //             return console.log(err);
+        //         }
+        //     }
 
-        } else {
+        // } else {
+        //     try {
+        //         const response = await AddToList(list._id, movieData);
+        //         setIsInList(true);
+        //         return console.log(response);
+        //     } catch (err) {
+        //         return console.log(err);
+        //     }
+        // }
+
+        if (isInList === false) {
             try {
                 const response = await AddToList(list._id, movieData);
                 setIsInList(true);
-                return console.log(response);
+                // return console.log(response);
             } catch (err) {
                 return console.log(err);
             }
@@ -36,21 +46,21 @@ export function ListProvider({ children }) {
 
     async function removeFromList(list, movieData) {
 
-        if (list.movies.length !== 0) {
+        // if (list.movies.length !== 0) {
 
-            // console.log(isInList);
+        // console.log(isInList);
 
-            if (isInList === true) {
-                try {
-                    await RemoveFromList(list._id, movieData);
-                    setIsInList(false);
-                    // return console.log("Film çıkarıldı");
-                } catch (err) {
-                    return console.log(err);
-                }
+        if (isInList === true) {
+            try {
+                await RemoveFromList(list._id, movieData);
+                setIsInList(false);
+                // return console.log("Film çıkarıldı");
+            } catch (err) {
+                return console.log(err);
             }
-
         }
+
+        // }
     };
 
     const values = {

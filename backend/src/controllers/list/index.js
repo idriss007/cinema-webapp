@@ -63,7 +63,7 @@ const AddToList = async (req, res) => {
         //Eklenilen dizi veritabanında listeye kayıtlıysa hata gönder. Değilse Veritabandaki listeye kayıt edilecek.
         if (isContain) {
             // return res.send("Movie already in this list.")
-            return res.sendStatus(400);
+            return res.send("Movie already in the list");
         }
 
         

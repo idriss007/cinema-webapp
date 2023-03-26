@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import styles from "./signup.module.css";
 import { useFormik } from "formik";
 import validationSchema from "./validations";
-import { fetchRegister, postList } from "../../../api";
+import { createRatingList, fetchRegister, postList } from "../../../api";
 import AuthContext from "../../../context/AuthContext";
 
 function Signup() {
@@ -24,12 +24,23 @@ function Signup() {
                 login(registerResponse);
 
                 //Kullanıcı kayıt olunca default olarak her kullanıcıya watchlist listesi oluştur.
-                const listResponse = await postList({
+                const watchlist = await postList({
                     name: "Watchlist",
                     user: registerResponse.user._id
                 });
 
-                console.log(listResponse);
+                const ratedMoviesList = await postList({
+                    name: "Rated",
+                    user: registerResponse.user._id
+                });
+
+                const ratingList = await createRatingList({
+                    user_id: registerResponse.user._id
+                });
+
+                console.log(watchlist);
+                console.log(ratedMoviesList);
+                console.log(ratingList);
 
             } catch (err) {
                 console.log(err);

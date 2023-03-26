@@ -15,8 +15,8 @@ function Movies() {
     if (error) return 'An error has occurred: ' + error.message
 
 
-    function renderProduct(item) {
-        return <MovieCard movie={item} />;
+    function renderProduct(item, key) {
+        return <MovieCard key={key} movie={item} />;
     }
 
     return (

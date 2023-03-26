@@ -1,9 +1,7 @@
-import React from "react";
-import { useQuery } from "react-query";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getGenreList } from "../../api";
-import Detail from "../../pages/Detail";
 import Genre from "../Genre/Genre";
+import StarCard from "../StarCard/StarCard";
 import style from "./moviecard.module.css";
 
 function MovieCard(props) {
@@ -16,7 +14,7 @@ function MovieCard(props) {
                 <img loading="lazy" className={style.image} src={url} />
             </div>
             <div className={style.cardDetail}>
-                <Link style={{ textDecoration: "none", color: "inherit", }} to={"/detail/" + props.movie.id}> <p className={style.title}> {props.movie.title} </p> </Link>
+                <Link reloadDocument style={{ textDecoration: "none", color: "inherit", }} to={"/detail/" + props.movie.id}> <p className={style.title}> {props.movie.title} </p> </Link>
                 <p className={style.detail}>{props.movie.overview}</p>
                 <Genre genres={props.movie.genre_ids} />
             </div>

@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ratingBtnTxt {
+    font-size: 2rem;
+}
+
+.modalRatingTxt {
+    font-size: 2rem;
+}
+
+.starInput {
+    display: none;
+}
+
+.star:hover {
+    cursor: pointer;
+}

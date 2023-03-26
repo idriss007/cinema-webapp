@@ -1,6 +1,6 @@
 const User = require("../../models/user");
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require("../../helpers/jwt");
-const user = require("../../models/user");
+// const user = require("../../models/user");
 
 const Register = async (req, res, next) => {
     const input = req.body;
