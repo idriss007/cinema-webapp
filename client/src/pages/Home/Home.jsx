@@ -7,18 +7,17 @@ function Home() {
     return (
         <div className={styles.container} >
 
-
             <p className={styles.title}>Vizyondaki Filmler</p>
-            <div className={styles.innerContainer + " " + styles.vizyondakiFilmlerContainer}>
+            {/* <div className={styles.innerContainer + " " + styles.vizyondakiFilmlerContainer}> */}
 
                 <MovieSlider query="now_playing?" />
-            </div>
+            {/* </div> */}
             
             <p className={styles.title}>Yakında Vizyona Girecek Filmler</p>
 
-            <div className={styles.innerContainer + " " + styles.gelecekFilmlerContainer}>
+            {/* <div className={styles.innerContainer + " " + styles.gelecekFilmlerContainer}> */}
                 <MovieSlider query="upcoming?" />
-            </div>
+            {/* </div> */}
         </div>
     );
 

@@ -1,20 +1,20 @@
 .container {
     width: 80%;
     margin: 40px auto;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .title {
     font-weight: bold;
     font-size: 2rem;
-    margin-bottom: 10px;
+    margin: 20px auto;
     color: rgb(245, 197, 24);
 }
 
-.innerContainer {
+/* .innerContainer {
     margin-bottom: 40px;
     padding: 40px;
     border-radius: 15px;
     background-color: black;
     display: flex;
-} 
+}  */

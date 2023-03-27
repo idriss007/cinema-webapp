@@ -55,7 +55,8 @@ function Detail() {
     if (loggedIn && statusLists) return 'Loading...'
     if (loggedIn && errorLists) return 'An error has occurred: ' + errorLists.message
 
-    const allImages = images?.images?.backdrops?.map(item => imageURL + item.file_path);
+    // const allImages = images?.images?.backdrops?.map(item => imageURL + item.file_path);
+    const allImages = images?.images?.backdrops?.map(item => item.file_path);
 
     const genreList = []
 
@@ -68,18 +69,18 @@ function Detail() {
     function handleAddWatchlistClicked() {
 
         //Kullanıcı giriş yapmışsa izleme listesine film ekleyip çıkarabilsin
-        if(loggedIn === true) {
-            if(isInList) {
+        if (loggedIn === true) {
+            if (isInList) {
                 removeFromList(lists[0], details);
             }
 
-            if(!isInList) {
+            if (!isInList) {
                 addToList(lists[0], details);
             }
         }
 
         //Kullanıcı giriş yapmamışsa login sayfasına yönlendirilsin
-        if(!loggedIn) {
+        if (!loggedIn) {
             return (navigate("/login"));
         }
     }
@@ -147,7 +148,24 @@ function Detail() {
 
             <div className={styles.middleContainer}>
                 <img className={styles.poster} src={imageURL + details?.poster_path} />
-                <img className={styles.slider} src={allImages[0]}></img>{/*<Slider className={styles.image} items={allImages} />*/}
+                {/* <img className={styles.slider} src={allImages[0]}></img> */}
+
+                <div className={styles.carouselContainer}>
+                    <Slider allImages={allImages} />
+                </div>
+                {/* <div className={styles.carouselContainer}>
+                    <div className={styles.carouselSlide}>
+                        {
+                            allImages.map(image => {
+                                return <img className={styles.slider} src={image}></img>
+                            })
+                        }
+                    </div>
+                </div>
+
+                <button id="preBtn">Prev</button>
+                <button id="nextBtn">Next</button> */}
+
             </div>
 
             <div className={styles.bottomContainer}>

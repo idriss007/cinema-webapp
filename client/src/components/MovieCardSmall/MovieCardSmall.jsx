@@ -9,12 +9,17 @@ function MovieCardSmall({ movie }) {
 
     return (
         <div className={styles.container}>
+
             <div className={styles.posterContainer}>
+
                 <Link reloadDocument style={{ textDecoration: "none", color: "inherit", }} to={"/detail/" + movie.id}>
                     <img className={styles.poster} src={poster} />
                 </Link>
+                
             </div>
+
             <p className={styles.title}>{movie.original_title}</p>
+
         </div>
     );
 }

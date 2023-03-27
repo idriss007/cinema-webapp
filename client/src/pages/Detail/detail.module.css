@@ -109,15 +109,23 @@
     flex: 1;
 }
 
-.slider {
+.carouselContainer {
     margin-left: 20px;
     min-width: 0;
     max-height: 100%;
     object-fit: contain;
     align-items: center;
-    /*resmin boyut küçülünce ona göre küçülmesini sağlıyor. */
     flex: 2.67;
+    overflow: hidden;
 }
+
+/* .carouselSlide {
+    display: flex;
+}
+
+.slider {
+    min-width: 100%;
+} */
 
 .bottomContainer {
     margin-top: 20px;

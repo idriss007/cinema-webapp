@@ -1,0 +1,28 @@
+.carouselSlide {
+    display: flex;
+    position: relative;
+}
+
+#prevBtn {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    z-index: 1;
+    font-size: 2rem;
+}
+
+#nextBtn {
+    position: absolute;
+    /* top: 0; */
+    top: 50%;
+    transform: translate(0, -50%);
+    /* min-height: 100%; */
+    z-index: 1;
+    font-size: 2rem;
+    right: 0;
+}
+
+.slider {
+    min-width: 100%;
+}
+
