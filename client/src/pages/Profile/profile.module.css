@@ -19,24 +19,25 @@
 } */
 
 .listNameTxt {
-    margin-top: 20px;
-    font-size: 2rem;
-    padding: 10px;
+    font-size: 1.5rem;
+    padding: 8px 0 8px 30px;
     color: white;
     font-weight: bold;
 }
 
 .listContainer {
     background-color: cornflowerblue;
-    border-radius: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 30px auto;
 }
 
 .innerListContainer {
     display: flex;
     background-color: black;
-    padding: 20px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
+    padding: 30px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .movieContainer {

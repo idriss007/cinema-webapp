@@ -18,7 +18,7 @@ function Detail() {
     const { user, loggedIn } = useContext(AuthContext)
     const { addToList, removeFromList, isInList, setIsInList } = useContext(ListContext);
 
-    const imageURL = "https://www.themoviedb.org/t/p/original";
+    const imageURL = "https://www.themoviedb.org/t/p/w780";
 
     const { id } = useParams();
     const navigate = useNavigate();

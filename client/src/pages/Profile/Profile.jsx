@@ -36,10 +36,12 @@ function Profile() {
         // const { data } = await getDetail(id);
         return (
             <>
-                <div className={styles.listNameTxt}>{lists[0].movies[0] && list.name}</div>
-                {/* {<ListMovies list={list} />} */}
-                <div className={styles.innerListContainer}>
-                    {list.movies.map(renderMovies)}
+                <div className={styles.listContainer}>
+                    <div className={styles.listNameTxt}>{lists[0].movies[0] && list.name}</div>
+                    {/* {<ListMovies list={list} />} */}
+                    <div className={styles.innerListContainer}>
+                        {list.movies.map(renderMovies)}
+                    </div>
                 </div>
             </>
         );
@@ -57,7 +59,7 @@ function Profile() {
             <p>Email adresin: {user?.email}</p>
             <p>Şifren: {user?.password}</p>
             {/* <p>{JSON.stringify(user)}</p> */}
-            {(lists && lists[0]?.movies[0]) && (<div className={styles.listContainer}>
+            {(lists && lists[0]?.movies[0]) && (<div>
                 {/* <div className={styles.listTxt}>{lists[0].movies[0] && "Film Listelerin"}</div> */}
                 {lists.map(renderLists)}
             </div>)}
