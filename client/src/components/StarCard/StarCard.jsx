@@ -6,30 +6,37 @@ import AuthContext from "../../context/AuthContext";
 import $ from "jquery";
 
 import styles from "./starcard.module.css";
+import { useNavigate } from "react-router-dom";
 
 function StarCard({ movie }) {
     // function StarCard({ lists, movie }) {
 
+    const navigate = useNavigate();
+
     const [lists, setLists] = useState(null);
-    const { user } = useContext(AuthContext);
+    const { user, loggedIn } = useContext(AuthContext);
 
     const [rating, setRating] = useState(null);
     const [ratedValue, setRatedValue] = useState(null);
     const [hover, setHover] = useState(null);
 
     useEffect(() => {
+        
         (async () => {
 
-            try {
-                const ratedValue = await GetRating({ user_id: user._id, movie_id: movie.id });
-                setRatedValue(ratedValue);
-            } catch (err) {
+            if (loggedIn) {
+                try {
+                    const ratedValue = await GetRating({ user_id: user._id, movie_id: movie.id });
+                    setRatedValue(ratedValue);
+                } catch (err) {
 
+                }
+
+
+                const listsData = await fetchLists(user._id);
+                setLists(listsData);
             }
 
-
-            const listsData = await fetchLists(user._id);
-            setLists(listsData);
 
             // const isContainInList = listData[0].movies.find(movie => movie.movie.id === parseInt(id));
 
@@ -103,10 +110,12 @@ function StarCard({ movie }) {
                                 className="btn btn-danger"
                                 data-dismiss="modal"
                                 onClick={() => {
-                                    DeleteRating({ user_id: user._id, movie_id: movie.id });
-                                    RemoveFromList(lists[1]._id, movie);
-                                    setRating(null);
-                                    setRatedValue(null);
+                                    if (loggedIn) {
+                                        DeleteRating({ user_id: user._id, movie_id: movie.id });
+                                        RemoveFromList(lists[1]._id, movie);
+                                        setRating(null);
+                                        setRatedValue(null);
+                                    }
                                 }}>
                                 Remove Rating
                             </button>)}
@@ -125,9 +134,13 @@ function StarCard({ movie }) {
                                 className="btn btn-primary"
                                 data-dismiss="modal"
                                 onClick={() => {
-                                    AddToList(lists[1]._id, movie);
-                                    addRating({ user_id: user._id, movie_id: movie.id, ratingValue: rating });
-                                    setRatedValue(rating);
+                                    if (loggedIn) {
+                                        AddToList(lists[1]._id, movie);
+                                        addRating({ user_id: user._id, movie_id: movie.id, ratingValue: rating });
+                                        setRatedValue(rating);
+                                    } else {
+                                        navigate("/login");
+                                    }
                                 }}>
                                 Save changes
                             </button>)}

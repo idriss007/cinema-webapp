@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { fetchLists, getDetail, getImages } from "../../api";
+import { fetchLists, getCredits, getDetail, getImages } from "../../api";
 import Genre from "../../components/Genre";
 import Slider from "../../components/Slider";
 import moment from "moment";
@@ -12,6 +12,7 @@ import AuthContext from "../../context/AuthContext";
 import ListContext from "../../context/ListContext";
 import axios from "axios";
 import StarCard from "../../components/StarCard/StarCard";
+import MovieSlider from "../../components/MovieSlider/MovieSlider";
 
 function Detail() {
 
@@ -24,10 +25,17 @@ function Detail() {
     const navigate = useNavigate();
     const prevLocation = useLocation();
 
+    const [credits, setCredits] = useState(null);
+
     useEffect(() => {
         loggedIn && (async () => {
 
+            //Aktif kullanıcının oluşturduğu listeler veritabanından çekilir.
             const { data: listData } = await axios.get("http://localhost:4000/list/" + user._id);
+
+            //Film kadrosunu api ile çekme işlemi.
+            const credits = await getCredits(id);
+            setCredits(credits);
 
             const isContainInList = listData[0].movies.find(movie => movie.movie.id === parseInt(id));
 
@@ -36,7 +44,7 @@ function Detail() {
 
         })();
 
-    });
+    }, []);
 
     //Get movie information
     const { isLoading: statusDetails, error: errorDetails, data: details } = useQuery(["movieDetail", parseInt(id)], () => getDetail(id));
@@ -82,6 +90,28 @@ function Detail() {
         //Kullanıcı giriş yapmamışsa login sayfasına yönlendirilsin
         if (!loggedIn) {
             return (navigate("/login"));
+        }
+    }
+
+    const directors = credits?.crew?.filter(person => person.job === "Director");
+    const writers = credits?.crew?.filter(person => person.job === "Writer");
+    const actingCrew = credits?.cast?.slice(0, 7);
+
+    function renderDirectors(director, i) {
+        const name = director.name;
+        if (directors.length === (i + 1)) {
+            return name;
+        } else {
+            return (name + ", ");
+        }
+    }
+
+    function renderWriters(writer, i) {
+        const name = writer.name;
+        if (writers.length === (i + 1)) {
+            return name;
+        } else {
+            return (name + ", ");
         }
     }
 
@@ -148,30 +178,50 @@ function Detail() {
 
             <div className={styles.middleContainer}>
                 <img className={styles.poster} src={imageURL + details?.poster_path} />
-                {/* <img className={styles.slider} src={allImages[0]}></img> */}
 
                 <div className={styles.carouselContainer}>
                     <Slider allImages={allImages} />
                 </div>
-                {/* <div className={styles.carouselContainer}>
-                    <div className={styles.carouselSlide}>
-                        {
-                            allImages.map(image => {
-                                return <img className={styles.slider} src={image}></img>
-                            })
-                        }
-                    </div>
+
+            </div>
+
+            {/* <div className={styles.bottomContainer}> */}
+            {/* <div className={styles.genres}><Genre genres={genreList} /></div> */}
+            {/* <p className={styles.overview}>{details.overview}</p> */}
+            {/* </div> */}
+
+            <div className={styles.gridInfoSection}>
+
+                <div className={styles.genres + " " + styles.gridCol2}>
+                    <Genre genres={genreList} />
                 </div>
 
-                <button id="preBtn">Prev</button>
-                <button id="nextBtn">Next</button> */}
+                <div className={styles.crew + " " + styles.gridColAll}>
+                    <p>Yönetmen: {directors ? directors.map(renderDirectors) : null}</p>
+                    {writers?.length > 0 ? (<p>Senaryo: {writers.map(renderWriters)}</p>) : null}
+                </div>
+
+                <div className={styles.castCrew + " " + styles.gridColAll}>Oyuncu Kadrosu</div>
+
+                {actingCrew ? actingCrew.map((person, i) => {
+                    const profileImgUrl = "https://image.tmdb.org/t/p/w185" + person.profile_path;
+
+                    return (
+                        <>
+                            <div className={styles.cast}>
+                                <img src={profileImgUrl} />
+                                <p>{person.name}</p>
+                            </div>
+                        </>
+                    );
+                }) : null}
+
+                <div className={styles.overview + " " + styles.gridColAll}>
+                    {details.overview}
+                </div>
 
             </div>
 
-            <div className={styles.bottomContainer}>
-                <div className={styles.genres}><Genre genres={genreList} /></div>
-                <p className={styles.overview}>{details.overview}</p>
-            </div>
         </div>
     );
 }

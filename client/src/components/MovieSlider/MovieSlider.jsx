@@ -8,7 +8,7 @@ import Slider from "react-slick";
 import "./slick.css";
 import "./slick-theme.css";
 
-function MovieSlider({ query }) {
+function MovieSlider({ query, children }) {
 
     const settings = {
         className: "center",
@@ -27,49 +27,25 @@ function MovieSlider({ query }) {
 
     if (statusDetails) return 'Loading...'
     if (errorDetails) return 'An error has occurred: ' + errorDetails.message
+    
 
     function renderMovies(movie, key) {
         return <MovieCardSmall key={key} movie={movie} />
     }
 
     return (
-        <div className={styles.container}>
 
-            <Slider {...settings}>
+        <>
+            <div className={styles.title}>{children}</div>
+            <div className={styles.container}>
 
-                {/* <div>
-                    <h3>1</h3>
-                </div>
-                <div>
-                    <h3>2</h3>
-                </div>
-                <div>
-                    <h3>3</h3>
-                </div>
-                <div>
-                    <h3>4</h3>
-                </div>
-                <div>
-                    <h3>5</h3>
-                </div>
-                <div>
-                    <h3>6</h3>
-                </div>
-                <div>
-                    <h3>7</h3>
-                </div>
-                <div>
-                    <h3>8</h3>
-                </div>
-                <div>
-                    <h3>9</h3>
-                </div> */}
-                {movies?.results.map((movie, key) => renderMovies(movie, key))}
-            </Slider>
+                <Slider {...settings}>
+                    {movies?.results.map((movie, key) => renderMovies(movie, key))}
+                </Slider>
 
-            
+            </div>
+        </>
 
-        </div>
     );
 }
 

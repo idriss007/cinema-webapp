@@ -6,4 +6,13 @@
     background-color: black;
     border-radius: 5px;
     padding: 39px;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 2rem;
+    margin: 20px auto;
+    color: rgb(245, 197, 24);
 }

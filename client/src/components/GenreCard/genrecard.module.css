@@ -2,13 +2,18 @@
     margin-right: 10px;
     border: 1px solid black;
     border-radius: 20px;
-    padding: 5px 13px;
+    padding: 6px 13px;
     color: black;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     font-size: 0.9rem;
     transition: 0.2s;
+    /* box-shadow: 3px 5px 5px 1px black; */
+
 }
 
 .container:hover {
-    background-color: lightgray;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    box-shadow: 2px 4px 10px 2px black;
 }

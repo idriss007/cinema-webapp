@@ -35,7 +35,17 @@ export async function fetchMovies(query) {
 };
 
 export async function fetchNowPlayingOrUpcomingMovies(query) {
-    const url = "https://api.themoviedb.org/3/movie/" + query + "api_key=" + process.env.REACT_APP_API_URL + "&language=en-US";
+
+    const url = "https://api.themoviedb.org/3/movie/" + query + "api_key=" + process.env.REACT_APP_API_URL + "&region=US";
+
+    const { data } = await axios.get(url);
+
+    return data;
+
+};
+
+export async function getSimilarMovies(movie_id) {
+    const url = "https://api.themoviedb.org/3/movie/" + movie_id + "/recommendations?api_key=" + process.env.REACT_APP_API_URL;
 
     const { data } = await axios.get(url);
 
@@ -65,6 +75,16 @@ export async function getDetail(id) {
 
     return data;
 }
+
+export async function getCredits(movie_id) {
+    const url = "https://api.themoviedb.org/3/movie/" + movie_id + "/credits?api_key=" + process.env.REACT_APP_API_URL;
+
+    const { data } = await axios.get(url);
+
+    return data;
+}
+
+//USER İŞLEMLERİ
 
 export async function fetchRegister(values) {
     const url = "http://localhost:4000/auth/register";
@@ -137,7 +157,7 @@ export async function AddToList(list_id, movieData) {
 
     const url = "http://localhost:4000/list/add/" + list_id + "/" + movie_id;
 
-    const {data} = await axios.post(url, {movieData});
+    const { data } = await axios.post(url, { movieData });
 
     return data;
 }
@@ -147,7 +167,7 @@ export async function RemoveFromList(list_id, movieData) {
 
     const url = "http://localhost:4000/list/delete/" + list_id + "/" + movie_id;
 
-    const {data} = await axios.post(url, {movieData});
+    const { data } = await axios.post(url, { movieData });
 
     return data;
 }
@@ -179,12 +199,12 @@ export async function DeleteRating(input) {
     const url = "http://localhost:4000/rating/delete";
 
     const { data } = await axios.post(url, input);
-    
+
     return data;
 
 }
 
-export async function GetRating({user_id, movie_id}) {
+export async function GetRating({ user_id, movie_id }) {
 
     const url = "http://localhost:4000/rating/" + user_id + "/" + movie_id;
 

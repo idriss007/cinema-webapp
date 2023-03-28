@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Genre from "../Genre/Genre";
-import StarCard from "../StarCard/StarCard";
 import style from "./moviecard.module.css";
+import StarCard from "../StarCard/StarCard";
 
 function MovieCard(props) {
 
@@ -18,6 +18,7 @@ function MovieCard(props) {
                 <p className={style.detail}>{props.movie.overview}</p>
                 <Genre genres={props.movie.genre_ids} />
             </div>
+            {/* <StarCard key={props.key} id={props.id} movie={props.movie}/> */}
         </div>
     );
 }
