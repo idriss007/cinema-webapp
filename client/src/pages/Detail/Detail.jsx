@@ -1,18 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchLists, getCredits, getDetail, getImages } from "../../api";
+import moment from "moment";
+import axios from "axios";
+
+//Import components
 import Genre from "../../components/Genre";
 import Slider from "../../components/Slider";
-import moment from "moment";
+import StarCard from "../../components/StarCard/StarCard";
 
-import styles from "./detail.module.css";
-
+//Import Contexts
 import AuthContext from "../../context/AuthContext";
 import ListContext from "../../context/ListContext";
-import axios from "axios";
-import StarCard from "../../components/StarCard/StarCard";
-import MovieSlider from "../../components/MovieSlider/MovieSlider";
+
+//Import css file
+import styles from "./detail.module.css";
 
 function Detail() {
 
@@ -23,24 +26,30 @@ function Detail() {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const prevLocation = useLocation();
 
     const [credits, setCredits] = useState(null);
 
     useEffect(() => {
-        loggedIn && (async () => {
+        (async () => {
 
-            //Aktif kullanıcının oluşturduğu listeler veritabanından çekilir.
-            const { data: listData } = await axios.get("http://localhost:4000/list/" + user._id);
 
-            //Film kadrosunu api ile çekme işlemi.
-            const credits = await getCredits(id);
-            setCredits(credits);
+            try {
+                //Film kadrosunu api ile çekme işlemi.
+                const credits = await getCredits(id);
+                setCredits(credits);
+            } catch (err) {
+                console.log(err.message);
+            }
 
-            const isContainInList = listData[0].movies.find(movie => movie.movie.id === parseInt(id));
+            if (loggedIn) {
+                //Aktif kullanıcının oluşturduğu listeler veritabanından çekilir.
+                const { data: listData } = await axios.get("http://localhost:4000/list/" + user._id);
 
-            if (isContainInList) { setIsInList(true); }
-            if (!isContainInList) { setIsInList(false); }
+                const isContainInList = listData[0].movies.find(movie => movie.movie.id === parseInt(id));
+
+                if (isContainInList) { setIsInList(true); }
+                if (!isContainInList) { setIsInList(false); }
+            }
 
         })();
 
@@ -51,8 +60,7 @@ function Detail() {
     //Get Movie images
     const { isLoading: statusImages, error: errorImages, data: images } = useQuery({ enabled: details?.original_title !== null, queryKey: ["images", parseInt(id)], queryFn: () => getImages(id), });
     //Get User Lists
-    const { isLoading: statusLists, error: errorLists, data: lists } = useQuery(["lists", parseInt(id)], () => fetchLists(user._id));
-
+    const { isLoading: statusLists, error: errorLists, data: lists } = useQuery(["lists", parseInt(id)], () => fetchLists(user._id), { enabled: loggedIn });
 
     if (statusImages) return 'Loading...'
     if (errorImages) return 'An error has occurred: ' + errorImages.message
@@ -63,16 +71,11 @@ function Detail() {
     if (loggedIn && statusLists) return 'Loading...'
     if (loggedIn && errorLists) return 'An error has occurred: ' + errorLists.message
 
-    // const allImages = images?.images?.backdrops?.map(item => imageURL + item.file_path);
+    //Filmin fotoğraf url adreslerini diziye aktar.
     const allImages = images?.images?.backdrops?.map(item => item.file_path);
 
-    const genreList = []
-
-    for (let i = 0; i < details.genres.length; i++) {
-        genreList.push(details.genres[i].id);
-    }
-
-    // const isContainInList = lists[0].movieIds.find(Id => Id === JSON.stringify(details.id));
+    //Filmin türlerini genreList isimli diziye aktar.
+    const genreList = details.genres.map(genre => genre.id);
 
     function handleAddWatchlistClicked() {
 
@@ -100,19 +103,45 @@ function Detail() {
     function renderDirectors(director, i) {
         const name = director.name;
         if (directors.length === (i + 1)) {
-            return name;
+            return <Link to={"/name/" + director.id}>{name}</Link>;
         } else {
-            return (name + ", ");
+            return (
+                <>
+                    <Link to={"/name/" + director.id}>{name}</Link><span>, </span>
+                </>
+            );
         }
     }
 
     function renderWriters(writer, i) {
         const name = writer.name;
         if (writers.length === (i + 1)) {
-            return name;
+            return <Link to={"/name/" + writer.id}>{name}</Link>;
         } else {
-            return (name + ", ");
+            return (
+                <>
+                    <Link to={"/name/" + writer.id}>{name}</Link><span>, </span>
+                </>
+            );
         }
+    }
+
+    function renderActingCrew(person, i) {
+        const profileImgUrl = "https://image.tmdb.org/t/p/w185" + person.profile_path;
+        if(!person.profile_path) {
+            return null;
+        }
+        return (
+            <>
+                <div className={styles.cast}>
+                    <Link reloadDocument style={{ textDecoration: "none", color: "inherit", }} to={"/name/" + person.id}>
+                        <img src={profileImgUrl} />
+                        <p>{person.name}</p>
+                    </Link>
+                    
+                </div>
+            </>
+        );
     }
 
     return (
@@ -157,19 +186,13 @@ function Detail() {
 
                         <div className={styles.starContainer}>
                             <StarCard movie={details} />
-                            {/* <button type="button" data-toggle="modal" data-target="#exampleModal" style={{ background: "inherit", border: "none" }}>
-                                <BsStar />
-                            </button> */}
                         </div>
 
                     </div>
 
-                    {/* <WatchlistCard lists={lists} user={user} details={details} /> */}
-
                     <div className={styles.addToWatchlistBtnContainer}>
                         <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")}
                             onClick={handleAddWatchlistClicked} >
-                            {/* onClick={isInList === false ? () => addToList(lists[0], details) : () => removeFromList(lists[0], details)} > */}
                             {isInList ? "— Kaldır" : "+ Add to watchlist"}
                         </button>
                     </div>
@@ -185,14 +208,9 @@ function Detail() {
 
             </div>
 
-            {/* <div className={styles.bottomContainer}> */}
-            {/* <div className={styles.genres}><Genre genres={genreList} /></div> */}
-            {/* <p className={styles.overview}>{details.overview}</p> */}
-            {/* </div> */}
-
             <div className={styles.gridInfoSection}>
 
-                <div className={styles.genres + " " + styles.gridCol2}>
+                <div className={styles.genres + " " + styles.gridCol3}>
                     <Genre genres={genreList} />
                 </div>
 
@@ -203,21 +221,14 @@ function Detail() {
 
                 <div className={styles.castCrew + " " + styles.gridColAll}>Oyuncu Kadrosu</div>
 
-                {actingCrew ? actingCrew.map((person, i) => {
-                    const profileImgUrl = "https://image.tmdb.org/t/p/w185" + person.profile_path;
-
-                    return (
-                        <>
-                            <div className={styles.cast}>
-                                <img src={profileImgUrl} />
-                                <p>{person.name}</p>
-                            </div>
-                        </>
-                    );
-                }) : null}
+                {actingCrew ? actingCrew.map(renderActingCrew) : <p>Yükleniyor...</p>}
 
                 <div className={styles.overview + " " + styles.gridColAll}>
                     {details.overview}
+                </div>
+
+                <div className={styles.imdbIdContainer}>
+                    <p><a href={"https://www.imdb.com/title/" + details.imdb_id} target="_blank">Imdb Sayfası</a></p>
                 </div>
 
             </div>

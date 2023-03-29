@@ -11,6 +11,7 @@ import Profile from "./pages/Profile/Profile";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import { ListProvider } from "./context/ListContext";
+import PersonDetail from "./pages/PersonDetail/PersonDetail";
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
               </Route>
               <Route path="/detail" element={<Detail />} >
                 <Route path=":id" element={<Detail />} />
+              </Route>
+              <Route path="/name" element={<PersonDetail />} >
+                <Route path=":name_id" element={<PersonDetail />} />
               </Route>
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Signin />} />

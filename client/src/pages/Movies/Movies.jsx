@@ -19,10 +19,6 @@ function Movies() {
         return <MovieCard key={key} movie={item} />;
     }
 
-    function handleRatingBtnClicked() {
-        
-    }
-
     return (
         <div className={"container"}>
             {data.results.map(renderProduct)}

@@ -8,6 +8,10 @@ function MovieCard(props) {
 
     const url = "https://image.tmdb.org/t/p/w500/" + props.movie.poster_path;
 
+    if(!props.movie.poster_path) {
+        return null;
+    }
+
     return (
         <div className={style.container}>
             <div className={style.imageContainer}>

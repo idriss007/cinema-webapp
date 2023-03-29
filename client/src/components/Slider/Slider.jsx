@@ -26,8 +26,8 @@ function Slider({ allImages }) {
                 <div className={styles.btnContainer}><button id={styles.prevBtn} onClick={goToPrevious} >{"<"}</button></div>
                 <div className={styles.btnContainer}><button id={styles.nextBtn} onClick={goToNext} >{">"}</button></div>
                 {
-                    allImages.map(image => {
-                        return <img className={styles.slider} src={"https://www.themoviedb.org/t/p/w1280" + currentIndex}></img>
+                    allImages.map((image, key) => {
+                        return <img key={key} className={styles.slider} src={"https://www.themoviedb.org/t/p/w1280" + currentIndex}></img>
                     })
                 }
             </div>

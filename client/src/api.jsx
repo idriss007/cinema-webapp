@@ -84,6 +84,22 @@ export async function getCredits(movie_id) {
     return data;
 }
 
+export async function getMoviesByGenre(genre_id) {
+    const url = "https://api.themoviedb.org/3/discover/movie?" + process.env.REACT_APP_API_URL + "&sort_by=vote_count.desc&with_genres=" + genre_id;
+
+    const { data } = await axios.get(url);
+
+    return data;
+}
+
+export async function getPersonDetail(name_id) {
+    const url = "https://api.themoviedb.org/3/person/"+ name_id + "?api_key=" + process.env.REACT_APP_API_URL;
+
+    const { data } = await axios.get(url);
+
+    return data;
+}
+
 //USER İŞLEMLERİ
 
 export async function fetchRegister(values) {
