@@ -54,7 +54,8 @@
     top: 0;
     left: 0;
 
-    display: block;
+    /* display: block; */
+    display: flex;
     margin-left: auto;
     margin-right: auto;
 }
@@ -123,3 +124,10 @@
 .slick-arrow.slick-hidden {
     display: none;
 }
+
+.slick-track .slick-slide {
+    display: flex;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+  }

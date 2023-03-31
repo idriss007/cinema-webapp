@@ -43,7 +43,7 @@ function Signup() {
                 console.log(ratingList);
 
             } catch (err) {
-                console.log(err);
+                bag.setErrors({ general: err.response.data });
             }
         },
     });
@@ -53,6 +53,9 @@ function Signup() {
             <div className={styles.headTitleContainer}><p className={styles.headTitle}>Sign Up</p></div>
             <form onSubmit={formik.handleSubmit}>
             <div className="form-group">
+
+                    {formik.errors.general && <div className="alert alert-danger">{formik.errors.general}</div>}
+
                     <label className={styles.lbl} name="name">Your Name</label>
                     <input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.name} name="name" type="text" className="form-control form-control-lg" placeholder="Enter your name" />
                 </div>

@@ -22,7 +22,7 @@ function MovieCard(props) {
                 <p className={style.detail}>{props.movie.overview}</p>
                 <Genre genres={props.movie.genre_ids} />
             </div>
-            {/* <StarCard key={props.key} id={props.id} movie={props.movie}/> */}
+            <StarCard movie={props.movie}/>
         </div>
     );
 }

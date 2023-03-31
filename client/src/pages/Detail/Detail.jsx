@@ -5,6 +5,8 @@ import { fetchLists, getCredits, getDetail, getImages } from "../../api";
 import moment from "moment";
 import axios from "axios";
 
+import { LoadingButton } from "@mui/lab"
+
 //Import components
 import Genre from "../../components/Genre";
 import Slider from "../../components/Slider";
@@ -56,40 +58,29 @@ function Detail() {
     }, []);
 
     //Get movie information
-    const { isLoading: statusDetails, error: errorDetails, data: details } = useQuery(["movieDetail", parseInt(id)], () => getDetail(id));
+    const { data: details } = useQuery(["movieDetail", parseInt(id)], () => getDetail(id));
     //Get Movie images
-    const { isLoading: statusImages, error: errorImages, data: images } = useQuery({ enabled: details?.original_title !== null, queryKey: ["images", parseInt(id)], queryFn: () => getImages(id), });
+    const { data: images } = useQuery({ enabled: details?.original_title !== null, queryKey: ["images", parseInt(id)], queryFn: () => getImages(id), });
     //Get User Lists
-    const { isLoading: statusLists, error: errorLists, data: lists } = useQuery(["lists", parseInt(id)], () => fetchLists(user._id), { enabled: loggedIn });
+    const { data: lists } = useQuery(["lists", parseInt(id)], () => fetchLists(user._id), { enabled: loggedIn });
 
-    if (statusImages) return 'Loading...'
-    if (errorImages) return 'An error has occurred: ' + errorImages.message
-
-    if (statusDetails) return 'Loading...'
-    if (errorDetails) return 'An error has occurred: ' + errorDetails.message
-
-    if (loggedIn && statusLists) return 'Loading...'
-    if (loggedIn && errorLists) return 'An error has occurred: ' + errorLists.message
+    if (!details || !images) { return <p>Yükleniyor</p> }
 
     //Filmin fotoğraf url adreslerini diziye aktar.
     const allImages = images?.images?.backdrops?.map(item => item.file_path);
-
     //Filmin türlerini genreList isimli diziye aktar.
     const genreList = details.genres.map(genre => genre.id);
 
     function handleAddWatchlistClicked() {
-
         //Kullanıcı giriş yapmışsa izleme listesine film ekleyip çıkarabilsin
         if (loggedIn === true) {
             if (isInList) {
                 removeFromList(lists[0], details);
             }
-
             if (!isInList) {
                 addToList(lists[0], details);
             }
         }
-
         //Kullanıcı giriş yapmamışsa login sayfasına yönlendirilsin
         if (!loggedIn) {
             return (navigate("/login"));
@@ -97,30 +88,17 @@ function Detail() {
     }
 
     const directors = credits?.crew?.filter(person => person.job === "Director");
-    const writers = credits?.crew?.filter(person => person.job === "Writer");
+    const writers = credits?.crew?.filter(person => { return (person.job === "Screenplay" || person.job === "Writer") });
     const actingCrew = credits?.cast?.slice(0, 7);
 
-    function renderDirectors(director, i) {
-        const name = director.name;
-        if (directors.length === (i + 1)) {
-            return <Link to={"/name/" + director.id}>{name}</Link>;
+    function renderCrew(crew, i, length) {
+        const name = crew.name;
+        if (length === (i + 1)) {
+            return <Link to={"/name/" + crew.id}>{name}</Link>;
         } else {
             return (
                 <>
-                    <Link to={"/name/" + director.id}>{name}</Link><span>, </span>
-                </>
-            );
-        }
-    }
-
-    function renderWriters(writer, i) {
-        const name = writer.name;
-        if (writers.length === (i + 1)) {
-            return <Link to={"/name/" + writer.id}>{name}</Link>;
-        } else {
-            return (
-                <>
-                    <Link to={"/name/" + writer.id}>{name}</Link><span>, </span>
+                    <Link to={"/name/" + crew.id}>{name}</Link><span>, </span>
                 </>
             );
         }
@@ -128,7 +106,7 @@ function Detail() {
 
     function renderActingCrew(person, i) {
         const profileImgUrl = "https://image.tmdb.org/t/p/w185" + person.profile_path;
-        if(!person.profile_path) {
+        if (!person.profile_path) {
             return null;
         }
         return (
@@ -138,7 +116,6 @@ function Detail() {
                         <img src={profileImgUrl} />
                         <p>{person.name}</p>
                     </Link>
-                    
                 </div>
             </>
         );
@@ -191,10 +168,17 @@ function Detail() {
                     </div>
 
                     <div className={styles.addToWatchlistBtnContainer}>
-                        <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")}
+                        {/* LoadingButton için @mui/material @emotion/react @emotion/styled @mui/lab paketleri kuruldu */}
+                        <LoadingButton
+                            className={styles.addToWatchlistBtn}
+                            loading={loggedIn && (lists ? false : true)} variant="contained"
+                            onClick={handleAddWatchlistClicked}>
+                            {isInList ? "✓ In Watchlist" : "+ Add to Watchlist"}
+                        </LoadingButton>
+                        {/* <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")}
                             onClick={handleAddWatchlistClicked} >
                             {isInList ? "— Kaldır" : "+ Add to watchlist"}
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
@@ -203,7 +187,7 @@ function Detail() {
                 <img className={styles.poster} src={imageURL + details?.poster_path} />
 
                 <div className={styles.carouselContainer}>
-                    <Slider allImages={allImages} />
+                    {images ? <Slider allImages={allImages} /> : <p>Yükleniyor</p>}
                 </div>
 
             </div>
@@ -215,8 +199,8 @@ function Detail() {
                 </div>
 
                 <div className={styles.crew + " " + styles.gridColAll}>
-                    <p>Yönetmen: {directors ? directors.map(renderDirectors) : null}</p>
-                    {writers?.length > 0 ? (<p>Senaryo: {writers.map(renderWriters)}</p>) : null}
+                    <p>Yönetmen: {directors ? directors.map((director, i, length) => renderCrew(director, i, directors.length)) : null}</p>
+                    {writers?.length > 0 ? (<p>Senaryo: {writers.map((writer, i, length) => renderCrew(writer, i, writers.length))}</p>) : null}
                 </div>
 
                 <div className={styles.castCrew + " " + styles.gridColAll}>Oyuncu Kadrosu</div>

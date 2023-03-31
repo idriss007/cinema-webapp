@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { fetchNowPlayingOrUpcomingMovies } from "../../api";
 import MovieCardSmall from "../MovieCardSmall/MovieCardSmall";
@@ -8,40 +8,35 @@ import Slider from "react-slick";
 import "./slick.css";
 import "./slick-theme.css";
 
-function MovieSlider({ query, children }) {
+function MovieSlider({ movies, children }) {
 
     const settings = {
         className: "center",
-        infinite: true,
+        dots: true,
+        infinite: false,
         centerPadding: "60px",
-        slidesToShow: 5,
-        swipeToSlide: true,
-        afterChange: function (index) {
-            console.log(
-                `Slider Changed to: ${index + 1}, background: #222; color: #bada55`
-            );
-        }
+        slidesToScroll: 5,
+        slidesToShow: 5
     }
 
-    const { isLoading: statusDetails, error: errorDetails, data: movies } = useQuery(["movies", { query }], () => fetchNowPlayingOrUpcomingMovies(query));
-
-    if (statusDetails) return 'Loading...'
-    if (errorDetails) return 'An error has occurred: ' + errorDetails.message
-    
+    if (movies?.length === 1) { settings.slidesToShow = 1 }
+    if (movies?.length === 2) { settings.slidesToShow = 2 }
+    if (movies?.length === 3) { settings.slidesToShow = 3 }
+    if (movies?.length === 4) { settings.slidesToShow = 4 }
+    if (movies?.length === 5) { settings.slidesToShow = 5 }
 
     function renderMovies(movie, key) {
+        if (!movie?.poster_path) { return null; }
         return <MovieCardSmall key={key} movie={movie} />
     }
 
     return (
 
         <>
-            <div className={styles.title}>{children}</div>
+            {children && <div className={styles.title}>{children}</div>}
             <div className={styles.container}>
 
-                <Slider {...settings}>
-                    {movies?.results.map((movie, key) => renderMovies(movie, key))}
-                </Slider>
+                <Slider {...settings}>{movies?.map((movie, key) => renderMovies(movie, key))}</Slider>
 
             </div>
         </>

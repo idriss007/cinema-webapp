@@ -2,12 +2,14 @@
     /* display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 2rem; */
-    margin-bottom: 50px;
+    /* margin-bottom: 50px; */
     background-color: black;
     border-radius: 5px;
     padding: 39px;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 0 0 100vmax black;
+    clip-path: inset(0 -100vmax); 
 }
 
 .title {

@@ -1,8 +1,26 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, CSSProperties } from "react";
 import { fetchLogout, fetchMe, fetchAccessTokenByRefreshToken } from "../api";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import SyncLoader from "react-spinners/SyncLoader";
+
+const override = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+};
+
 const AuthContext = createContext();
+
+const style = {
+    position: "absolute",
+    display: "flex",
+    width: "100vw",
+    height: "100vh",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "red",
+}
 
 export function AuthProvider({ children }) {
 
@@ -24,7 +42,7 @@ export function AuthProvider({ children }) {
                 console.log("me " + JSON.stringify(me));
                 setLoading(false);
             } catch (err) {
-                
+
                 //Kullanıcı eğer giriş yapmamışsa veya giriş yapılmış fakat access token kullanım süresi...
                 //....bitmişse aşağıdaki kodlar çalışacaktır. 
                 //------------------------------------------------
@@ -35,7 +53,7 @@ export function AuthProvider({ children }) {
                     // navigate("/");
                     // navigate(prevLocation.pathname);
                     return;
-                } catch(err) {
+                } catch (err) {
                     setLoading(false);
                 }
                 //-----------------------------------------------
@@ -79,7 +97,15 @@ export function AuthProvider({ children }) {
 
     if (loading) {
         return (
-            <p>Yükleniyor...</p>
+            // <div style={style} ><p>Yükleniyor...</p></div>
+            <div style={style}><SyncLoader
+                // color={color}
+                loading={loading}
+                cssOverride={override}
+                size={35}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+            /></div>
         );
     }
 

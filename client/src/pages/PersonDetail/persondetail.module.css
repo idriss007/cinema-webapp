@@ -1,9 +1,10 @@
-/* body {
-    background-color:rgb(42, 42, 42);
-} */
+body {
+    /* background-color:rgb(42, 42, 42); */
+}
 
 .container {
     margin-top: 20px;
+    /* background-color: black; */
 }
 
 .gridColAll {
@@ -12,8 +13,7 @@
 
 .infoContainer {
     grid-column: span 4;
-    padding: 20px;
-    font-size: 1.05rem;
+    /* padding: 0 20px; */
 }
 
 .infoContainer span {
@@ -25,7 +25,7 @@
     padding: 50px;
     margin: auto;
     display: grid;
-    gap: 0.5rem;
+    gap: 1.5rem;
     grid-template-columns: repeat(5, 1fr);
     border-radius: 20px;
 }
@@ -36,18 +36,24 @@
 }
 
 .jobContainer {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    line-height: 0.6rem;
 }
 
 .personImg {
     width: 100%;
+    border-radius: 5px;
 }
 
 .biographyContainer {
     margin-top: 20px;
-    font-size: 1.2rem;
+    /* font-size: 1.2rem; */
 }
 
-.playedTitles {
-    display: flex;
+.credit {
+    /* margin-top: 20px; */
+}
+
+.credit img {
+    width: 100%;
 }

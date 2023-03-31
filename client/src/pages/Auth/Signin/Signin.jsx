@@ -17,9 +17,12 @@ function Signin() {
         validationSchema,
         onSubmit: async (values, bag) => {
             try {
-                const response = await fetchLogin(values);
-                login(response);
-            } catch (e) { }
+                const loginResponse = await fetchLogin(values);
+                console.log(loginResponse);
+                login(loginResponse);
+            } catch (err) { 
+                bag.setErrors({ invalidLogin: err.response.data });
+            }
         }
     });
 
@@ -29,6 +32,7 @@ function Signin() {
             <form onSubmit={formik.handleSubmit}>
 
                 <div className="form-group" >
+                    {formik.errors.invalidLogin && (<div className="alert alert-danger">{formik.errors.invalidLogin}</div>)}
                     <label className={styles.lbl} name="email">Email</label>
                     <input onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} name="email" className="form-control form-control-lg" type="email" placeholder="Enter your email" />
                 </div>
