@@ -19,7 +19,8 @@ function Signup() {
         validationSchema,
         onSubmit: async (values, bag) => {
             try {
-                const registerResponse = await fetchRegister({name: values.name, email: values.email, password: values.password});
+                
+                const registerResponse = await fetchRegister({ name: values.name, email: values.email, password: values.password });
                 console.log(registerResponse);
                 login(registerResponse);
 
@@ -52,7 +53,7 @@ function Signup() {
         <div className={styles.container}>
             <div className={styles.headTitleContainer}><p className={styles.headTitle}>Sign Up</p></div>
             <form onSubmit={formik.handleSubmit}>
-            <div className="form-group">
+                <div className="form-group">
 
                     {formik.errors.general && <div className="alert alert-danger">{formik.errors.general}</div>}
 

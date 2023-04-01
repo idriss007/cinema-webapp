@@ -5,6 +5,9 @@ import AuthContext from "../../context/AuthContext";
 import StatesContext from "../../context/StatesContext";
 import styles from "./navbar.module.css";
 
+import moment from "moment";
+import SearchBox from "../SearchBox/SearchBox";
+
 function Navbar() {
 
     const linkStyle = {
@@ -19,7 +22,9 @@ function Navbar() {
     const searchBoxInput = useRef(null);
 
     const { searchQuery, setSearchQuery } = useContext(StatesContext);
+
     const [movies, setMovies] = useState();
+    const imgPath = "https://www.themoviedb.org/t/p/w154";
 
     useEffect(() => {
 
@@ -43,11 +48,11 @@ function Navbar() {
         setSearchQuery(e.target.value);
     }
 
-    function handleClick() {
-        const path = searchQuery.length !== 0 && "/search/" + searchQuery
-        navigate(path);
-        setSearchQuery("");
-    }
+    // function handleClick() {
+    //     const path = searchQuery.length !== 0 && "/search/" + searchQuery
+    //     navigate(path);
+    //     setSearchQuery("");
+    // }
 
     function handleKeyPress(e) {
         if (e.which === 13) {
@@ -65,21 +70,43 @@ function Navbar() {
             </div>
 
             <div className={styles.search}>
+                <SearchBox
+                    handleKeyPress={handleKeyPress}
+                    handleChange={handleChange}
+                    searchQuery={searchQuery}
+                    placeholder="Search a movie"
+                    movies={movies}
+                    linkStyle={linkStyle}
+                    imgPath={imgPath}
+                />
+            </div>
+
+            {/* <div className={styles.search}>
 
                 <div className={styles.searchInputs}>
                     <input ref={searchBoxInput} onKeyDown={handleKeyPress} value={searchQuery} onChange={handleChange} className={styles.searchBoxInput} placeholder="Search a movie" />
-                    <button onClick={handleClick} className={styles.searchButton} >Search</button>
+                    {/* <button onClick={handleClick} className={styles.searchButton} >Search</button> }
                 </div>
                 {movies?.length > 0 ?
                     (
                         <div className={styles.queryResultContainer}>
-                            {movies?.map(movie => {
-                                return <div><p>{movie.original_title}</p></div>
+                            {movies?.slice(0, 5).map(movie => {
+                                return (
+                                    <Link reloadDocument style={linkStyle} to={"detail/" + movie.id}>
+                                        <div className={styles.resultMovieContainer}>
+                                            <div className={styles.resultMovieImgContainer}><img className={styles.resultMovieImg} src={imgPath + movie.poster_path} alt="" /></div>
+                                            <div className={styles.resultMovieInfoContainer}>
+                                                <div><p>{movie.original_title}</p></div>
+                                                <div className={styles.resultMovieReleaseDateContainer}><p>{moment(movie.release_date).format("YYYY")}</p></div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                )
                             })}
                         </div>
                     ) : null
                 }
-            </div>
+            </div> */}
 
             <div className={styles.menu}>
                 {!loggedIn && (
@@ -102,7 +129,7 @@ function Navbar() {
                 )}
             </div>
 
-        </div>
+        </div >
     );
 }
 

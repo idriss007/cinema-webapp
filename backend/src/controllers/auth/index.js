@@ -2,18 +2,18 @@ const User = require("../../models/user");
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require("../../helpers/jwt");
 // const user = require("../../models/user");
 
-const Register = async (req, res, next) => {
+const Register = async (req, res) => {
     const input = req.body;
 
     try {
         const isExist = await User.exists({ email: input.email });
         if (isExist) { throw new Error("Daha önce bu email ile oluşturulan bir hesap bulunuyor."); }
-        
+
         const registeredUser = await User.create(input);
         // console.log(registeredUser);
 
-        const accessToken = await signAccessToken({ user_id: registeredUser._id });
-        const refreshToken = await signRefreshToken({ user_id: registeredUser._id });
+        const accessToken = signAccessToken({ user_id: registeredUser._id });
+        const refreshToken = signRefreshToken({ user_id: registeredUser._id });
 
         res.json({
             user: registeredUser,
@@ -27,7 +27,7 @@ const Register = async (req, res, next) => {
 
 }
 
-const Login = async (req, res, next) => {
+const Login = async (req, res) => {
     const input = req.body;
 
     try {
@@ -36,32 +36,31 @@ const Login = async (req, res, next) => {
 
         if (!findUser) {
             throw new Error("Hatalı email.");
-        } else {
-
-            if (findUser.password !== input.password) {
-                throw new Error("Hatalı şifre");
-            }
-
-            const accessToken = await signAccessToken({ user_id: findUser._id });
-            const refreshToken = await signRefreshToken({ user_id: findUser._id });
-
-            // const userData = findUser.toObject();
-            // delete userData.password;
-            // delete userData.__v;
-
-            return res.json({
-                user: findUser,
-                accessToken,
-                refreshToken
-            });
         }
+
+        if (findUser.password !== input.password) {
+            throw new Error("Hatalı şifre");
+        }
+
+        const accessToken = signAccessToken({ user_id: findUser._id });
+        const refreshToken = signRefreshToken({ user_id: findUser._id });
+
+        // const userData = findUser.toObject();
+        // delete userData.password;
+        // delete userData.__v;
+
+        return res.json({
+            user: findUser,
+            accessToken,
+            refreshToken
+        });
 
     } catch (err) {
         res.status(400).send(err.message);
     }
 }
 
-const RefreshToken = async (req, res, next) => {
+const RefreshToken = async (req, res) => {
     const { refresh_token } = req.body;
 
     if (!refresh_token) {
@@ -72,15 +71,15 @@ const RefreshToken = async (req, res, next) => {
     try {
         const user_id = await verifyRefreshToken(refresh_token);
         const user = await User.findById(user_id);
-        const accessToken = await signAccessToken({ user_id });
-        const refreshToken = await signRefreshToken({ user_id });
+        const accessToken = signAccessToken({ user_id });
+        const refreshToken = signRefreshToken({ user_id });
         res.json({ user, accessToken, refreshToken });
     } catch (err) {
         res.send(err);
     }
 }
 
-const Me = async (req, res, next) => {
+const Me = async (req, res) => {
     const { user_id } = req.payload;
     try {
         const user = await User.findById(user_id);
@@ -91,7 +90,7 @@ const Me = async (req, res, next) => {
     }
 }
 
-const Logout = (req, res, next) => {
+const Logout = (req, res) => {
     const { refresh_token } = req.body;
     res.json({ message: "success" })
 }

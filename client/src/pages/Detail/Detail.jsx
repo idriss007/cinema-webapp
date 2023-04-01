@@ -7,10 +7,17 @@ import axios from "axios";
 
 import { LoadingButton } from "@mui/lab"
 
+//Bootstrap
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import ListGroup from 'react-bootstrap/ListGroup';
+
+
 //Import components
 import Genre from "../../components/Genre";
 import Slider from "../../components/Slider";
 import StarCard from "../../components/StarCard/StarCard";
+import Comments from "../Comments/Comments";
 
 //Import Contexts
 import AuthContext from "../../context/AuthContext";
@@ -125,99 +132,124 @@ function Detail() {
 
         <div className={styles.container}>
 
-            <div className={styles.headContainer}>
+            {/* <div className="d-flex ml-2 align-items-center">
+                <div className="mr-3 p-2"><p>Movie Detail</p></div>
+                <div className="p-2"><p>Comments</p></div>
+            </div> */}
 
-                <div className={styles.leftInnerContainer}>
+            {/* <ListGroup horizontal>
+                <ListGroup.Item>This</ListGroup.Item>
+                <ListGroup.Item>ListGroup</ListGroup.Item>
+            </ListGroup> */}
 
-                    <div className={styles.titleInnerContainer}>
-                        <p className={styles.title}>{details.original_title}</p>
-                    </div>
+            <Tabs
+                defaultActiveKey="movie"
+                id="uncontrolled-tab-example"
+                className="mb-3"
+            >
+                <Tab eventKey="movie" title="Movie Detail">
 
-                    <div className={styles.releaseDateInnerContainer}>
-                        <p className={styles.releaseDate}>{moment(details.release_date).format("YYYY")}</p>
-                    </div>
 
-                </div>
+                    <div className={styles.headContainer}>
 
-                <div className={styles.rightInnerContainer}>
+                        <div className={styles.leftInnerContainer}>
 
-                    <div className={styles.userRatingContainer}>
+                            <div className={styles.titleInnerContainer}>
+                                <p className={styles.title}>{details.original_title}</p>
+                            </div>
 
-                        <p className={styles.usersRatingText}>USERS RATING</p>
+                            <div className={styles.releaseDateInnerContainer}>
+                                <p className={styles.releaseDate}>{moment(details.release_date).format("YYYY")}</p>
+                            </div>
 
-                        <div className={styles.voteInnerContainer}>
-                            <p className={styles.vote}>{parseFloat(details.vote_average).toFixed(1)}/10</p>
                         </div>
 
-                        <div className={styles.voteCountInnerContainer}>
-                            <p className={styles.voteCount}>{details.vote_count}</p>
+                        <div className={styles.rightInnerContainer}>
+
+                            <div className={styles.userRatingContainer}>
+
+                                <p className={styles.usersRatingText}>USERS RATING</p>
+
+                                <div className={styles.voteInnerContainer}>
+                                    <p className={styles.vote}>{parseFloat(details.vote_average).toFixed(1)}/10</p>
+                                </div>
+
+                                <div className={styles.voteCountInnerContainer}>
+                                    <p className={styles.voteCount}>{details.vote_count}</p>
+                                </div>
+
+                            </div>
+
+                            <div className={styles.yourRatingContainer}>
+
+                                <div className={styles.yourRatingTextContainer}>
+                                    <p className={styles.yourRatingText}>YOUR RATING</p>
+                                </div>
+
+                                <div className={styles.starContainer}>
+                                    <StarCard movie={details} />
+                                </div>
+
+                            </div>
+
+                            <div className={styles.addToWatchlistBtnContainer}>
+                                {/* LoadingButton için @mui/material @emotion/react @emotion/styled @mui/lab paketleri kuruldu */}
+                                <LoadingButton
+                                    className={styles.addToWatchlistBtn}
+                                    loading={loggedIn && (lists ? false : true)} variant="contained"
+                                    onClick={handleAddWatchlistClicked}>
+                                    {isInList ? "✓ In Watchlist" : "+ Add to Watchlist"}
+                                </LoadingButton>
+                                {/* <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")}
+                onClick={handleAddWatchlistClicked} >
+                {isInList ? "— Kaldır" : "+ Add to watchlist"}
+            </button> */}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.middleContainer}>
+                        <img className={styles.poster} src={imageURL + details?.poster_path} />
+
+                        <div className={styles.carouselContainer}>
+                            {images ? <Slider allImages={allImages} /> : <p>Yükleniyor</p>}
                         </div>
 
                     </div>
 
-                    <div className={styles.yourRatingContainer}>
+                    <div className={styles.gridInfoSection}>
 
-                        <div className={styles.yourRatingTextContainer}>
-                            <p className={styles.yourRatingText}>YOUR RATING</p>
+                        <div className={styles.genres + " " + styles.gridCol3}>
+                            <Genre genres={genreList} />
                         </div>
 
-                        <div className={styles.starContainer}>
-                            <StarCard movie={details} />
+                        <div className={styles.crew + " " + styles.gridColAll}>
+                            <p>Yönetmen: {directors ? directors.map((director, i, length) => renderCrew(director, i, directors.length)) : null}</p>
+                            {writers?.length > 0 ? (<p>Senaryo: {writers.map((writer, i, length) => renderCrew(writer, i, writers.length))}</p>) : null}
+                        </div>
+
+                        <div className={styles.castCrew + " " + styles.gridColAll}>Oyuncu Kadrosu</div>
+
+                        {actingCrew ? actingCrew.map(renderActingCrew) : <p>Yükleniyor...</p>}
+
+                        <div className={styles.overview + " " + styles.gridColAll}>
+                            {details.overview}
+                        </div>
+
+                        <div className={styles.imdbIdContainer}>
+                            <p><a href={"https://www.imdb.com/title/" + details.imdb_id} target="_blank">Imdb Sayfası</a></p>
                         </div>
 
                     </div>
+                </Tab>
 
-                    <div className={styles.addToWatchlistBtnContainer}>
-                        {/* LoadingButton için @mui/material @emotion/react @emotion/styled @mui/lab paketleri kuruldu */}
-                        <LoadingButton
-                            className={styles.addToWatchlistBtn}
-                            loading={loggedIn && (lists ? false : true)} variant="contained"
-                            onClick={handleAddWatchlistClicked}>
-                            {isInList ? "✓ In Watchlist" : "+ Add to Watchlist"}
-                        </LoadingButton>
-                        {/* <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")}
-                            onClick={handleAddWatchlistClicked} >
-                            {isInList ? "— Kaldır" : "+ Add to watchlist"}
-                        </button> */}
-                    </div>
-                </div>
-            </div>
+                <Tab eventKey="comments" title="Comments" >
+                    <Comments movie_id={details.id} />
+                </Tab>
 
-            <div className={styles.middleContainer}>
-                <img className={styles.poster} src={imageURL + details?.poster_path} />
-
-                <div className={styles.carouselContainer}>
-                    {images ? <Slider allImages={allImages} /> : <p>Yükleniyor</p>}
-                </div>
-
-            </div>
-
-            <div className={styles.gridInfoSection}>
-
-                <div className={styles.genres + " " + styles.gridCol3}>
-                    <Genre genres={genreList} />
-                </div>
-
-                <div className={styles.crew + " " + styles.gridColAll}>
-                    <p>Yönetmen: {directors ? directors.map((director, i, length) => renderCrew(director, i, directors.length)) : null}</p>
-                    {writers?.length > 0 ? (<p>Senaryo: {writers.map((writer, i, length) => renderCrew(writer, i, writers.length))}</p>) : null}
-                </div>
-
-                <div className={styles.castCrew + " " + styles.gridColAll}>Oyuncu Kadrosu</div>
-
-                {actingCrew ? actingCrew.map(renderActingCrew) : <p>Yükleniyor...</p>}
-
-                <div className={styles.overview + " " + styles.gridColAll}>
-                    {details.overview}
-                </div>
-
-                <div className={styles.imdbIdContainer}>
-                    <p><a href={"https://www.imdb.com/title/" + details.imdb_id} target="_blank">Imdb Sayfası</a></p>
-                </div>
-
-            </div>
-
+            </Tabs>
         </div>
+
     );
 }
 

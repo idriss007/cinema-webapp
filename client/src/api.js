@@ -73,7 +73,7 @@ export async function getMoviesByGenre(genre_id) {
 }
 
 export async function getPersonDetail(name_id) {
-    const url = "https://api.themoviedb.org/3/person/"+ name_id + "?api_key=" + process.env.REACT_APP_API_URL;
+    const url = "https://api.themoviedb.org/3/person/" + name_id + "?api_key=" + process.env.REACT_APP_API_URL;
 
     const { data } = await axios.get(url);
 
@@ -81,7 +81,7 @@ export async function getPersonDetail(name_id) {
 }
 
 export async function getPersonCredit(name_id) {
-    const url = "https://api.themoviedb.org/3/person/"+ name_id + "/combined_credits?api_key=" + process.env.REACT_APP_API_URL;
+    const url = "https://api.themoviedb.org/3/person/" + name_id + "/combined_credits?api_key=" + process.env.REACT_APP_API_URL;
 
     const { data } = await axios.get(url);
 
@@ -213,6 +213,48 @@ export async function GetRating({ user_id, movie_id }) {
     const url = "http://localhost:4000/rating/" + user_id + "/" + movie_id;
 
     const { data } = await axios.get(url);
+
+    return data;
+
+}
+
+//Comment İşlemleri
+
+export async function FetchAllComments(movie_id) {
+
+    const url = "http://localhost:4000/comment/" + movie_id;
+
+    const { data } = await axios.get(url);
+
+    return data;
+
+}
+
+export async function PostComment(user_id, movie_id, body, parent_id) {
+    console.log(parent_id);
+    const url = "http://localhost:4000/comment/";
+
+    const { data } = await axios.post(url, {user_id, movie_id, body, parent_id});
+
+    return data;
+
+}
+
+export async function DeleteComment(comment_id) {
+
+    const url = "http://localhost:4000/comment/";
+    
+    const { data } = await axios.delete(url, {data: {comment_id}});
+
+    return data;
+
+}
+
+export async function UpdateComment(comment_id, body) {
+
+    const url = "http://localhost:4000/comment/";
+    
+    const { data } = await axios.put(url, {comment_id, body});
 
     return data;
 

@@ -1,17 +1,4 @@
-.container {
-    height: 70px;
-    background-color: black;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    color: white;
-    margin-left: 20px;
-}
-
-/* .searchInputs {
+.searchInputs {
     color: white;
 }
 
@@ -33,7 +20,7 @@
     font-weight: bold;
     transition: 0.3s;
     
-}
+} */
 
 .searchButton:hover {
     background-color: black;
@@ -78,18 +65,4 @@
 
 .resultMovieReleaseDateContainer {
     color: rgb(188,188,188);
-} */
-
-.menu {
-    color: white;
-    margin-right: 20px;
-    display: flex;
-}
-
-.authButton {
-    padding: 10px;
-}
-
-.profileBtn {
-    color: black;
 }

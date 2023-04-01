@@ -138,20 +138,6 @@
     margin-bottom: 100px;
 }
 
-@media (min-width: 1400px) {
-    .gridInfoSection {
-        grid-template-columns: repeat(7, 1fr);
-    }
-
-    .gridColAll {
-        grid-column: span 7;
-    }
-    
-    .gridCol3 {
-        grid-column: span 3;
-    }
-}
-
 .crew p {
     font-size: 1.5rem;
 }
@@ -193,4 +179,46 @@
 .overview {
     margin-top: 20px;
     font-size: 1.2rem;
+}
+
+@media (min-width: 500px) {
+    .gridInfoSection {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gridColAll {
+        grid-column: span 2;
+    }
+    
+    .gridCol3 {
+        grid-column: span 2;
+    }
+}
+
+@media (min-width: 1000px) {
+    .gridInfoSection {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .gridColAll {
+        grid-column: span 5;
+    }
+    
+    .gridCol3 {
+        grid-column: span 3;
+    }
+}
+
+@media (min-width: 1400px) {
+    .gridInfoSection {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .gridColAll {
+        grid-column: span 7;
+    }
+    
+    .gridCol3 {
+        grid-column: span 3;
+    }
 }
