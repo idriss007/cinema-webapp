@@ -1,1 +1,1 @@
-export {default} from "./MovieSlider";
+export { default } from "./MovieSlider";

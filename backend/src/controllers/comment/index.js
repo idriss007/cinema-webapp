@@ -1,103 +1,97 @@
 const Comment = require("../../models/comment");
 
 const CreateComment = async (req, res) => {
+  const { user_id, movie_id, body, parent_id } = req.body;
 
-    const { user_id, movie_id, body, parent_id } = req.body;
+  if (!user_id || !movie_id || !body) {
+    return res.sendStatus(400);
+  }
 
-    if (!user_id || !movie_id || !body) { return res.sendStatus(400); }
-
-    try {
-
-        const newComment = await (await Comment.create({ user: user_id, movie_id, body, parentId: parent_id })).populate("user");
-        console.log(newComment);
-        return res.send(newComment);
-    } catch (err) {
-        console.log(err);
-    }
-
-}
+  try {
+    const newComment = await (
+      await Comment.create({
+        user: user_id,
+        movie_id,
+        body,
+        parentId: parent_id,
+      })
+    ).populate("user");
+    return res.send(newComment);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const DeleteComment = async (req, res) => {
+  const { comment_id } = req.body;
 
-    const { comment_id } = req.body;
+  if (!comment_id) {
+    return res.sendStatus(400);
+  }
 
-    if (!comment_id) { return res.sendStatus(400); }
-    
-    try {
-
-        await Comment.deleteMany({parentId: comment_id});
-        const response = await Comment.findByIdAndDelete(comment_id).populate("user");
-        return res.send(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
+  try {
+    await Comment.deleteMany({ parentId: comment_id });
+    const response = await Comment.findByIdAndDelete(comment_id).populate(
+      "user"
+    );
+    return res.send(response);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const UpdateComment = async (req, res) => {
+  const { comment_id, body } = req.body;
 
-    const { comment_id, body } = req.body;
+  if (!comment_id || !body) {
+    return res.sendStatus(400);
+  }
 
-    console.log(comment_id, "     ", body);
-
-    if (!comment_id || !body) { return res.sendStatus(400); }
-
-    try {
-
-        const comment = await Comment.findById(comment_id);
-        comment.body = body;
-        comment.updatedAt = new Date();
-        const updatedComment = await comment.save();
-        res.send(updatedComment)
-        console.log("Successfully updated the comment :)");
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
+  try {
+    const comment = await Comment.findById(comment_id);
+    comment.body = body;
+    comment.updatedAt = new Date();
+    const updatedComment = await comment.save();
+    res.send(updatedComment);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const GetAllComments = async (req, res) => {
+  const { movie_id } = req.params;
 
-    const { movie_id } = req.params;
+  if (!movie_id) {
+    return res.sendStatus(400);
+  }
 
-    if (!movie_id) { return res.sendStatus(400); }
-
-    try {
-
-        const comments = await Comment.find({ movie_id }).populate("user");
-        return res.send(comments);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
+  try {
+    const comments = await Comment.find({ movie_id }).populate("user");
+    return res.send(comments);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const GetUserComments = async (req, res) => {
+  const { user_id } = req.params;
 
-    const { user_id } = req.params;
-    console.log(user_id);
+  if (!user_id) {
+    return res.sendStatus(400);
+  }
 
-    if (!user_id) { return res.sendStatus(400); }
-
-    try {
-
-        const comments = await Comment.find({ user: user_id });
-        console.log(comments);
-        return res.send(comments);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
+  try {
+    const comments = await Comment.find({ user: user_id }).populate("user");
+    return res.send(comments);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 module.exports = {
-    CreateComment,
-    DeleteComment,
-    UpdateComment,
-    GetAllComments,
-    GetUserComments
-}
+  CreateComment,
+  DeleteComment,
+  UpdateComment,
+  GetAllComments,
+  GetUserComments,
+};

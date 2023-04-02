@@ -5,31 +5,26 @@ import GenreCard from "../GenreCard/GenreCard";
 import style from "./genre.module.css";
 
 function Genre(props) {
+  const { data } = useQuery("genre", getGenreList);
+  const genres = data?.genres;
 
-    const { data } = useQuery("genre", getGenreList);
-    const genres = data?.genres;
+  const resultGenres = [];
 
-    const resultGenres = [];
-
-    for(let i = 0; i < genres?.length; i++) {
-
-        for(let j = 0; j < props.genres.length; j++) {
-            if(genres[i].id === props.genres[j]) {
-                resultGenres.push(genres[i].name)
-            }
-        }
-            
+  for (let i = 0; i < genres?.length; i++) {
+    for (let j = 0; j < props.genres.length; j++) {
+      if (genres[i].id === props.genres[j]) {
+        resultGenres.push(genres[i].name);
+      }
     }
+  }
 
-    function renderGenres(genre, key) {
-        return <GenreCard key={key} item={genre} />
-    }
+  function renderGenres(genre, key) {
+    return <GenreCard key={key} item={genre} />;
+  }
 
-    return (
-        <div className={style.container}>
-            {resultGenres.map(renderGenres)}
-        </div>
-    );
+  return (
+    <div className={style.container}>{resultGenres.map(renderGenres)}</div>
+  );
 }
 
 export default Genre;

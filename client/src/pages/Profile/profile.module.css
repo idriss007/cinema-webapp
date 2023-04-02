@@ -1,19 +1,19 @@
 .container {
-    width: 90%;
-    margin: 30px auto;
+  width: 90%;
+  margin: 30px auto;
 }
 
 .profileTxt {
-    font-size: 3rem;
-    margin-bottom: 10px;
+  font-size: 3rem;
+  margin-bottom: 10px;
 }
 
 .sliderContainer {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 .logoutBtn {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 /* .listTxt {
@@ -23,29 +23,29 @@
 } */
 
 .listNameTxt {
-    font-size: 1.5rem;
-    padding: 8px 0 8px 30px;
-    color: white;
-    font-weight: bold;
+  font-size: 1.5rem;
+  padding: 8px 0 8px 30px;
+  color: white;
+  font-weight: bold;
 }
 
 .listContainer {
-    background-color: cornflowerblue;
-    border-radius: 5px;
-    overflow: hidden;
-    margin: 30px auto;
+  background-color: cornflowerblue;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 30px auto;
 }
 
 .innerListContainer {
-    display: flex;
-    background-color: black;
-    padding: 30px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
+  display: flex;
+  background-color: black;
+  padding: 30px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .movieContainer {
-    margin-right: 20px;
-    /* display: grid;
+  margin-right: 20px;
+  /* display: grid;
     grid-template-columns: 20% 20% 20% 20% 20%; */
 }

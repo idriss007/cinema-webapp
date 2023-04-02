@@ -1,11 +1,11 @@
 .addToWatchlistBtnContainer {
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .addToWatchlistBtn {
-    height: 100%;
-    font-weight: bold;
+  height: 100%;
+  font-weight: bold;
 }

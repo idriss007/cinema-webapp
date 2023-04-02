@@ -25,10 +25,10 @@ function App() {
               <Route path="/search" element={<Movies />}>
                 <Route path=":query" element={<Movies />} />
               </Route>
-              <Route path="/detail" element={<Detail />} >
+              <Route path="/detail" element={<Detail />}>
                 <Route path=":id" element={<Detail />} />
               </Route>
-              <Route path="/name" element={<PersonDetail />} >
+              <Route path="/name" element={<PersonDetail />}>
                 <Route path=":name_id" element={<PersonDetail />} />
               </Route>
               <Route path="/signup" element={<Signup />} />

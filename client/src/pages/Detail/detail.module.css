@@ -1,123 +1,123 @@
 .container {
-    margin: 0 auto;
-    margin-top: 20px;
-    width: 85%;
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* padding: 20px; */
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 85%;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* padding: 20px; */
 }
 
 .headContainer {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 5px;
 }
 
 .title {
-    font-size: 2.3rem;
-    font-weight: bold;
-    /*padding: 0;
+  font-size: 2.3rem;
+  font-weight: bold;
+  /*padding: 0;
     margin: 0;*/
 }
 
 .rightInnerContainer {
-    display: flex;
+  display: flex;
 }
 
 .usersRatingText {
-    font-weight: bold;
-    font-size: 0.85rem;
-    color: dimgrey;
-    margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: dimgrey;
+  margin-bottom: 6px;
 }
 
 .vote {
-    font-weight: bold;
-    font-size: 1.4rem;
+  font-weight: bold;
+  font-size: 1.4rem;
 }
 
 .voteCount {
-    font-size: 0.75rem;
-    line-height: 0.6rem;
+  font-size: 0.75rem;
+  line-height: 0.6rem;
 }
 
 .yourRatingContainer {
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .yourRatingText {
-    /* margin-left: 20px; */
-    font-weight: bold;
-    color: dimgrey;
-    font-size: 0.85rem;
+  /* margin-left: 20px; */
+  font-weight: bold;
+  color: dimgrey;
+  font-size: 0.85rem;
 }
 
 .starContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    /* font-size: 2rem; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  /* font-size: 2rem; */
 }
 
 .addToWatchlistBtnContainer {
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .addToWatchlistBtn {
-    height: 100%;
-    font-weight: bold;
+  height: 100%;
+  font-weight: bold;
 }
 
 .addToWatchlistBtn:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .middleContainer {
-    height: fit-content;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    order: 1;
+  height: fit-content;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  order: 1;
 }
 
 .poster {
-    min-width: 0;
-    max-height: 100%;
-    object-fit: contain;
-    align-items: center;
-    /*resmin boyut küçülünce ona göre küçülmesini sağlıyor. */
-    flex: 1;
-    box-shadow: 2px 2px 10px 1px black;
+  min-width: 0;
+  max-height: 100%;
+  object-fit: contain;
+  align-items: center;
+  /*resmin boyut küçülünce ona göre küçülmesini sağlıyor. */
+  flex: 1;
+  box-shadow: 2px 2px 10px 1px black;
 }
 
 .poster:hover {
-    box-shadow: 2px 2px 15px 1px black;
+  box-shadow: 2px 2px 15px 1px black;
 }
 
 .carouselContainer {
-    box-shadow: 2px 2px 10px 1px black;
-    margin-left: 20px;
-    min-width: 0;
-    max-height: 100%;
-    object-fit: contain;
-    align-items: center;
-    flex: 2.67;
-    overflow: hidden;
+  box-shadow: 2px 2px 10px 1px black;
+  margin-left: 20px;
+  min-width: 0;
+  max-height: 100%;
+  object-fit: contain;
+  align-items: center;
+  flex: 2.67;
+  overflow: hidden;
 }
 
 .bottomContainer {
-    margin-top: 20px;
-    margin-bottom: 50px;
-    display: flex;
-    order: 2;
-    flex-direction: column;
-    align-items: flex-start;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  display: flex;
+  order: 2;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 /*--------------------------------------------GRİD-SECTİON---------------------------------------------------*/
@@ -131,94 +131,94 @@
 } */
 
 .gridInfoSection {
-    display: grid;
-    gap: 1.2rem;
-    /* grid-template-columns: repeat(7, 1fr); */
+  display: grid;
+  gap: 1.2rem;
+  /* grid-template-columns: repeat(7, 1fr); */
 
-    margin-bottom: 100px;
+  margin-bottom: 100px;
 }
 
 .crew p {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .castCrew {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .cast {
-    display: flex;
-    flex-direction: column;
-    width: 150px;
+  display: flex;
+  flex-direction: column;
+  width: 150px;
 }
 
 .cast img {
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-    width: 100%;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  width: 100%;
 }
 
 .cast {
-    /* background-color: #262626; */
-    padding-bottom: 15px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 5px 1px black;
+  /* background-color: #262626; */
+  padding-bottom: 15px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px 1px black;
 }
 
 .cast p {
-    margin-top: 10px;
-    text-align: center;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .genres {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .overview {
-    margin-top: 20px;
-    font-size: 1.2rem;
+  margin-top: 20px;
+  font-size: 1.2rem;
 }
 
 @media (min-width: 500px) {
-    .gridInfoSection {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  .gridInfoSection {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-    .gridColAll {
-        grid-column: span 2;
-    }
-    
-    .gridCol3 {
-        grid-column: span 2;
-    }
+  .gridColAll {
+    grid-column: span 2;
+  }
+
+  .gridCol3 {
+    grid-column: span 2;
+  }
 }
 
 @media (min-width: 1000px) {
-    .gridInfoSection {
-        grid-template-columns: repeat(5, 1fr);
-    }
+  .gridInfoSection {
+    grid-template-columns: repeat(5, 1fr);
+  }
 
-    .gridColAll {
-        grid-column: span 5;
-    }
-    
-    .gridCol3 {
-        grid-column: span 3;
-    }
+  .gridColAll {
+    grid-column: span 5;
+  }
+
+  .gridCol3 {
+    grid-column: span 3;
+  }
 }
 
 @media (min-width: 1400px) {
-    .gridInfoSection {
-        grid-template-columns: repeat(7, 1fr);
-    }
+  .gridInfoSection {
+    grid-template-columns: repeat(7, 1fr);
+  }
 
-    .gridColAll {
-        grid-column: span 7;
-    }
-    
-    .gridCol3 {
-        grid-column: span 3;
-    }
+  .gridColAll {
+    grid-column: span 7;
+  }
+
+  .gridCol3 {
+    grid-column: span 3;
+  }
 }

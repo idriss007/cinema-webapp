@@ -1,14 +1,14 @@
 .searchInputs {
-    color: white;
+  color: white;
 }
 
 .searchBoxInput {
-    border-radius: 20px;
-    text-align: center;
-    height: 35px;
-    width: 400px;
-    border: none;
-    outline: none;
+  border-radius: 20px;
+  text-align: center;
+  height: 35px;
+  width: 400px;
+  border: none;
+  outline: none;
 }
 
 /* .searchButton {
@@ -23,46 +23,46 @@
 } */
 
 .searchButton:hover {
-    background-color: black;
-    color: white;
+  background-color: black;
+  color: white;
 }
 
 .queryResultContainer {
-    position: absolute;
-    background-color: rgb(26,26,26);
-    margin-top: 5px;
-    width: 400px;
-    z-index: 100;
-    color: white;
-    border-radius: 5px;
+  position: absolute;
+  background-color: rgb(26, 26, 26);
+  margin-top: 5px;
+  width: 400px;
+  z-index: 100;
+  color: white;
+  border-radius: 5px;
 }
 
 .resultMovieContainer {
-    padding: 10px;
-    transition: 0.1s;
-    display: flex;
-    border-radius: 5px;
+  padding: 10px;
+  transition: 0.1s;
+  display: flex;
+  border-radius: 5px;
 }
 
 .resultMovieContainer:hover {
-    background-color:rgb(49,49,49);
-    color: white;
+  background-color: rgb(49, 49, 49);
+  color: white;
 }
 
 .resultMovieImgContainer {
-    flex:1;
+  flex: 1;
 }
 
 .resultMovieImg {
-    width: 100%;
+  width: 100%;
 }
 
 .resultMovieInfoContainer {
-    flex:6;
-    margin-left: 5px;
-    font-weight: normal;
+  flex: 6;
+  margin-left: 5px;
+  font-weight: normal;
 }
 
 .resultMovieReleaseDateContainer {
-    color: rgb(188,188,188);
+  color: rgb(188, 188, 188);
 }

@@ -1,7 +1,5 @@
 import React from "react";
 
-function List() {
-    
-}
+function List() {}
 
 export default List;
