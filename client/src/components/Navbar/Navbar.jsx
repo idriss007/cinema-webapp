@@ -67,6 +67,7 @@ function Navbar() {
       <div className={styles.logo + " navbar-brand"}>
         <Link
           reloadDocument
+          style={{ color: "black", fontWeight: "bold" }}
           className={styles.linkUrl + " btn bg-warning text-color-dark"}
           to="/"
         >
