@@ -3,13 +3,17 @@ import moment from "moment";
 import styles from "./searchbox.module.css";
 import { Link } from "react-router-dom";
 
+const linkStyle = {
+  textDecoration: "none",
+  color: "inherit",
+};
+
 function SearchBox({
   handleKeyPress,
   handleChange,
   searchQuery,
   placeholder,
   movies,
-  linkStyle,
   imgPath,
 }) {
   return (

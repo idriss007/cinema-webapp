@@ -13,11 +13,6 @@ import { FaUserCircle } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 function Navbar() {
-  const linkStyle = {
-    textDecoration: "none",
-    color: "inherit",
-  };
-
   const { loggedIn, user, logout } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -72,8 +67,7 @@ function Navbar() {
       <div className={styles.logo + " navbar-brand"}>
         <Link
           reloadDocument
-          className="btn bg-warning"
-          style={linkStyle}
+          className={styles.linkUrl + " btn bg-warning text-color-dark"}
           to="/"
         >
           Home
@@ -87,7 +81,6 @@ function Navbar() {
           searchQuery={searchQuery}
           placeholder="Search a movie"
           movies={movies}
-          linkStyle={linkStyle}
           imgPath={imgPath}
         />
       </div>
@@ -100,11 +93,9 @@ function Navbar() {
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        {/* <span class={"navbar-toggler-icon " + styles.navbarTogglerIcon}> */}
         <div>
           <GiHamburgerMenu color="white" size="25" />
         </div>
-        {/* </span> */}
       </button>
       <div
         className={
@@ -115,26 +106,34 @@ function Navbar() {
       >
         {!loggedIn && (
           <div className="navbar-nav">
-            <div className={styles.authButton}>
-              <Link
-                reloadDocument
-                className="btn btn-primary nav-item nav-link active"
-                style={linkStyle}
-                to="/login"
-              >
-                Login<span class="sr-only">(current)</span>
-              </Link>
-            </div>
-            <div className={styles.authButton}>
-              <Link
-                reloadDocument
-                className={"btn btn-primary nav-item nav-link"}
-                style={linkStyle}
-                to="/signup"
-              >
-                Sign Up
-              </Link>
-            </div>
+            <Link
+              reloadDocument
+              className={
+                "dropdown-item p-3 d-flex justify-content-center " +
+                styles.dropdownItem +
+                " " +
+                styles.navBtn +
+                " " +
+                styles.linkUrl
+              }
+              to="/login"
+            >
+              Login<span class="sr-only">(current)</span>
+            </Link>
+            <Link
+              reloadDocument
+              className={
+                "dropdown-item p-3 d-flex justify-content-center " +
+                styles.dropdownItem +
+                " " +
+                styles.navBtn +
+                " " +
+                styles.linkUrl
+              }
+              to="/signup"
+            >
+              Sign Up
+            </Link>
           </div>
         )}
 
@@ -143,21 +142,24 @@ function Navbar() {
             <Link
               reloadDocument
               className={
-                "nav-item nav-link " +
+                "nav-item nav-link p-3 " +
                 styles.navBtn +
                 " " +
-                styles.navbarDropdown
+                styles.navbarDropdown +
+                " " +
+                styles.linkUrl
               }
-              style={linkStyle}
               to="/"
             >
               Watchlist
             </Link>
-            <div class={"nav-item dropdown " + styles.navBtn}>
+            <div class={"nav-item dropdown"}>
               <a
                 class={
-                  "nav-link dropdown-toggle d-flex align-items-center " +
-                  styles.navbarDropdown
+                  "nav-link dropdown-toggle d-flex align-items-center p-3 " +
+                  styles.navbarDropdown +
+                  " " +
+                  styles.navBtn
                 }
                 href="/"
                 id={"navbarDropdown"}
@@ -166,8 +168,8 @@ function Navbar() {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <div>
-                  <FaUserCircle size="20" className="mr-1" />
+                <div style={{ height: "16px" }}>
+                  <FaUserCircle size="18" className="mr-1" />
                   {user.name}
                 </div>
               </a>
@@ -184,10 +186,11 @@ function Navbar() {
                     "dropdown-item p-3 d-flex justify-content-center " +
                     styles.dropdownItem +
                     " " +
-                    styles.topItem
+                    styles.topItem +
+                    " " +
+                    styles.linkUrl
                   }
                   reloadDocument
-                  style={linkStyle}
                   to="/profile"
                 >
                   Profile
@@ -198,10 +201,11 @@ function Navbar() {
                     "dropdown-item p-3 d-flex justify-content-center " +
                     styles.dropdownItem +
                     " " +
-                    styles.bottomItem
+                    styles.bottomItem +
+                    " " +
+                    styles.linkUrl
                   }
                   reloadDocument
-                  style={linkStyle}
                   onClick={() => logout()}
                 >
                   Sign out

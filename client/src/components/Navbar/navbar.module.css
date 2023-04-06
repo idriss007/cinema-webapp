@@ -7,13 +7,23 @@
     font-weight: bold;
 }
 
-.menu {
+/* .menu {
     color: white;
     display: flex;
+} */
+
+.linkUrl {
+    text-decoration: none;
+    color: inherit;
 }
 
-.authButton {
-    padding: 10px;
+.linkUrl:hover {
+    color: white;
+}
+
+.linkUrl:focus {
+    background-color: inherit;
+    color: white;
 }
 
 .search {
@@ -32,6 +42,10 @@
     border-radius: 5px;
 }
 
+.navBtn:active {
+    background-color: rgb(72, 72, 72);
+}
+
 .dropdownMenu {
     background-color: rgb(31, 31, 31);
     color: white;
@@ -43,6 +57,10 @@
     background-color: rgb(49, 49, 49);
 }
 
+.dropdownItem:active {
+    background-color: rgb(72, 72, 72);
+}
+
 .navbarDropdown {
     color: white;
 }
@@ -52,13 +70,13 @@
 }
 
 .topItem {
-    border-radius: 5px;
+    border-radius: 3px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
 
 .bottomItem {
-    border-radius: 5px;
+    border-radius: 3px;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 }
