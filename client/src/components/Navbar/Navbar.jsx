@@ -8,14 +8,17 @@ import styles from "./navbar.module.css";
 import moment from "moment";
 import SearchBox from "../SearchBox/SearchBox";
 
+//FontAwesome
+import { FaUserCircle } from "react-icons/fa";
+import { GiHamburgerMenu } from "react-icons/gi";
+
 function Navbar() {
   const linkStyle = {
     textDecoration: "none",
     color: "inherit",
-    fontWeight: "bold",
   };
 
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn, user, logout } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const searchBoxInput = useRef(null);
@@ -61,11 +64,15 @@ function Navbar() {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.logo}>
+    <div
+      className={
+        styles.container + " justify-content-lg-between navbar navbar-expand-lg"
+      }
+    >
+      <div className={styles.logo + " navbar-brand"}>
         <Link
           reloadDocument
-          className="btn btn-primary"
+          className="btn bg-warning"
           style={linkStyle}
           to="/"
         >
@@ -73,7 +80,7 @@ function Navbar() {
         </Link>
       </div>
 
-      <div className={styles.search}>
+      <div className={styles.search + " flex-lg-grow-0 flex-grow-1"}>
         <SearchBox
           handleKeyPress={handleKeyPress}
           handleChange={handleChange}
@@ -84,71 +91,122 @@ function Navbar() {
           imgPath={imgPath}
         />
       </div>
-
-      {/* <div className={styles.search}>
-
-                <div className={styles.searchInputs}>
-                    <input ref={searchBoxInput} onKeyDown={handleKeyPress} value={searchQuery} onChange={handleChange} className={styles.searchBoxInput} placeholder="Search a movie" />
-                    {/* <button onClick={handleClick} className={styles.searchButton} >Search</button> }
-                </div>
-                {movies?.length > 0 ?
-                    (
-                        <div className={styles.queryResultContainer}>
-                            {movies?.slice(0, 5).map(movie => {
-                                return (
-                                    <Link reloadDocument style={linkStyle} to={"detail/" + movie.id}>
-                                        <div className={styles.resultMovieContainer}>
-                                            <div className={styles.resultMovieImgContainer}><img className={styles.resultMovieImg} src={imgPath + movie.poster_path} alt="" /></div>
-                                            <div className={styles.resultMovieInfoContainer}>
-                                                <div><p>{movie.original_title}</p></div>
-                                                <div className={styles.resultMovieReleaseDateContainer}><p>{moment(movie.release_date).format("YYYY")}</p></div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                )
-                            })}
-                        </div>
-                    ) : null
-                }
-            </div> */}
-
-      <div className={styles.menu}>
+      <button
+        className="navbar-toggler p-0 ml-3"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        {/* <span class={"navbar-toggler-icon " + styles.navbarTogglerIcon}> */}
+        <div>
+          <GiHamburgerMenu color="white" size="25" />
+        </div>
+        {/* </span> */}
+      </button>
+      <div
+        className={
+          styles.menu +
+          " align-items-center collapse navbar-collapse flex-grow-0 flex-lg-row flex-column "
+        }
+        id="navbarNavAltMarkup"
+      >
         {!loggedIn && (
-          <>
+          <div className="navbar-nav">
             <div className={styles.authButton}>
               <Link
                 reloadDocument
-                className="btn btn-primary"
+                className="btn btn-primary nav-item nav-link active"
                 style={linkStyle}
                 to="/login"
               >
-                Login
+                Login<span class="sr-only">(current)</span>
               </Link>
             </div>
             <div className={styles.authButton}>
               <Link
                 reloadDocument
-                className={"btn btn-primary"}
+                className={"btn btn-primary nav-item nav-link"}
                 style={linkStyle}
                 to="/signup"
               >
                 Sign Up
               </Link>
             </div>
-          </>
+          </div>
         )}
 
         {loggedIn && (
           <>
-            <div className={styles.authButton + " " + styles.profileBtn}>
-              <Link
-                reloadDocument
-                className="btn btn-light"
-                style={linkStyle}
-                to="/profile"
+            <Link
+              reloadDocument
+              className={
+                "nav-item nav-link " +
+                styles.navBtn +
+                " " +
+                styles.navbarDropdown
+              }
+              style={linkStyle}
+              to="/"
+            >
+              Watchlist
+            </Link>
+            <div class={"nav-item dropdown " + styles.navBtn}>
+              <a
+                class={
+                  "nav-link dropdown-toggle d-flex align-items-center " +
+                  styles.navbarDropdown
+                }
+                href="/"
+                id={"navbarDropdown"}
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
-                Profile
-              </Link>
+                <div>
+                  <FaUserCircle size="20" className="mr-1" />
+                  {user.name}
+                </div>
+              </a>
+              <div
+                class={
+                  "dropdown-menu m-0 p-0 dropdown-menu-right mt-2 " +
+                  " " +
+                  styles.dropdownMenu
+                }
+                aria-labelledby="navbarDropdown"
+              >
+                <Link
+                  className={
+                    "dropdown-item p-3 d-flex justify-content-center " +
+                    styles.dropdownItem +
+                    " " +
+                    styles.topItem
+                  }
+                  reloadDocument
+                  style={linkStyle}
+                  to="/profile"
+                >
+                  Profile
+                </Link>
+                {/* <div class="dropdown-divider"></div> */}
+                <Link
+                  className={
+                    "dropdown-item p-3 d-flex justify-content-center " +
+                    styles.dropdownItem +
+                    " " +
+                    styles.bottomItem
+                  }
+                  reloadDocument
+                  style={linkStyle}
+                  onClick={() => logout()}
+                >
+                  Sign out
+                </Link>
+              </div>
             </div>
           </>
         )}

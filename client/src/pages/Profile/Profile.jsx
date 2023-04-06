@@ -24,9 +24,9 @@ function Profile() {
 
   let moviesData = [];
 
-  function handleLogout() {
-    logout();
-  }
+  // function handleLogout() {
+  //   logout();
+  // }
 
   function renderLists(list) {
     if (!(list.movies.length > 0)) {
@@ -47,12 +47,12 @@ function Profile() {
       <p className={styles.profileTxt}>Hoşgeldin {user?.name}</p>
       <p>Email adresin: {user?.email}</p>
       <p>Şifren: {user?.password}</p>
-      <button
+      {/* <button
         onClick={handleLogout}
         className={"btn btn-danger " + styles.logoutBtn}
       >
         Logout
-      </button>
+      </button> */}
       {lists.length > 0 ? lists.map(renderLists) : null}
 
       <Comments />

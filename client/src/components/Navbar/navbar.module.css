@@ -1,95 +1,64 @@
 .container {
-  height: 70px;
-  background-color: black;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    background-color: rgb(26, 26, 26);
 }
 
 .logo {
-  color: white;
-  margin-left: 20px;
-}
-
-/* .searchInputs {
-    color: white;
-}
-
-.searchBoxInput {
-    border-radius: 20px;
-    text-align: center;
-    height: 35px;
-    width: 400px;
-    border: none;
-    outline: none;
-}
-
-/* .searchButton {
-    padding: 7px 10px;
-    margin-left: 10px;
-    border-radius: 10px;
-    background-color: rgb(241, 248, 23);
-    color:black;
+    color: black;
     font-weight: bold;
-    transition: 0.3s;
-    
 }
-
-.searchButton:hover {
-    background-color: black;
-    color: white;
-}
-
-.queryResultContainer {
-    position: absolute;
-    background-color: rgb(26,26,26);
-    margin-top: 5px;
-    width: 400px;
-    z-index: 100;
-    color: white;
-    border-radius: 5px;
-}
-
-.resultMovieContainer {
-    padding: 10px;
-    transition: 0.1s;
-    display: flex;
-    border-radius: 5px;
-}
-
-.resultMovieContainer:hover {
-    background-color:rgb(49,49,49);
-    color: white;
-}
-
-.resultMovieImgContainer {
-    flex:1;
-}
-
-.resultMovieImg {
-    width: 100%;
-}
-
-.resultMovieInfoContainer {
-    flex:6;
-    margin-left: 5px;
-    font-weight: normal;
-}
-
-.resultMovieReleaseDateContainer {
-    color: rgb(188,188,188);
-} */
 
 .menu {
-  color: white;
-  margin-right: 20px;
-  display: flex;
+    color: white;
+    display: flex;
 }
 
 .authButton {
-  padding: 10px;
+    padding: 10px;
 }
 
-.profileBtn {
-  color: black;
+.search {
+    width: 40%;
+    position: relative;
+}
+
+.navBtn {
+    text-decoration: none;
+    font-weight: bold;
+    background-color: rgb(26, 26, 26);
+}
+
+.navBtn:hover {
+    background-color: rgb(37, 37, 37);
+    border-radius: 5px;
+}
+
+.dropdownMenu {
+    background-color: rgb(31, 31, 31);
+    color: white;
+    transition: 0.2s;
+    min-width: 8rem !important;
+}
+
+.dropdownItem:hover {
+    background-color: rgb(49, 49, 49);
+}
+
+.navbarDropdown {
+    color: white;
+}
+
+.navbarDropdown:hover {
+    color: white;
+}
+
+.topItem {
+    border-radius: 5px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.bottomItem {
+    border-radius: 5px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
 }
