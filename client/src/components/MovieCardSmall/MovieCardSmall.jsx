@@ -1,17 +1,21 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 //Stylesheet
 import styles from "./moviecardsmall.module.css";
 
 //Components
 import StarCard from "../StarCard/StarCard";
+import WatchlistCard from "../WatchlistCard/WatchlistCard";
 
 //React Icons
 import { BsStarFill } from "react-icons/bs";
 
 //Contexts
 import AuthContext from "../../context/AuthContext";
+import { useQuery } from "react-query";
+import { fetchLists } from "../../api";
+import ListContext from "../../context/ListContext";
 
 function MovieCardSmall({ movie }) {
   const { user } = useContext(AuthContext);
@@ -48,7 +52,6 @@ function MovieCardSmall({ movie }) {
         </div>
       </div>
       <p className={styles.title + " pl-2"}>{movie.original_title}</p>
-      <div>{/* <WatchlistCard user={user} details={movie} /> */}</div>
 
       {/* <p>{moment(movie.release_date).format("YYYY")}</p> */}
     </div>

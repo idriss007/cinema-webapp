@@ -72,8 +72,6 @@ function MovieSlider({ movies, children }) {
     return <MovieCardSmall key={movie.id} movie={movie} />;
   }
 
-  console.log(movies);
-
   return (
     <>
       {children && <div className={styles.title}>{children}</div>}

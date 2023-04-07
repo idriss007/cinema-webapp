@@ -5,8 +5,6 @@ import { fetchLists, getCredits, getDetail, getImages } from "../../api";
 import moment from "moment";
 import axios from "axios";
 
-import { LoadingButton } from "@mui/lab";
-
 //React Icons
 import { BsStarFill } from "react-icons/bs";
 
@@ -27,6 +25,7 @@ import ListContext from "../../context/ListContext";
 //Import css file
 import styles from "./detail.module.css";
 import RecommendationsForMovie from "../../components/RecommendationsForMovie/RecommendationsForMovie";
+import WatchlistCard from "../../components/WatchlistCard/WatchlistCard";
 
 function Detail() {
   const { user, loggedIn } = useContext(AuthContext);
@@ -216,16 +215,13 @@ function Detail() {
                 </div>
               )}
 
-              <div className={styles.addToWatchlistBtnContainer}>
-                {/* LoadingButton için @mui/material @emotion/react @emotion/styled @mui/lab paketleri kuruldu */}
-                <LoadingButton
-                  className={styles.addToWatchlistBtn}
-                  loading={loggedIn && (lists ? false : true)}
-                  variant="contained"
-                  onClick={handleAddWatchlistClicked}
-                >
-                  {isInList ? "✓ In Watchlist" : "+ Add to Watchlist"}
-                </LoadingButton>
+              <div>
+                <WatchlistCard
+                  loggedIn={loggedIn}
+                  lists={lists}
+                  isInList={isInList}
+                  handleAddWatchlistClicked={handleAddWatchlistClicked}
+                />
               </div>
             </div>
           </div>
