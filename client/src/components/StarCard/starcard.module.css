@@ -4,8 +4,31 @@
   justify-content: center;
 }
 
-.ratingBtnTxt {
+.starBtn {
+  padding: 9px 17px 9px 17px;
+  background-color: inherit;
+  border: none;
+  border-radius: 5px;
+  transition: 0.22s;
+  color: #5799EF;
+}
+
+.starBtn:hover {
+  background-color: rgb(44, 44, 44);
+  color: white;
+}
+
+.starBtn:active {
+  background-color: rgb(78, 78, 78);
+}
+
+.ratingBtnTxtBig {
   font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.ratingBtnTxtSmall {
+  font-size: 1rem;
 }
 
 .modalRatingTxt {

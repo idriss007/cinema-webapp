@@ -80,16 +80,19 @@ function PersonDetail() {
 
         <div className={styles.infoContainer}>
           <p>
-            <span>Doğum Tarihi:</span>{" "}
+            <span>Birthday:</span>{" "}
             {person.birthday
               ? moment(person.birthday).format("DD/MM/YYYY")
               : "Kayıtlarımızda doğum tarihi ile ilgili bir kayıt bulunmamaktadır."}
           </p>
           {person.deathday && (
-            <p>Ölüm Tarihi: {moment(person.deathday).format("DD/MM/YYYY")}</p>
+            <p>
+              <span>Day of Death:</span>{" "}
+              {moment(person.deathday).format("DD/MM/YYYY")}
+            </p>
           )}
           <p>
-            <span>Doğum Yeri:</span> {person.place_of_birth}
+            <span>Place of Birth:</span> {person.place_of_birth}
           </p>
           <div className={styles.biographyContainer}>
             <p>
@@ -108,9 +111,7 @@ function PersonDetail() {
 
         {personCredits && (
           <div className={styles.credit + " " + styles.gridColAll}>
-            <MovieSlider movies={personCredits}>
-              Yer Aldığı Yapımlar
-            </MovieSlider>
+            <MovieSlider movies={personCredits}>Known For</MovieSlider>
           </div>
         )}
 

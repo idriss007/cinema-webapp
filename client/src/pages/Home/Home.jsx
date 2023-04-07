@@ -1,11 +1,6 @@
 import React from "react";
 import { useQuery } from "react-query";
-import {
-  fetchNowPlayingMovies,
-  fetchNowPlayingOrUpcomingMovies,
-  fetchPopularMovies,
-  fetchUpcomingMovies,
-} from "../../api";
+import { fetchNowPlayingOrUpcomingMovies } from "../../api";
 import MovieSlider from "../../components/MovieSlider/MovieSlider";
 import styles from "./home.module.css";
 
@@ -38,13 +33,15 @@ function Home() {
 
   return (
     <div className={styles.container}>
-      <MovieSlider movies={nowPlayingMovies?.results}>
-        Vizyondaki Filmler
+      <MovieSlider key={"1"} movies={nowPlayingMovies?.results}>
+        In theaters
       </MovieSlider>
-      <MovieSlider movies={upcomingMovies?.results}>
-        Yakında Vizyona Girecek Filmler
+      {/* <MovieSlider key={"2"} movies={upcomingMovies?.results}>
+        Coming soon to theaters
+      </MovieSlider> */}
+      <MovieSlider key={"3"} movies={popularMovies?.results}>
+        Popular Movies
       </MovieSlider>
-      <MovieSlider movies={popularMovies?.results}>Popüler Filmler</MovieSlider>
     </div>
   );
 }

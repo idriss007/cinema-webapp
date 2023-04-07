@@ -16,7 +16,7 @@ import Modal from "react-bootstrap/Modal";
 import styles from "./starcard.module.css";
 import { useNavigate } from "react-router-dom";
 
-function StarCard({ movie }) {
+function StarCard({ movie, size, formOfCalling }) {
   const navigate = useNavigate();
 
   const [lists, setLists] = useState(null);
@@ -49,23 +49,42 @@ function StarCard({ movie }) {
 
   return (
     <>
-      <button
+      <div
+        className={
+          styles.starBtn +
+          " d-flex align-align-items-center justify-content-center"
+        }
         type="button"
         data-toggle="modal"
         data-target="#exampleModal"
-        style={{ background: "inherit", border: "none" }}
-        // className =
         onClick={() => {
           handleShow();
           setRating(ratedValue);
         }}
       >
         {ratedValue ? (
-          <p className={styles.ratingBtnTxt}>{ratedValue}/10</p>
+          formOfCalling === "inDetailPage" ? (
+            <div className="d-flex align-items-center">
+              <BsStarFill size="30" />
+              <p className={styles.ratingBtnTxtBig + " ml-2"}>
+                {ratedValue}/10
+              </p>
+            </div>
+          ) : (
+            <div className="d-flex">
+              <BsStarFill size={size} />
+              <p className={styles.ratingBtnTxtSmall + " ml-1"}>{ratedValue}</p>
+            </div>
+          )
         ) : (
-          <BsStar size="30" />
+          <div className="d-flex align-items-center">
+            <BsStar className={styles.star} size={size} />
+            {formOfCalling === "inDetailPage" && (
+              <div className={"ml-2 " + styles.ratingBtnTxtBig}>Rate</div>
+            )}
+          </div>
         )}
-      </button>
+      </div>
 
       <Modal centered show={show} onHide={handleClose}>
         <Modal.Header className={styles.container}>

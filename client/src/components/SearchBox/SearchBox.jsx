@@ -15,6 +15,7 @@ function SearchBox({
   placeholder,
   movies,
   imgPath,
+  searchBoxInput,
 }) {
   return (
     <>
@@ -25,6 +26,7 @@ function SearchBox({
           onChange={handleChange}
           className={styles.searchBoxInput}
           placeholder={placeholder}
+          ref={searchBoxInput}
         />
       </div>
 

@@ -31,7 +31,7 @@ export async function fetchNowPlayingOrUpcomingMovies(query) {
   return data;
 }
 
-export async function getSimilarMovies(movie_id) {
+export async function getRecommendationsForMovie(movie_id) {
   const url =
     "https://api.themoviedb.org/3/movie/" +
     movie_id +

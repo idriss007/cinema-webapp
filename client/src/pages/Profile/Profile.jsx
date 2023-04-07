@@ -24,19 +24,17 @@ function Profile() {
 
   let moviesData = [];
 
-  // function handleLogout() {
-  //   logout();
-  // }
-
-  function renderLists(list) {
+  function renderLists(list, key) {
     if (!(list.movies.length > 0)) {
       return null;
     }
-    moviesData = list.movies.map((movie) => movie.movie);
+    moviesData = list.movies.map((movie, key) => movie.movie);
     return (
       <>
         <div className={styles.sliderContainer}>
-          <MovieSlider movies={moviesData}>{list.name}</MovieSlider>
+          <MovieSlider key={key} movies={moviesData}>
+            {list.name}
+          </MovieSlider>
         </div>
       </>
     );
@@ -47,15 +45,9 @@ function Profile() {
       <p className={styles.profileTxt}>Hoşgeldin {user?.name}</p>
       <p>Email adresin: {user?.email}</p>
       <p>Şifren: {user?.password}</p>
-      {/* <button
-        onClick={handleLogout}
-        className={"btn btn-danger " + styles.logoutBtn}
-      >
-        Logout
-      </button> */}
-      {lists.length > 0 ? lists.map(renderLists) : null}
-
-      <Comments />
+      {lists.length > 0
+        ? lists.map((list, key) => renderLists(list, key))
+        : null}
     </div>
   );
 }

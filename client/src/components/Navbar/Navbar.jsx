@@ -51,6 +51,7 @@ function Navbar() {
 
   function handleKeyPress(e) {
     if (e.which === 13) {
+      setMovies(null);
       const path = searchQuery.length !== 0 && "/search/" + searchQuery;
       navigate(path);
       setSearchQuery("");
@@ -83,6 +84,7 @@ function Navbar() {
           placeholder="Search a movie"
           movies={movies}
           imgPath={imgPath}
+          searchBoxInput={searchBoxInput}
         />
       </div>
       <button
@@ -182,20 +184,22 @@ function Navbar() {
                 }
                 aria-labelledby="navbarDropdown"
               >
-                <Link
-                  className={
-                    "dropdown-item p-3 d-flex justify-content-center " +
-                    styles.dropdownItem +
-                    " " +
-                    styles.topItem +
-                    " " +
-                    styles.linkUrl
-                  }
-                  reloadDocument
-                  to="/profile"
-                >
-                  Profile
-                </Link>
+                <div>
+                  <Link
+                    className={
+                      "dropdown-item p-3 d-flex justify-content-center " +
+                      styles.dropdownItem +
+                      " " +
+                      styles.topItem +
+                      " " +
+                      styles.linkUrl
+                    }
+                    reloadDocument
+                    to="/profile"
+                  >
+                    Profile
+                  </Link>
+                </div>
                 {/* <div class="dropdown-divider"></div> */}
                 <Link
                   className={

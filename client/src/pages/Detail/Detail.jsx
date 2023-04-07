@@ -7,6 +7,9 @@ import axios from "axios";
 
 import { LoadingButton } from "@mui/lab";
 
+//React Icons
+import { BsStarFill } from "react-icons/bs";
+
 //Bootstrap
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -23,6 +26,7 @@ import ListContext from "../../context/ListContext";
 
 //Import css file
 import styles from "./detail.module.css";
+import RecommendationsForMovie from "../../components/RecommendationsForMovie/RecommendationsForMovie";
 
 function Detail() {
   const { user, loggedIn } = useContext(AuthContext);
@@ -114,7 +118,9 @@ function Detail() {
   const writers = credits?.crew?.filter((person) => {
     return person.job === "Screenplay" || person.job === "Writer";
   });
-  const actingCrew = credits?.cast?.slice(0, 7);
+  const actingCrew = credits?.cast
+    ?.filter((people) => people.profile_path !== null)
+    .slice(0, 7);
 
   function renderCrew(crew, i, length) {
     const name = crew.name;
@@ -174,29 +180,41 @@ function Detail() {
             </div>
 
             <div className={styles.rightInnerContainer}>
-              <div className={styles.userRatingContainer}>
-                <p className={styles.usersRatingText}>USERS RATING</p>
+              {(details.status === "released" || "Released") && (
+                <div className={styles.userRatingContainer}>
+                  <p className={styles.usersRatingText}>USERS RATING</p>
+                  <div className="d-flex justify-content-center align-items-center">
+                    <BsStarFill className="mr-1" color="#F5C518" size="30" />
+                    <div className="">
+                      <div className={styles.voteInnerContainer}>
+                        <p className={styles.vote}>
+                          {parseFloat(details.vote_average).toFixed(1)}/10
+                        </p>
+                      </div>
 
-                <div className={styles.voteInnerContainer}>
-                  <p className={styles.vote}>
-                    {parseFloat(details.vote_average).toFixed(1)}/10
-                  </p>
+                      <div className={styles.voteCountInnerContainer}>
+                        <p className={styles.voteCount}>{details.vote_count}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              )}
 
-                <div className={styles.voteCountInnerContainer}>
-                  <p className={styles.voteCount}>{details.vote_count}</p>
-                </div>
-              </div>
+              {(details.status === "released" || "Released") && (
+                <div className={styles.yourRatingContainer}>
+                  <div className={styles.yourRatingTextContainer}>
+                    <p className={styles.yourRatingText}>YOUR RATING</p>
+                  </div>
 
-              <div className={styles.yourRatingContainer}>
-                <div className={styles.yourRatingTextContainer}>
-                  <p className={styles.yourRatingText}>YOUR RATING</p>
+                  <div className={styles.starContainer}>
+                    <StarCard
+                      movie={details}
+                      size={"30"}
+                      formOfCalling="inDetailPage"
+                    />
+                  </div>
                 </div>
-
-                <div className={styles.starContainer}>
-                  <StarCard movie={details} />
-                </div>
-              </div>
+              )}
 
               <div className={styles.addToWatchlistBtnContainer}>
                 {/* LoadingButton için @mui/material @emotion/react @emotion/styled @mui/lab paketleri kuruldu */}
@@ -208,10 +226,6 @@ function Detail() {
                 >
                   {isInList ? "✓ In Watchlist" : "+ Add to Watchlist"}
                 </LoadingButton>
-                {/* <button className={styles.addToWatchlistBtn + " " + (isInList ? "btn btn-danger" : "btn btn-success")}
-                onClick={handleAddWatchlistClicked} >
-                {isInList ? "— Kaldır" : "+ Add to watchlist"}
-            </button> */}
               </div>
             </div>
           </div>
@@ -234,7 +248,9 @@ function Detail() {
 
             <div className={styles.crew + " " + styles.gridColAll}>
               <p>
-                Yönetmen:{" "}
+                <span className="font-weight-bold">
+                  {directors?.length > 1 ? "Directors:" : "Director:"}
+                </span>{" "}
                 {directors
                   ? directors.map((director, i, length) =>
                       renderCrew(director, i, directors.length)
@@ -243,7 +259,9 @@ function Detail() {
               </p>
               {writers?.length > 0 ? (
                 <p>
-                  Senaryo:{" "}
+                  <span className="font-weight-bold">
+                    {writers?.length > 1 ? "Writers:" : "Writer:"}
+                  </span>{" "}
                   {writers.map((writer, i, length) =>
                     renderCrew(writer, i, writers.length)
                   )}
@@ -251,8 +269,16 @@ function Detail() {
               ) : null}
             </div>
 
-            <div className={styles.castCrew + " " + styles.gridColAll}>
-              Oyuncu Kadrosu
+            <div className={styles.overview + " " + styles.gridColAll}>
+              {details.overview}
+            </div>
+
+            <div
+              className={
+                styles.castCrew + " " + styles.gridColAll + " font-weight-bold"
+              }
+            >
+              Top cast
             </div>
 
             {actingCrew ? (
@@ -261,8 +287,8 @@ function Detail() {
               <p>Yükleniyor...</p>
             )}
 
-            <div className={styles.overview + " " + styles.gridColAll}>
-              {details.overview}
+            <div className={styles.gridColAll}>
+              <RecommendationsForMovie movie={details} />
             </div>
 
             <div className={styles.imdbIdContainer}>
@@ -270,6 +296,7 @@ function Detail() {
                 <a
                   href={"https://www.imdb.com/title/" + details.imdb_id}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Imdb Sayfası
                 </a>

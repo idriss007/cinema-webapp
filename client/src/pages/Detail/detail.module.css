@@ -45,6 +45,7 @@
   margin-left: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .yourRatingText {
@@ -139,7 +140,7 @@
 }
 
 .crew p {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .castCrew {
@@ -174,11 +175,6 @@
 
 .genres {
   margin-top: 20px;
-}
-
-.overview {
-  margin-top: 20px;
-  font-size: 1.2rem;
 }
 
 @media (min-width: 500px) {

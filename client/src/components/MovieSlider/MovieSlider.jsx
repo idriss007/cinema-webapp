@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { fetchNowPlayingOrUpcomingMovies } from "../../api";
+import React from "react";
 import MovieCardSmall from "../MovieCardSmall/MovieCardSmall";
 import styles from "./movieslider.module.css";
 import Slider from "react-slick";
@@ -16,6 +14,39 @@ function MovieSlider({ movies, children }) {
     centerPadding: "60px",
     slidesToScroll: 5,
     slidesToShow: 5,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1300, // width to change options
+        settings: {
+          slidesToScroll: 4,
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 1100, // width to change options
+        settings: {
+          slidesToScroll: 3,
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 840, // width to change options
+        settings: {
+          slidesToScroll: 2,
+          slidesToShow: 2,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 590, // width to change options
+        settings: {
+          slidesToScroll: 1,
+          slidesToShow: 1,
+          dots: false,
+        },
+      },
+    ],
   };
 
   if (movies?.length === 1) {
@@ -38,17 +69,21 @@ function MovieSlider({ movies, children }) {
     if (!movie?.poster_path) {
       return null;
     }
-    return <MovieCardSmall key={key} movie={movie} />;
+    return <MovieCardSmall key={movie.id} movie={movie} />;
   }
+
+  console.log(movies);
 
   return (
     <>
       {children && <div className={styles.title}>{children}</div>}
-      <div className={styles.container}>
-        <Slider {...settings}>
-          {movies?.map((movie, key) => renderMovies(movie, key))}
-        </Slider>
-      </div>
+      {movies?.length > 0 && (
+        <div className={styles.container}>
+          <Slider {...settings}>
+            {movies?.map((movie, key) => renderMovies(movie, key))}
+          </Slider>
+        </div>
+      )}
     </>
   );
 }
