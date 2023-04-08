@@ -1,7 +1,14 @@
+.mainContainer {
+  background-color: black;
+  box-shadow: 0 0 0 100vmax black;
+  clip-path: inset(-100vmax 0);
+}
+
 .container {
   width: 80%;
   margin: 40px auto;
   /* overflow: hidden; */
+  background-color: black;
 }
 
 /* .title {

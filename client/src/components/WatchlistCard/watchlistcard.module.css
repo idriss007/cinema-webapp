@@ -8,4 +8,17 @@
 .addToWatchlistBtn {
   height: 100%;
   font-weight: bold;
+  width: 100%;
+  background-color: rgb(44, 44, 44);
+  color: rgb(87, 153, 239);
+  border-radius: 5px;
+}
+
+.addToWatchlistBtn:hover {
+  cursor: pointer;
+  background-color: rgb(48, 53, 60);
+}
+
+.addToWatchlistBtn:active {
+  background-color: rgb(54, 68, 88);
 }

@@ -1,7 +1,5 @@
 import React from "react";
 
-import { LoadingButton } from "@mui/lab";
-
 import styles from "./watchlistcard.module.css";
 
 function WatchlistCard({
@@ -9,18 +7,28 @@ function WatchlistCard({
   lists,
   handleAddWatchlistClicked,
   isInList,
+  setIsInList,
+  movie,
+  called,
 }) {
   return (
     <>
-      {/* LoadingButton için @mui/material @emotion/react @emotion/styled @mui/lab paketleri kuruldu */}
-      <LoadingButton
-        className={styles.addToWatchlistBtn}
+      <div
+        className={
+          styles.addToWatchlistBtn +
+          " d-flex align-items-center justify-content-center pl-3 pr-3 pt-2 pb-2"
+        }
         loading={loggedIn && (lists ? false : true)}
-        variant="contained"
-        onClick={handleAddWatchlistClicked}
+        onClick={() => handleAddWatchlistClicked(isInList, setIsInList, movie)}
       >
-        {isInList ? "✓ In Watchlist" : "+ Add to Watchlist"}
-      </LoadingButton>
+        {isInList
+          ? called === "DetailPage"
+            ? "✓ In Watchlist"
+            : "✓ Watchlist"
+          : called === "DetailPage"
+          ? "+ Add to Watchlist"
+          : "+  Watchlist"}
+      </div>
     </>
   );
 }

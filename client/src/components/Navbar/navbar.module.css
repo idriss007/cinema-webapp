@@ -1,5 +1,6 @@
 .container {
     background-color: rgb(26, 26, 26);
+    z-index: 1;
 }
 
 .logo {

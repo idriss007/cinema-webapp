@@ -32,16 +32,18 @@ function Home() {
     return "An error has occurred: ";
 
   return (
-    <div className={styles.container}>
-      <MovieSlider key={"1"} movies={nowPlayingMovies?.results}>
-        In theaters
-      </MovieSlider>
-      {/* <MovieSlider key={"2"} movies={upcomingMovies?.results}>
+    <div className={styles.mainContainer}>
+      <div className={styles.container}>
+        <MovieSlider key={"1"} movies={nowPlayingMovies?.results}>
+          In theaters
+        </MovieSlider>
+        {/* <MovieSlider key={"2"} movies={upcomingMovies?.results}>
         Coming soon to theaters
       </MovieSlider> */}
-      <MovieSlider key={"3"} movies={popularMovies?.results}>
-        Popular Movies
-      </MovieSlider>
+        <MovieSlider key={"3"} movies={popularMovies?.results}>
+          Popular Movies
+        </MovieSlider>
+      </div>
     </div>
   );
 }

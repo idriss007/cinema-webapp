@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { fetchLists, getCredits, getDetail, getImages } from "../../api";
+import { getCredits, getDetail, getImages } from "../../api";
 import moment from "moment";
-import axios from "axios";
 
 //React Icons
 import { BsStarFill } from "react-icons/bs";
@@ -28,16 +27,15 @@ import RecommendationsForMovie from "../../components/RecommendationsForMovie/Re
 import WatchlistCard from "../../components/WatchlistCard/WatchlistCard";
 
 function Detail() {
-  const { user, loggedIn } = useContext(AuthContext);
-  const { addToList, removeFromList, isInList, setIsInList } =
-    useContext(ListContext);
+  const { loggedIn } = useContext(AuthContext);
+  const { lists, handleAddWatchlistClicked } = useContext(ListContext);
 
   const imageURL = "https://www.themoviedb.org/t/p/w780";
 
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [credits, setCredits] = useState(null);
+  const [isInList, setIsInList] = useState();
 
   useEffect(() => {
     (async () => {
@@ -49,15 +47,12 @@ function Detail() {
         console.log(err.message);
       }
 
-      if (loggedIn) {
-        //Aktif kullanıcının oluşturduğu listeler veritabanından çekilir.
-        const { data: listData } = await axios.get(
-          "http://localhost:4000/list/" + user._id
+      if (loggedIn && lists) {
+        const isContainInList = await lists[0]?.movies?.find(
+          (movieData) => movieData?.movie?.id === parseInt(id)
         );
 
-        const isContainInList = listData[0].movies.find(
-          (movie) => movie.movie.id === parseInt(id)
-        );
+        console.log(isContainInList);
 
         if (isContainInList) {
           setIsInList(true);
@@ -67,7 +62,7 @@ function Detail() {
         }
       }
     })();
-  }, []);
+  }, [id, lists, loggedIn]);
 
   //Get movie information
   const { data: details } = useQuery(["movieDetail", parseInt(id)], () =>
@@ -79,12 +74,6 @@ function Detail() {
     queryKey: ["images", parseInt(id)],
     queryFn: () => getImages(id),
   });
-  //Get User Lists
-  const { data: lists } = useQuery(
-    ["lists", parseInt(id)],
-    () => fetchLists(user._id),
-    { enabled: loggedIn }
-  );
 
   if (!details || !images) {
     return <p>Yükleniyor</p>;
@@ -94,22 +83,6 @@ function Detail() {
   const allImages = images?.images?.backdrops?.map((item) => item.file_path);
   //Filmin türlerini genreList isimli diziye aktar.
   const genreList = details.genres.map((genre) => genre.id);
-
-  function handleAddWatchlistClicked() {
-    //Kullanıcı giriş yapmışsa izleme listesine film ekleyip çıkarabilsin
-    if (loggedIn === true) {
-      if (isInList) {
-        removeFromList(lists[0], details);
-      }
-      if (!isInList) {
-        addToList(lists[0], details);
-      }
-    }
-    //Kullanıcı giriş yapmamışsa login sayfasına yönlendirilsin
-    if (!loggedIn) {
-      return navigate("/login");
-    }
-  }
 
   const directors = credits?.crew?.filter(
     (person) => person.job === "Director"
@@ -215,12 +188,15 @@ function Detail() {
                 </div>
               )}
 
-              <div>
+              <div className="ml-2">
                 <WatchlistCard
                   loggedIn={loggedIn}
                   lists={lists}
                   isInList={isInList}
                   handleAddWatchlistClicked={handleAddWatchlistClicked}
+                  movie={details}
+                  setIsInList={setIsInList}
+                  called="DetailPage"
                 />
               </div>
             </div>

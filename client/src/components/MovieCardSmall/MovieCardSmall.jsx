@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 //Stylesheet
 import styles from "./moviecardsmall.module.css";
@@ -13,12 +13,31 @@ import { BsStarFill } from "react-icons/bs";
 
 //Contexts
 import AuthContext from "../../context/AuthContext";
-import { useQuery } from "react-query";
-import { fetchLists } from "../../api";
 import ListContext from "../../context/ListContext";
 
 function MovieCardSmall({ movie }) {
-  const { user } = useContext(AuthContext);
+  const { loggedIn } = useContext(AuthContext);
+  const { lists, handleAddWatchlistClicked } = useContext(ListContext);
+  const [isInList, setIsInList] = useState();
+
+  useEffect(() => {
+    (async () => {
+      if (loggedIn && lists) {
+        const isContainInList = await lists[0]?.movies?.find(
+          (movieData) => movieData?.movie?.id === parseInt(movie?.id)
+        );
+
+        console.log(isContainInList);
+
+        if (isContainInList) {
+          setIsInList(true);
+        }
+        if (!isContainInList) {
+          setIsInList(false);
+        }
+      }
+    })();
+  }, [lists]);
 
   const poster = "https://www.themoviedb.org/t/p/w342/" + movie?.poster_path;
 
@@ -52,6 +71,17 @@ function MovieCardSmall({ movie }) {
         </div>
       </div>
       <p className={styles.title + " pl-2"}>{movie.original_title}</p>
+      <div className="d-flex justify-content-center align-items-center p-2">
+        <WatchlistCard
+          loggedIn={loggedIn}
+          lists={lists}
+          isInList={isInList}
+          handleAddWatchlistClicked={handleAddWatchlistClicked}
+          movie={movie}
+          setIsInList={setIsInList}
+          called="MovieCardSmall"
+        />
+      </div>
 
       {/* <p>{moment(movie.release_date).format("YYYY")}</p> */}
     </div>
