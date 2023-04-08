@@ -6,12 +6,13 @@ axios.interceptors.request.use(function (config) {
   return config;
 });
 
-export async function fetchMovies(query) {
+export async function fetchMovies(query, page) {
   const url =
     "https://api.themoviedb.org/3/search/movie?api_key=" +
     process.env.REACT_APP_API_URL +
     "&query=" +
-    query;
+    query +
+    (page ? "&page=" + page : "");
 
   const { data } = await axios.get(url);
 

@@ -27,8 +27,6 @@ function MovieCardSmall({ movie }) {
           (movieData) => movieData?.movie?.id === parseInt(movie?.id)
         );
 
-        console.log(isContainInList);
-
         if (isContainInList) {
           setIsInList(true);
         }

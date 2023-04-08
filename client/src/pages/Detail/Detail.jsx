@@ -165,7 +165,9 @@ function Detail() {
                       </div>
 
                       <div className={styles.voteCountInnerContainer}>
-                        <p className={styles.voteCount}>{details.vote_count}</p>
+                        <p className={styles.voteCount}>
+                          {details.vote_count.toLocaleString()}
+                        </p>
                       </div>
                     </div>
                   </div>

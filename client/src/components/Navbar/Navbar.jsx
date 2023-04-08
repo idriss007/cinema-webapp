@@ -51,9 +51,11 @@ function Navbar() {
 
   function handleKeyPress(e) {
     if (e.which === 13) {
-      setMovies(null);
+      setMovies();
       const path = searchQuery.length !== 0 && "/search/" + searchQuery;
-      navigate(path);
+      // navigate(path);
+      return <Link reloadDocument to={path}></Link>;
+      // navigate(0);
       setSearchQuery("");
       searchBoxInput.current.blur();
     }
@@ -121,7 +123,7 @@ function Navbar() {
               }
               to="/login"
             >
-              Login<span class="sr-only">(current)</span>
+              Login<span className="sr-only">(current)</span>
             </Link>
             <Link
               reloadDocument
@@ -156,9 +158,9 @@ function Navbar() {
             >
               Watchlist
             </Link>
-            <div class={"nav-item dropdown"}>
+            <div className={"nav-item dropdown"}>
               <a
-                class={
+                className={
                   "nav-link dropdown-toggle d-flex align-items-center p-3 " +
                   styles.navbarDropdown +
                   " " +
@@ -177,7 +179,7 @@ function Navbar() {
                 </div>
               </a>
               <div
-                class={
+                className={
                   "dropdown-menu m-0 p-0 dropdown-menu-right mt-2 " +
                   " " +
                   styles.dropdownMenu
@@ -200,7 +202,7 @@ function Navbar() {
                     Profile
                   </Link>
                 </div>
-                {/* <div class="dropdown-divider"></div> */}
+                {/* <div className="dropdown-divider"></div> */}
                 <Link
                   className={
                     "dropdown-item p-3 d-flex justify-content-center " +

@@ -18,7 +18,7 @@ function WatchlistCard({
           styles.addToWatchlistBtn +
           " d-flex align-items-center justify-content-center pl-3 pr-3 pt-2 pb-2"
         }
-        loading={loggedIn && (lists ? false : true)}
+        // loading={loggedIn && (lists ? false : true)}
         onClick={() => handleAddWatchlistClicked(isInList, setIsInList, movie)}
       >
         {isInList

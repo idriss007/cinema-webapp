@@ -1,23 +1,19 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
-import { fetchLists, getDetail } from "../../api";
+import { fetchLists } from "../../api";
 import MovieSlider from "../../components/MovieSlider/MovieSlider";
 import AuthContext from "../../context/AuthContext";
 import styles from "./profile.module.css";
 import Comments from "../Comments/Comments";
 
 function Profile() {
-  const { id } = useParams();
-
-  const { user, logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const {
     isLoading: listsLoading,
     error: listsError,
     data: lists,
-  } = useQuery("lists", () => fetchLists(user._id));
+  } = useQuery(["lists", Date.now], () => fetchLists(user._id));
 
   if (listsLoading) return "Loading...";
   if (listsError) return "An error has occurred: " + listsError.message;
