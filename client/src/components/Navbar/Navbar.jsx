@@ -51,13 +51,12 @@ function Navbar() {
 
   function handleKeyPress(e) {
     if (e.which === 13) {
-      setMovies();
-      const path = searchQuery.length !== 0 && "/search/" + searchQuery;
+      // setMovies();
+      // const path = searchQuery.length !== 0 && "/search/" + searchQuery;
       // navigate(path);
-      return <Link reloadDocument to={path}></Link>;
       // navigate(0);
-      setSearchQuery("");
-      searchBoxInput.current.blur();
+      // setSearchQuery("");
+      // searchBoxInput.current.blur();
     }
   }
 

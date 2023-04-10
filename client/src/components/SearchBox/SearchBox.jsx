@@ -20,14 +20,18 @@ function SearchBox({
   return (
     <>
       <div className={styles.searchInputs}>
-        <input
-          onKeyDown={handleKeyPress}
-          value={searchQuery}
-          onChange={handleChange}
-          className={styles.searchBoxInput}
-          placeholder={placeholder}
-          ref={searchBoxInput}
-        />
+        <form action={"http://localhost:3000/search/" + searchQuery}>
+          <input
+            onKeyDown={handleKeyPress}
+            value={searchQuery}
+            onChange={handleChange}
+            className={styles.searchBoxInput}
+            placeholder={placeholder}
+            ref={searchBoxInput}
+            type="text"
+          />
+          {/* <button type="submit">Search</button> */}
+        </form>
       </div>
 
       {movies?.length > 0 ? (
