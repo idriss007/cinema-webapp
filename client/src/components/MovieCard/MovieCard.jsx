@@ -1,9 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Genre from "../Genre/Genre";
-import styles from "./moviecard.module.css";
-import StarCard from "../StarCard/StarCard";
 import moment from "moment";
+
+//Components
+import Genre from "../Genre/Genre";
+import StarCard from "../StarCard/StarCard";
+
+//Stylesheet
+import styles from "./moviecard.module.css";
 
 //React Icons
 import { BsStarFill } from "react-icons/bs";
@@ -18,7 +22,7 @@ function MovieCard(props) {
   return (
     <div className={"container mb-5 mt-5 p-4 " + styles.container}>
       <div className="row">
-        <div className="col-md-auto">
+        <div className={"col-md-auto " + styles.centerContainer}>
           <div className={styles.imageContainer + " mr-3 ml-3"}>
             <Link
               reloadDocument
@@ -33,7 +37,7 @@ function MovieCard(props) {
           </div>
         </div>
         <div className="col">
-          <div className="row mb-2">
+          <div className={"row mb-2 " + styles.centerContainer}>
             <Link
               reloadDocument
               style={{ textDecoration: "none", color: "inherit" }}
@@ -46,10 +50,14 @@ function MovieCard(props) {
               ({moment(props.movie.release_date).format("YYYY")})
             </div>
           </div>
-          <div className="row mb-1">
+          <div className={"row mb-1 " + styles.centerContainer}>
             <Genre genres={props.movie.genre_ids} />
           </div>
-          <div className="row d-flex align-items-center mb-2">
+          <div
+            className={
+              "row d-flex align-items-center mb-2 " + styles.centerContainer
+            }
+          >
             <div className="d-flex align-items-center mr-1">
               <BsStarFill className="mr-1" color="#F5C518" size="17" />
               {parseFloat(props.movie.vote_average).toFixed(1)}
@@ -59,7 +67,7 @@ function MovieCard(props) {
           <div className="row mb-2">
             <p className={styles.detail}>{props.movie.overview}</p>
           </div>
-          <div className="row">
+          <div className={"row " + styles.centerContainer}>
             Votes: {props.movie.vote_count.toLocaleString()}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { BsStar } from "react-icons/bs";
-import { BsStarFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+
+//API CALLS
 import {
   addRating,
   AddToList,
@@ -9,12 +10,23 @@ import {
   GetRating,
   RemoveFromList,
 } from "../../api";
+
+//Contexts
 import AuthContext from "../../context/AuthContext";
+
+//React Bootstrap Components
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
+//React Icons
+import { BsStar } from "react-icons/bs";
+import { BsStarFill } from "react-icons/bs";
+
+//Loader
+import ClipLoader from "react-spinners/ClipLoader";
+
+//Stylesheet
 import styles from "./starcard.module.css";
-import { useNavigate } from "react-router-dom";
 
 function StarCard({ movie, size, formOfCalling }) {
   const navigate = useNavigate();
@@ -24,6 +36,7 @@ function StarCard({ movie, size, formOfCalling }) {
 
   const [rating, setRating] = useState(null);
   const [ratedValue, setRatedValue] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [hover, setHover] = useState(null);
   const [show, setShow] = useState(false);
 
@@ -39,7 +52,10 @@ function StarCard({ movie, size, formOfCalling }) {
             movie_id: movie.id,
           });
           setRatedValue(ratedValue);
-        } catch (err) {}
+          setLoading(false);
+        } catch (err) {
+          setLoading(false);
+        }
 
         const listsData = await fetchLists(user._id);
         setLists(listsData);
@@ -62,7 +78,11 @@ function StarCard({ movie, size, formOfCalling }) {
           setRating(ratedValue);
         }}
       >
-        {ratedValue ? (
+        {loading ? (
+          <div className="">
+            <ClipLoader />
+          </div>
+        ) : ratedValue ? (
           formOfCalling === "inDetailPage" ? (
             <div className="d-flex align-items-center">
               <BsStarFill size="30" />

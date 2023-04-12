@@ -19,6 +19,7 @@ function MovieCardSmall({ movie }) {
   const { loggedIn } = useContext(AuthContext);
   const { lists, handleAddWatchlistClicked } = useContext(ListContext);
   const [isInList, setIsInList] = useState();
+  const [isInListLoading, setIsInListLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -33,9 +34,11 @@ function MovieCardSmall({ movie }) {
         if (!isContainInList) {
           setIsInList(false);
         }
+
+        setIsInListLoading(false);
       }
     })();
-  }, [lists]);
+  }, [lists, loggedIn, movie?.id]);
 
   const poster = "https://www.themoviedb.org/t/p/w342/" + movie?.poster_path;
 
@@ -78,6 +81,7 @@ function MovieCardSmall({ movie }) {
           movie={movie}
           setIsInList={setIsInList}
           called="MovieCardSmall"
+          isInListLoading={isInListLoading}
         />
       </div>
 

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getCredits, getDetail, getImages } from "../../api";
 import moment from "moment";
 
@@ -36,6 +36,7 @@ function Detail() {
 
   const [credits, setCredits] = useState(null);
   const [isInList, setIsInList] = useState();
+  const [isInListLoading, setIsInListLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -52,14 +53,14 @@ function Detail() {
           (movieData) => movieData?.movie?.id === parseInt(id)
         );
 
-        console.log(isContainInList);
-
         if (isContainInList) {
           setIsInList(true);
         }
         if (!isContainInList) {
           setIsInList(false);
         }
+
+        setIsInListLoading(false);
       }
     })();
   }, [id, lists, loggedIn]);
@@ -176,9 +177,7 @@ function Detail() {
 
               {(details.status === "released" || "Released") && (
                 <div className={styles.yourRatingContainer}>
-                  <div className={styles.yourRatingTextContainer}>
-                    <p className={styles.yourRatingText}>YOUR RATING</p>
-                  </div>
+                  <p className={styles.yourRatingText}>YOUR RATING</p>
 
                   <div className={styles.starContainer}>
                     <StarCard
@@ -199,6 +198,7 @@ function Detail() {
                   movie={details}
                   setIsInList={setIsInList}
                   called="DetailPage"
+                  isInListLoading={isInListLoading}
                 />
               </div>
             </div>
@@ -208,10 +208,11 @@ function Detail() {
             <img
               className={styles.poster}
               src={imageURL + details?.poster_path}
+              alt="movie poster"
             />
 
             <div className={styles.carouselContainer}>
-              {images ? <Slider allImages={allImages} /> : <p>Yükleniyor</p>}
+              {images && <Slider allImages={allImages} />}
             </div>
           </div>
 

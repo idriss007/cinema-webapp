@@ -11,7 +11,6 @@ export function ListProvider({ children }) {
 
   const { loggedIn, user } = useContext(AuthContext);
 
-  const [isInList, setIsInList] = useState();
   const [lists, setLists] = useState();
 
   useEffect(() => {
@@ -30,11 +29,11 @@ export function ListProvider({ children }) {
     //Kullanıcı giriş yapmışsa izleme listesine film ekleyip çıkarabilsin
     if (loggedIn === true) {
       if (isInList) {
-        removeFromList(lists[0], movie, isInList);
+        removeFromList(lists[0], movie, isInList, setIsInList);
         setIsInList(false);
       }
       if (!isInList) {
-        addToList(lists[0], movie, isInList);
+        addToList(lists[0], movie, isInList, setIsInList);
         setIsInList(true);
       }
     }
@@ -44,7 +43,7 @@ export function ListProvider({ children }) {
     }
   }
 
-  async function addToList(list, movieData, isInList) {
+  async function addToList(list, movieData, isInList, setIsInList) {
     if (isInList === false) {
       try {
         const response = await AddToList(list._id, movieData);
@@ -55,7 +54,7 @@ export function ListProvider({ children }) {
     }
   }
 
-  async function removeFromList(list, movieData, isInList) {
+  async function removeFromList(list, movieData, isInList, setIsInList) {
     if (isInList === true) {
       try {
         await RemoveFromList(list._id, movieData);
@@ -69,8 +68,6 @@ export function ListProvider({ children }) {
   const values = {
     addToList,
     removeFromList,
-    isInList,
-    setIsInList,
     lists,
     handleAddWatchlistClicked,
   };
