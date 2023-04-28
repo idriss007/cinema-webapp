@@ -59,6 +59,8 @@ function StarCard({ movie, size, formOfCalling }) {
 
         const listsData = await fetchLists(user._id);
         setLists(listsData);
+      } else {
+        setLoading(false);
       }
     })();
   }, []);

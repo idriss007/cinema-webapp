@@ -1,13 +1,11 @@
 .container {
-  margin-right: 10px;
+  /* margin-right: 10px; */
   border: 1px solid black;
   border-radius: 20px;
   padding: 6px 13px;
   color: black;
-  /* margin-bottom: 20px; */
   font-size: 0.9rem;
   transition: 0.2s;
-  /* box-shadow: 3px 5px 5px 1px black; */
 }
 
 .container:hover {

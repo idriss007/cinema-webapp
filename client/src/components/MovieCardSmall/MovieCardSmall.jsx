@@ -36,6 +36,8 @@ function MovieCardSmall({ movie }) {
         }
 
         setIsInListLoading(false);
+      } else {
+        setIsInListLoading(false);
       }
     })();
   }, [lists, loggedIn, movie?.id]);

@@ -21,21 +21,25 @@ function WatchlistCard({
       ) : (
         <div
           className={
-            styles.addToWatchlistBtn +
-            " d-flex align-items-center justify-content-center pl-3 pr-3 pt-2 pb-2"
+            called === "DetailPage"
+              ? styles.addToWatchlistBtn +
+                " d-flex align-items-center justify-content-center pr-3 pl-3 pt-3 pb-3 w-100"
+              : styles.addToWatchlistBtn +
+                " d-flex align-items-center justify-content-center pl-3 pr-3 pt-2 pb-2 w-100"
           }
-          // loading={loggedIn && (lists ? false : true)}
           onClick={() =>
             handleAddWatchlistClicked(isInList, setIsInList, movie)
           }
         >
-          {isInList
-            ? called === "DetailPage"
-              ? "✓ In Watchlist"
-              : "✓ Watchlist"
-            : called === "DetailPage"
-            ? "+ Add to Watchlist"
-            : "+  Watchlist"}
+          <p className="d-flex justify-content-center align-items-center text-nowrap">
+            {isInList
+              ? called === "DetailPage"
+                ? "✓ In Watchlist"
+                : "✓ Watchlist"
+              : called === "DetailPage"
+              ? "+ Add to Watchlist"
+              : "+  Watchlist"}
+          </p>
         </div>
       )}
     </>

@@ -23,7 +23,9 @@ function Genre(props) {
   }
 
   return (
-    <div className={style.container}>{resultGenres.map(renderGenres)}</div>
+    <div className="row no-gutters d-flex justify-content-center">
+      {resultGenres.map(renderGenres)}
+    </div>
   );
 }
 

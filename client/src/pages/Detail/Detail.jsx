@@ -62,6 +62,9 @@ function Detail() {
 
         setIsInListLoading(false);
       }
+      if (!loggedIn) {
+        setIsInListLoading(false);
+      }
     })();
   }, [id, lists, loggedIn]);
 
@@ -93,7 +96,7 @@ function Detail() {
   });
   const actingCrew = credits?.cast
     ?.filter((people) => people.profile_path !== null)
-    .slice(0, 7);
+    .slice(0, 6);
 
   function renderCrew(crew, i, length) {
     const name = crew.name;
@@ -117,30 +120,41 @@ function Detail() {
     }
     return (
       <>
-        <div className={styles.cast}>
-          <Link
-            reloadDocument
-            style={{ textDecoration: "none", color: "inherit" }}
-            to={"/name/" + person.id}
-          >
-            <img src={profileImgUrl} />
-            <p>{person.name}</p>
-          </Link>
+        <div
+          className={
+            "col-xl-2 col-sm-4 col-xs-12 justify-content-center d-flex mt-3"
+          }
+        >
+          <div className={styles.castContainer + " m-4 d-flex"}>
+            <Link
+              className="d-flex flex-column"
+              reloadDocument
+              style={{ textDecoration: "none", color: "inherit" }}
+              to={"/name/" + person.id}
+            >
+              <img className="mw-100 " src={profileImgUrl} />
+              <div className="text-center d-flex align-items-center justify-content-center flex-grow-1 p-1">
+                <p className="">{person.name}</p>
+              </div>
+            </Link>
+          </div>
         </div>
       </>
     );
   }
 
+  console.log(details.status !== "Released");
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container + ""}>
       <Tabs
         defaultActiveKey="movie"
         id="uncontrolled-tab-example"
-        className="mb-3"
+        className="mb-3 mt-4"
       >
         <Tab eventKey="movie" title="Movie Detail">
-          <div className={styles.headContainer}>
-            <div className={styles.leftInnerContainer}>
+          <div className={"row no-gutters mb-2"}>
+            <div className={"col-sm-12 col-md-12 col-lg-6 mr-auto mb-2"}>
               <div className={styles.titleInnerContainer}>
                 <p className={styles.title}>{details.original_title}</p>
               </div>
@@ -152,44 +166,64 @@ function Detail() {
               </div>
             </div>
 
-            <div className={styles.rightInnerContainer}>
-              {(details.status === "released" || "Released") && (
-                <div className={styles.userRatingContainer}>
-                  <p className={styles.usersRatingText}>USERS RATING</p>
-                  <div className="d-flex justify-content-center align-items-center">
-                    <BsStarFill className="mr-1" color="#F5C518" size="30" />
-                    <div className="">
-                      <div className={styles.voteInnerContainer}>
-                        <p className={styles.vote}>
-                          {parseFloat(details.vote_average).toFixed(1)}/10
-                        </p>
-                      </div>
+            <div className="col-md-12 col-lg-auto d-flex">
+              <div className="mr-3">
+                {details.status.toUpperCase() !== "RELEASED" ? null : (
+                  <div
+                    className={
+                      styles.userRatingContainer +
+                      " d-flex flex-column align-items-center"
+                    }
+                  >
+                    <p
+                      className={
+                        styles.usersRatingText +
+                        " mb-2 text-nowrap font-weight-bold text-black-50"
+                      }
+                    >
+                      USERS RATING
+                    </p>
+                    <div className="d-flex justify-content-center align-items-center">
+                      <BsStarFill className="mr-1" color="#F5C518" size="30" />
+                      <div className="">
+                        <div>
+                          <p className="font-weight-bold">
+                            {parseFloat(details.vote_average).toFixed(1)}/10
+                          </p>
+                        </div>
 
-                      <div className={styles.voteCountInnerContainer}>
-                        <p className={styles.voteCount}>
-                          {details.vote_count.toLocaleString()}
-                        </p>
+                        <div>
+                          <p className={styles.voteCount}>
+                            {details.vote_count.toLocaleString()}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
-              {(details.status === "released" || "Released") && (
-                <div className={styles.yourRatingContainer}>
-                  <p className={styles.yourRatingText}>YOUR RATING</p>
-
-                  <div className={styles.starContainer}>
+              <div>
+                {details.status.toUpperCase() !== "RELEASED" ? null : (
+                  <div className="d-flex flex-column align-items-center">
+                    <p
+                      className={
+                        styles.yourRatingText +
+                        " font-weight-bold text-black-50"
+                      }
+                    >
+                      YOUR RATING
+                    </p>
                     <StarCard
                       movie={details}
                       size={"30"}
                       formOfCalling="inDetailPage"
                     />
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
-              <div className="ml-2">
+              <div className="d-flex justify-content-center align-items-center ml-2">
                 <WatchlistCard
                   loggedIn={loggedIn}
                   lists={lists}
@@ -204,7 +238,7 @@ function Detail() {
             </div>
           </div>
 
-          <div className={styles.middleContainer}>
+          <div className={styles.middleContainer + " mb-4"}>
             <img
               className={styles.poster}
               src={imageURL + details?.poster_path}
@@ -216,67 +250,64 @@ function Detail() {
             </div>
           </div>
 
-          <div className={styles.gridInfoSection}>
-            <div className={styles.genres + " " + styles.gridCol3}>
-              <Genre genres={genreList} />
-            </div>
+          <div className="row no-gutters mb-3">
+            <Genre genres={genreList} />
+          </div>
 
-            <div className={styles.crew + " " + styles.gridColAll}>
+          <div className="row no-gutters">
+            <p>
+              <span className="font-weight-bold">
+                {directors?.length > 1 ? "Directors:" : "Director:"}
+              </span>{" "}
+              {directors
+                ? directors.map((director, i, length) =>
+                    renderCrew(director, i, directors.length)
+                  )
+                : null}
+            </p>
+          </div>
+
+          <div className="row no-gutters mb-3">
+            {writers?.length > 0 ? (
               <p>
                 <span className="font-weight-bold">
-                  {directors?.length > 1 ? "Directors:" : "Director:"}
+                  {writers?.length > 1 ? "Writers:" : "Writer:"}
                 </span>{" "}
-                {directors
-                  ? directors.map((director, i, length) =>
-                      renderCrew(director, i, directors.length)
-                    )
-                  : null}
+                {writers.map((writer, i, length) =>
+                  renderCrew(writer, i, writers.length)
+                )}
               </p>
-              {writers?.length > 0 ? (
-                <p>
-                  <span className="font-weight-bold">
-                    {writers?.length > 1 ? "Writers:" : "Writer:"}
-                  </span>{" "}
-                  {writers.map((writer, i, length) =>
-                    renderCrew(writer, i, writers.length)
-                  )}
-                </p>
-              ) : null}
-            </div>
+            ) : null}
+          </div>
 
-            <div className={styles.overview + " " + styles.gridColAll}>
-              {details.overview}
-            </div>
+          <div className="row no-gutters mb-3">{details.overview}</div>
 
-            <div
-              className={
-                styles.castCrew + " " + styles.gridColAll + " font-weight-bold"
-              }
-            >
-              Top cast
-            </div>
+          <div className="row no-gutters font-weight-bold">Top cast</div>
 
+          <div className="row no-gutters">
             {actingCrew ? (
               actingCrew.map(renderActingCrew)
             ) : (
               <p>Yükleniyor...</p>
             )}
+          </div>
 
-            <div className={styles.gridColAll}>
+          <div className="row no-gutters">
+            <div className="col-lg-12">
               <RecommendationsForMovie movie={details} />
             </div>
+          </div>
 
-            <div className={styles.imdbIdContainer}>
-              <p>
-                <a
-                  href={"https://www.imdb.com/title/" + details.imdb_id}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Imdb Sayfası
-                </a>
-              </p>
-            </div>
+          <div className={styles.imdbIdContainer}>
+            <p>
+              <a
+                href={"https://www.imdb.com/title/" + details.imdb_id}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Imdb Sayfası
+              </a>
+            </p>
           </div>
         </Tab>
 

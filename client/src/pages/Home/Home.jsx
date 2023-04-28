@@ -27,7 +27,8 @@ function Home() {
     fetchNowPlayingOrUpcomingMovies("popular?")
   );
 
-  if (statusUpcoming && statusNowPlaying && statusPopular) return "Loading...";
+  if (statusUpcoming && statusNowPlaying && statusPopular)
+    return <div className={styles.mainContainer}></div>;
   if ((errorNowPlaying, errorPopular, errorUpcoming))
     return "An error has occurred: ";
 
@@ -37,9 +38,9 @@ function Home() {
         <MovieSlider key={"1"} movies={nowPlayingMovies?.results}>
           In theaters
         </MovieSlider>
-        {/* <MovieSlider key={"2"} movies={upcomingMovies?.results}>
-        Coming soon to theaters
-      </MovieSlider> */}
+        <MovieSlider key={"2"} movies={upcomingMovies?.results}>
+          Coming soon to theaters
+        </MovieSlider>
         <MovieSlider key={"3"} movies={popularMovies?.results}>
           Popular Movies
         </MovieSlider>

@@ -1,17 +1,9 @@
-.addToWatchlistBtnContainer {
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .addToWatchlistBtn {
-  height: 100%;
   font-weight: bold;
-  width: 100%;
   background-color: rgb(44, 44, 44);
   color: rgb(87, 153, 239);
   border-radius: 5px;
+  transition: 0.2s;
 }
 
 .addToWatchlistBtn:hover {

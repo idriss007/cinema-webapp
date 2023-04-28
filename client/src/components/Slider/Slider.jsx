@@ -26,11 +26,13 @@ function Slider({ allImages }) {
             {"<"}
           </button>
         </div>
+
         <div className={styles.btnContainer}>
           <button id={styles.nextBtn} onClick={goToNext}>
             {">"}
           </button>
         </div>
+
         {allImages.map((image, key) => {
           return (
             <img
