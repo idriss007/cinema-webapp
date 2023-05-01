@@ -15,8 +15,6 @@ function TrailerCard({ movie, handleTrailer, handleShow }) {
     fetchTrailer(movie.id)
   );
 
-  // trailerData && console.log(trailerData.results);
-
   return (
     <div
       className={styles.container}

@@ -11,7 +11,7 @@ function Genre(props) {
   const resultGenres = [];
 
   for (let i = 0; i < genres?.length; i++) {
-    for (let j = 0; j < props.genres.length; j++) {
+    for (let j = 0; j < props?.genres?.length; j++) {
       if (genres[i].id === props.genres[j]) {
         resultGenres.push(genres[i].name);
       }

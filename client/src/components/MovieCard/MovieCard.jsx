@@ -19,8 +19,13 @@ function MovieCard(props) {
     return null;
   }
 
+  let genres = [];
+
+  !props.movie.genre_ids &&
+    props.movie.genres.map((genre) => genres.push(genre.id));
+
   return (
-    <div className={"container mb-5 mt-5 p-4 " + styles.container}>
+    <div className={"container mb-5 p-4 " + styles.container}>
       <div className="row">
         <div className={"col-md-auto " + styles.centerContainer}>
           <div className={styles.imageContainer + " mr-3 ml-3"}>
@@ -51,7 +56,11 @@ function MovieCard(props) {
             </div>
           </div>
           <div className={"row mb-1 " + styles.centerContainer}>
-            <Genre genres={props.movie.genre_ids} />
+            {props.movie.genre_ids ? (
+              <Genre genres={props.movie.genre_ids} />
+            ) : (
+              <Genre genres={genres} />
+            )}
           </div>
           <div
             className={

@@ -63,7 +63,8 @@ function Navbar() {
   return (
     <div
       className={
-        styles.container + " justify-content-lg-between navbar navbar-expand-lg"
+        styles.container +
+        " justify-content-lg-between navbar navbar-expand-lg mb-5"
       }
     >
       <div className="container ">
@@ -144,7 +145,7 @@ function Navbar() {
 
           {loggedIn && (
             <>
-              <Link
+              {/* <Link
                 reloadDocument
                 className={
                   "nav-item nav-link p-3 " +
@@ -154,10 +155,10 @@ function Navbar() {
                   " " +
                   styles.linkUrl
                 }
-                to="/"
+                to="/watchlist"
               >
                 Watchlist
-              </Link>
+              </Link> */}
               <div className={"nav-item dropdown"}>
                 <a
                   className={

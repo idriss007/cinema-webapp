@@ -18,6 +18,17 @@ const CreateList = async (req, res) => {
   }
 };
 
+const GetList = async (req, res) => {
+  const { list_id } = req.params;
+  try {
+    const list = await List.findById(list_id);
+    res.send(list);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
+
 //Kullanıcının sahip olduğu tüm listeleri döndürür.
 const GetLists = async (req, res) => {
   const { user_id } = req.params;
@@ -122,4 +133,4 @@ const RemoveFromList = async (req, res) => {
 
 //
 
-module.exports = { CreateList, GetLists, AddToList, RemoveFromList };
+module.exports = { CreateList, GetList, GetLists, AddToList, RemoveFromList };

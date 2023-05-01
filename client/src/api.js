@@ -206,6 +206,14 @@ export async function postList(input) {
   return data;
 }
 
+export async function fetchList(list_id) {
+  const url = "http://localhost:4000/list/list/" + list_id;
+
+  const { data } = await axios.get(url);
+
+  return data;
+}
+
 export async function fetchLists(user_id) {
   const url = "http://localhost:4000/list/" + user_id;
 

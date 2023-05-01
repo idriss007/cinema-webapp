@@ -12,6 +12,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import { ListProvider } from "./context/ListContext";
 import PersonDetail from "./pages/PersonDetail/PersonDetail";
+import List from "./pages/List/List";
 
 function App() {
   return (
@@ -35,6 +36,11 @@ function App() {
               <Route path="/login" element={<Signin />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/profile" element={<Profile />} />
+              </Route>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/list" element={<List />}>
+                  <Route path=":listId" element={<List />} />
+                </Route>
               </Route>
             </Routes>
           </ListProvider>

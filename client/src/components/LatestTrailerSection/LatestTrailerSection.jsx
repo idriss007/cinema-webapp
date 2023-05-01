@@ -61,7 +61,11 @@ function LatestTrailerSection({ upcomingMovies }) {
                           />
                         </Link>
                       </div>
-                      <div className="col-lg-10 col-md-12 mt-3">
+                      <div
+                        className={
+                          "col-lg-10 col-md-12 " + styles.trailerCardContainer
+                        }
+                      >
                         <TrailerCard
                           movie={movie}
                           handleTrailer={handleTrailer}
