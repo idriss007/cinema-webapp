@@ -1,0 +1,17 @@
+.poster {
+    cursor: pointer;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.poster:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 991.2px) {
+
+    .poster {
+        width: 50%;
+    }
+
+}

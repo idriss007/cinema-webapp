@@ -32,6 +32,31 @@ export async function fetchNowPlayingOrUpcomingMovies(query) {
   return data;
 }
 
+export async function fetchUpcomingMovies(date) {
+  const url =
+    "https://api.themoviedb.org/3/discover/movie?api_key=" +
+    process.env.REACT_APP_API_URL +
+    "&sort_by=popularity.desc&primary_release_date.gte=" +
+    date +
+    "&with_watch_monetization_types=flatrate";
+
+  const { data } = await axios.get(url);
+
+  return data;
+}
+
+export async function fetchTrailer(movieId) {
+  const url =
+    "https://api.themoviedb.org/3/movie/" +
+    movieId +
+    "/videos?api_key=" +
+    process.env.REACT_APP_API_URL;
+
+  const { data } = await axios.get(url);
+
+  return data;
+}
+
 export async function getRecommendationsForMovie(movie_id) {
   const url =
     "https://api.themoviedb.org/3/movie/" +

@@ -1,0 +1,45 @@
+.trailerImg {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.container:hover .trailerImg {
+    opacity: 0.8;
+}
+
+.playIcon {
+    color: white;
+    font-size: 100px;
+}
+
+.container:hover .playIcon {
+    color: yellow;
+}
+
+.infoContainer {
+    position: absolute;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+}
+
+.title {
+    font-size: 2rem;
+    color: white;
+}
+
+@media (max-width: 991.2px) {
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .playIcon {
+        font-size: 80px;
+    }
+
+}

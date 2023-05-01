@@ -1,10 +1,21 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { fetchNowPlayingOrUpcomingMovies } from "../../api";
+import {
+  fetchNowPlayingOrUpcomingMovies,
+  fetchUpcomingMovies,
+} from "../../api";
+
+import moment from "moment";
+
+//Components
 import MovieSlider from "../../components/MovieSlider/MovieSlider";
+import LatestTrailerSection from "../../components/LatestTrailerSection/LatestTrailerSection";
+
+//Stylesheet
 import styles from "./home.module.css";
 
 function Home() {
+  let date = moment(new Date()).format("YYYY-MM-DD");
   const {
     isLoading: statusNowPlaying,
     error: errorNowPlaying,
@@ -16,9 +27,7 @@ function Home() {
     isLoading: statusUpcoming,
     error: errorUpcoming,
     data: upcomingMovies,
-  } = useQuery(["movies", "upcoming?"], () =>
-    fetchNowPlayingOrUpcomingMovies("upcoming?")
-  );
+  } = useQuery(["movies", "upcoming?"], () => fetchUpcomingMovies(date));
   const {
     isLoading: statusPopular,
     error: errorPopular,
@@ -35,6 +44,7 @@ function Home() {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.container}>
+        <LatestTrailerSection upcomingMovies={upcomingMovies} />
         <MovieSlider key={"1"} movies={nowPlayingMovies?.results}>
           In theaters
         </MovieSlider>
