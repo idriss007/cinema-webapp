@@ -145,7 +145,7 @@ function Navbar() {
 
           {loggedIn && (
             <>
-              {/* <Link
+              <Link
                 reloadDocument
                 className={
                   "nav-item nav-link p-3 " +
@@ -155,10 +155,10 @@ function Navbar() {
                   " " +
                   styles.linkUrl
                 }
-                to="/watchlist"
+                to={"user/" + user?._id + "/watchlist"}
               >
                 Watchlist
-              </Link> */}
+              </Link>
               <div className={"nav-item dropdown"}>
                 <a
                   className={
@@ -201,6 +201,20 @@ function Navbar() {
                       to="/profile"
                     >
                       Profile
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      className={
+                        "dropdown-item p-3 d-flex justify-content-center " +
+                        styles.dropdownItem +
+                        " " +
+                        styles.linkUrl
+                      }
+                      reloadDocument
+                      to={"/user/" + user._id + "/ratings"}
+                    >
+                      <p>Your Ratings</p>
                     </Link>
                   </div>
                   {/* <div className="dropdown-divider"></div> */}

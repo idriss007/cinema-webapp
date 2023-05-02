@@ -10,6 +10,7 @@ import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import ProtectedRoute2 from "./pages/ProtectedRoute2";
 import { ListProvider } from "./context/ListContext";
 import PersonDetail from "./pages/PersonDetail/PersonDetail";
 import List from "./pages/List/List";
@@ -32,15 +33,24 @@ function App() {
               <Route path="/name" element={<PersonDetail />}>
                 <Route path=":name_id" element={<PersonDetail />} />
               </Route>
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/login" element={<Signin />} />
+              <Route element={<ProtectedRoute2 />}>
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Signin />} />
+              </Route>
+
               <Route element={<ProtectedRoute />}>
                 <Route path="/profile" element={<Profile />} />
-              </Route>
-              <Route element={<ProtectedRoute />}>
                 <Route path="/list" element={<List />}>
                   <Route path=":listId" element={<List />} />
                 </Route>
+                <Route
+                  path="/user/:userId/watchlist"
+                  element={<List calledType="watchlist" />}
+                />
+                <Route
+                  path="/user/:userId/ratings"
+                  element={<List calledType="ratings" />}
+                />
               </Route>
             </Routes>
           </ListProvider>

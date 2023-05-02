@@ -1,25 +1,4 @@
-.listNameTxt {
-  font-size: 1.5rem;
-  padding: 8px 0 8px 30px;
-  color: white;
-  font-weight: bold;
-}
-
-.listContainer {
-  background-color: cornflowerblue;
-  border-radius: 5px;
-  overflow: hidden;
-  margin: 30px auto;
-}
-
-.innerListContainer {
-  display: flex;
-  background-color: black;
-  padding: 30px;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
-.movieContainer {
-  margin-right: 20px;
+.yourListstxt {
+    color: rgb(165, 133, 0);
+    font-size: 2rem;
 }
