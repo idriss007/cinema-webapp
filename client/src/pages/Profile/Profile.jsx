@@ -89,7 +89,7 @@ function Profile() {
         key={index}
         index={index}
         list={lists[1]}
-        movie={lists[1].movies[lists[1].movies.length - (index + 1)].movie}
+        movie={lists[1]?.movies[lists[1].movies.length - (index + 1)].movie}
         user={user}
       />
     );
@@ -124,17 +124,19 @@ function Profile() {
         </div>
 
         <div className={"col-12 mt-1 mb-1 p-3"}>
-          <p className="mb-2 font-weight-bold text-muted">
-            Most Recently Rated
-          </p>
-          {lists[1].movies.length > 0 && (
+          {lists[1]?.movies.length > 0 && (
+            <p className="mb-2 font-weight-bold text-muted">
+              Most Recently Rated
+            </p>
+          )}
+          {lists[1]?.movies.length > 0 && (
             <div className="row no-gutters">
-              {lists[1].movies.map(renderRecentlyRatedMovies)}
+              {lists[1]?.movies.map(renderRecentlyRatedMovies)}
             </div>
           )}
 
-          {lists[1].movies.length > 0 ? (
-            lists[1].movies.length > 4 && (
+          {lists[1]?.movies.length > 0 ? (
+            lists[1]?.movies.length > 4 && (
               <div className="mt-4">
                 <Link
                   style={{ color: "inherit" }}
@@ -142,7 +144,7 @@ function Profile() {
                   to={"/user/" + user._id + "/ratings"}
                 >
                   <p>
-                    See all {lists[1].movies.length} ratings {">>"}
+                    See all {lists[1]?.movies.length} ratings {">>"}
                   </p>
                 </Link>
               </div>

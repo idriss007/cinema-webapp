@@ -93,7 +93,7 @@ function StarCard({ movie, size, formOfCalling }) {
               </p>
             </div>
           ) : (
-            <div className="d-flex">
+            <div className="d-flex justify-content-center align-items-center">
               <BsStarFill size={size} />
               <p className={styles.ratingBtnTxtSmall + " ml-1"}>{ratedValue}</p>
             </div>

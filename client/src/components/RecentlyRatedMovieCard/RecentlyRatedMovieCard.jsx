@@ -4,6 +4,8 @@ import { GetRating } from "../../api";
 import { Link } from "react-router-dom";
 import styles from "./recentlyratedmoviecard.module.css";
 
+import { BsStarFill } from "react-icons/bs";
+
 function RecentlyRatedMovieCard({ list, index, movie, user }) {
   const { data: rating } = useQuery(["movieRating", parseInt(movie.id)], () =>
     GetRating({ user_id: user._id, movie_id: movie.id })
@@ -25,13 +27,21 @@ function RecentlyRatedMovieCard({ list, index, movie, user }) {
         </Link>
       </div>
       <div className={"w-100 d-flex justify-content-center mt-2 p-1"}>
-        <p className={styles.title}>
-          {list.movies[list.movies.length - (index + 1)].movie.title}
-        </p>
+        <Link
+          className={styles.title}
+          reloadDocument
+          style={{ textDecoration: "none", color: "inherit" }}
+          to={"/detail/" + movie.id}
+        >
+          <p className={styles.title}>
+            {list.movies[list.movies.length - (index + 1)].movie.title}
+          </p>
+        </Link>
       </div>
       {rating && (
-        <div>
-          <p className="mt-1">{rating}</p>
+        <div className="d-flex justify-content-center align-items-center">
+          <BsStarFill color="" />
+          <p className="ml-1">{rating}</p>
         </div>
       )}
     </div>

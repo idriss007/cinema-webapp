@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AddToList, RemoveFromList } from "../../api";
 
 //Stylesheet
 import styles from "./newlist.module.css";
 import ListCard from "../ListCard/ListCard";
-import ListContext from "../../context/ListContext";
 
 function NewList({ lists, movie }) {
-  // const { lists } = useContext(ListContext);
   const [isInList, setIsInList] = useState([]);
 
   async function addToList(list_id, movie) {
@@ -20,15 +18,18 @@ function NewList({ lists, movie }) {
   }
   return (
     <div
-      className="modal fade"
+      className="modal fade w-100 h-100"
       id="newListModal"
       tabindex="-1"
       role="dialog"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
     >
-      <div className="modal-dialog modal-dialog-centered w-25" role="document">
-        <div className={"modal-content rounded-0 " + styles.container}>
+      <div
+        className="modal-dialog d-flex justify-content-center align-items-center w-100 h-100 mw-100 m-0"
+        role="document"
+      >
+        <div className={"modal-content rounded-0 w-auto " + styles.container}>
           <div class="modal-header justify-content-center">
             <p className="">Add to List</p>
           </div>

@@ -56,8 +56,8 @@ function MovieCard(props) {
             <div className="ml-2 d-flex justify-content-center align-items-center">
               ({moment(props.movie.release_date).format("YYYY")})
             </div>
-            {props.listName !== "Rated" && (
-              <div className="col-auto ml-auto">
+            {/* {props.listName !== "Rated" && (
+              <div className="col-auto ml-lg-auto">
                 <button
                   className="btn btn-danger"
                   onClick={() => props.handleDeleteBtn(props.movie)}
@@ -65,7 +65,7 @@ function MovieCard(props) {
                   Delete
                 </button>
               </div>
-            )}
+            )} */}
           </div>
           <div className={"row mb-1 " + styles.centerContainer}>
             {props.movie.genre_ids ? (
@@ -91,6 +91,16 @@ function MovieCard(props) {
           <div className={"row " + styles.centerContainer}>
             Votes: {props.movie.vote_count.toLocaleString()}
           </div>
+          {props.listName !== "Rated" && (
+            <div className="row no gutters">
+              <button
+                className="btn btn-danger col-auto ml-auto"
+                onClick={() => props.handleDeleteBtn(props.movie)}
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

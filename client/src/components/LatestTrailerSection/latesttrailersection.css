@@ -22,7 +22,7 @@
 
 .carousel-control-next,
 .carousel-control-prev {
-    width: 5%;
+    width: auto !important;
 }
 
 .carousel-control-next-icon,
