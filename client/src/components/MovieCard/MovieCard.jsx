@@ -42,7 +42,9 @@ function MovieCard(props) {
           </div>
         </div>
         <div className="col">
-          <div className={"row mb-2 " + styles.centerContainer}>
+          <div
+            className={"row mb-2 align-items-center " + styles.centerContainer}
+          >
             <Link
               reloadDocument
               style={{ textDecoration: "none", color: "inherit" }}
@@ -54,6 +56,16 @@ function MovieCard(props) {
             <div className="ml-2 d-flex justify-content-center align-items-center">
               ({moment(props.movie.release_date).format("YYYY")})
             </div>
+            {props.listName !== "Rated" && (
+              <div className="col-auto ml-auto">
+                <button
+                  className="btn btn-danger"
+                  onClick={() => props.handleDeleteBtn(props.movie)}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
           <div className={"row mb-1 " + styles.centerContainer}>
             {props.movie.genre_ids ? (

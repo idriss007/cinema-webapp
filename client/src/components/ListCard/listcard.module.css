@@ -1,9 +1,5 @@
-.yourListstxt {
-    color: rgb(165, 133, 0);
-    font-size: 2rem;
-}
-
 .button {
+    background-color: inherit;
     color: inherit;
     border: none;
 }

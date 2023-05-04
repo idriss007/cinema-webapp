@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { AddToList, RemoveFromList } from "../api";
+import { AddToList, RemoveFromList, fetchLists } from "../api";
 import AuthContext from "./AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -17,10 +17,8 @@ export function ListProvider({ children }) {
     (async () => {
       if (loggedIn) {
         //Aktif kullanıcının oluşturduğu listeler veritabanından çekilir.
-        const { data: listData } = await axios.get(
-          "http://localhost:4000/list/" + user._id
-        );
-        setLists(listData);
+        const data = await fetchLists(user._id);
+        setLists(data);
       }
     })();
   }, []);

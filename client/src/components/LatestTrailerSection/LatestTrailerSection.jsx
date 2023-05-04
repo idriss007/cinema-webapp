@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 // React Bootstrap Components
 import Modal from "react-bootstrap/Modal";
-import Carousel from "react-bootstrap/Carousel";
 
 // Stylesheets
 import styles from "./latesttrailersection.module.css";

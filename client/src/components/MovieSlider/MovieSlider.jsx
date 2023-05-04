@@ -6,7 +6,7 @@ import Slider from "react-slick";
 import "./slick.css";
 import "./slick-theme.css";
 
-function MovieSlider({ movies, children }) {
+function MovieSlider({ movies, children, type }) {
   const settings = {
     className: "center",
     dots: true,
@@ -69,7 +69,7 @@ function MovieSlider({ movies, children }) {
     if (!movie?.poster_path) {
       return null;
     }
-    return <MovieCardSmall key={movie.id} movie={movie} />;
+    return <MovieCardSmall key={movie.id} movie={movie} type={type} />;
   }
 
   return (

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
-import { getCredits, getDetail, getImages } from "../../api";
+import { fetchLists, getCredits, getDetail, getImages } from "../../api";
 import moment from "moment";
 
 //React Icons
@@ -27,7 +27,7 @@ import RecommendationsForMovie from "../../components/RecommendationsForMovie/Re
 import WatchlistCard from "../../components/WatchlistCard/WatchlistCard";
 
 function Detail() {
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn, user } = useContext(AuthContext);
   const { lists, handleAddWatchlistClicked } = useContext(ListContext);
 
   const imageURL = "https://www.themoviedb.org/t/p/w780";
@@ -78,6 +78,11 @@ function Detail() {
     queryKey: ["images", parseInt(id)],
     queryFn: () => getImages(id),
   });
+  // const {
+  //   isLoading: listsLoading,
+  //   error: listsError,
+  //   data: listsData,
+  // } = useQuery(["lists", Date.now], () => fetchLists(user._id));
 
   if (!details || !images) {
     return <p>Yükleniyor</p>;
@@ -142,8 +147,6 @@ function Detail() {
       </>
     );
   }
-
-  console.log(details.status !== "Released");
 
   return (
     <div className={styles.container + ""}>
@@ -222,19 +225,6 @@ function Detail() {
                   </div>
                 )}
               </div>
-
-              <div className="d-flex justify-content-center align-items-center ml-2">
-                <WatchlistCard
-                  loggedIn={loggedIn}
-                  lists={lists}
-                  isInList={isInList}
-                  handleAddWatchlistClicked={handleAddWatchlistClicked}
-                  movie={details}
-                  setIsInList={setIsInList}
-                  called="DetailPage"
-                  isInListLoading={isInListLoading}
-                />
-              </div>
             </div>
           </div>
 
@@ -280,9 +270,28 @@ function Detail() {
             ) : null}
           </div>
 
-          <div className="row no-gutters mb-3">{details.overview}</div>
+          <div className="row no-gutters">
+            <div className="col-lg-8">{details.overview}</div>
+            <div className="col-lg-4">
+              <div className="d-flex justify-content-center align-items-center ml-2">
+                {lists && (
+                  <WatchlistCard
+                    loggedIn={loggedIn}
+                    lists={lists}
+                    isInList={isInList}
+                    handleAddWatchlistClicked={handleAddWatchlistClicked}
+                    movie={details}
+                    setIsInList={setIsInList}
+                    called="DetailPage"
+                    isInListLoading={isInListLoading}
+                    // listsData={listsData.slice(2)}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
 
-          <div className="row no-gutters font-weight-bold">Top cast</div>
+          <div className="row no-gutters font-weight-bold mt-3">Top cast</div>
 
           <div className="row no-gutters">
             {actingCrew ? (
@@ -298,7 +307,7 @@ function Detail() {
             </div>
           </div>
 
-          <div className={styles.imdbIdContainer}>
+          <div className={styles.imdbIdContainer + " mt-5 mb-5"}>
             <p>
               <a
                 href={"https://www.imdb.com/title/" + details.imdb_id}

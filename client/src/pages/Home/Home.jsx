@@ -48,7 +48,7 @@ function Home() {
         <MovieSlider key={"1"} movies={nowPlayingMovies?.results}>
           In theaters
         </MovieSlider>
-        <MovieSlider key={"2"} movies={upcomingMovies?.results}>
+        <MovieSlider key={"2"} movies={upcomingMovies?.results} type="upcoming">
           Coming soon to theaters
         </MovieSlider>
         <MovieSlider key={"3"} movies={popularMovies?.results}>

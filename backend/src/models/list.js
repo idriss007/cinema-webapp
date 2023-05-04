@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const listSchema = new mongoose.Schema({
   name: {
     type: String,
-    default: "watchlist",
+    // default: "watchlist",
     required: true,
   },
   user: {

@@ -14,6 +14,7 @@ import ProtectedRoute2 from "./pages/ProtectedRoute2";
 import { ListProvider } from "./context/ListContext";
 import PersonDetail from "./pages/PersonDetail/PersonDetail";
 import List from "./pages/List/List";
+import CreateNewList from "./pages/CreateNewList/CreateNewList";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
 
               <Route element={<ProtectedRoute />}>
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/list/create" element={<CreateNewList />} />
                 <Route path="/list" element={<List />}>
                   <Route path=":listId" element={<List />} />
                 </Route>

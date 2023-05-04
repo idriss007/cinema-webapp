@@ -242,6 +242,14 @@ export async function RemoveFromList(list_id, movieData) {
   return data;
 }
 
+export async function DeleteList(list_id) {
+  const url = "http://localhost:4000/list/";
+
+  const { data } = await axios.delete(url, { data: { list_id } });
+
+  return data;
+}
+
 //RatingList Methods
 
 export async function createRatingList(input) {

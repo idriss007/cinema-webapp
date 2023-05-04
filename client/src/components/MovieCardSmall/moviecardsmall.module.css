@@ -4,8 +4,6 @@
   border-bottom-right-radius: 4px;
   text-overflow: ellipsis;
   width: 180px;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 .posterContainer {
@@ -30,4 +28,7 @@
   /* align-self: flex-start; */
   /* margin-left: 5px;
   padding-bottom: 15px; */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
