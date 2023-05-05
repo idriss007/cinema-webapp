@@ -49,7 +49,7 @@ function Signup() {
       }
     },
   });
-  console.log(formik.errors);
+
   return (
     <div className={styles.container}>
       <div className={styles.headTitleContainer}>

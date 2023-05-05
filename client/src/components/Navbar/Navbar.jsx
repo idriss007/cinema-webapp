@@ -62,12 +62,9 @@ function Navbar() {
 
   return (
     <div
-      className={
-        styles.container +
-        " justify-content-lg-between navbar navbar-expand-lg mb-5"
-      }
+      className={styles.container + " navbar navbar-expand-lg mb-5 pl-0 pr-0"}
     >
-      <div className="container ">
+      <div className="container customContainer">
         <div className={styles.logo + " navbar-brand"}>
           <Link
             reloadDocument

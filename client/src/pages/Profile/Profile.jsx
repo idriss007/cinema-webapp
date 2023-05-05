@@ -13,6 +13,9 @@ import Comments from "../Comments/Comments";
 import { FaUserCircle } from "react-icons/fa";
 import RecentlyRatedMovieCard from "../../components/RecentlyRatedMovieCard/RecentlyRatedMovieCard";
 
+//React Spinners
+import SyncLoader from "react-spinners/SyncLoader";
+
 function Profile() {
   const [lists, setLists] = useState();
 
@@ -26,7 +29,11 @@ function Profile() {
   }, []);
 
   if (!lists) {
-    return "Loading...";
+    return (
+      <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
+        <SyncLoader size={35} />
+      </div>
+    );
   }
 
   function renderLists(list, key) {
@@ -102,7 +109,7 @@ function Profile() {
   }
 
   return (
-    <div className={styles.container + " container"}>
+    <div className="container customContainer">
       {/* <div className="row no-gutters">
         <div className="col-12">
           <p className="h2 ">Hoşgeldin {user?.name}</p>
@@ -130,13 +137,16 @@ function Profile() {
         </div>
 
         <div className={"col-12 mt-1 mb-1 p-3"}>
-          {lists[1]?.movies.length > 0 && (
+          {/* {lists[1]?.movies.length > 0 && (
             <p className="mb-2 font-weight-bold text-muted">
               Most Recently Rated
             </p>
-          )}
+          )} */}
           {lists[1]?.movies.length > 0 && (
-            <div className="row no-gutters">
+            <div className="row">
+              <p className="col-12 mb-2 font-weight-bold text-muted">
+                Most Recently Rated
+              </p>
               {lists[1]?.movies.map(renderRecentlyRatedMovies)}
             </div>
           )}

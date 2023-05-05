@@ -23,9 +23,9 @@ const CreateComment = async (req, res) => {
 };
 
 const DeleteComment = async (req, res) => {
-  const { comment_id } = req.body;
+  const { comment_id, user_id } = req.body;
 
-  if (!comment_id) {
+  if (!comment_id || !user_id) {
     return res.sendStatus(400);
   }
 

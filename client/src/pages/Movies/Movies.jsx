@@ -27,7 +27,7 @@ function Movies() {
   }
 
   return (
-    <>
+    <div className="container customContainer">
       {data.results.map(renderProduct)}
 
       <nav className="mb-3">
@@ -45,7 +45,7 @@ function Movies() {
           ))}
         </ul>
       </nav>
-    </>
+    </div>
   );
 }
 

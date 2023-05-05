@@ -26,8 +26,10 @@ import styles from "./detail.module.css";
 import RecommendationsForMovie from "../../components/RecommendationsForMovie/RecommendationsForMovie";
 import WatchlistCard from "../../components/WatchlistCard/WatchlistCard";
 
+import SyncLoader from "react-spinners/SyncLoader";
+
 function Detail() {
-  const { loggedIn, user } = useContext(AuthContext);
+  const { loggedIn } = useContext(AuthContext);
   const { lists, handleAddWatchlistClicked } = useContext(ListContext);
 
   const imageURL = "https://www.themoviedb.org/t/p/w780";
@@ -53,20 +55,11 @@ function Detail() {
           (movieData) => movieData?.movie?.id === parseInt(id)
         );
 
-        if (isContainInList) {
-          setIsInList(true);
-        }
-        if (!isContainInList) {
-          setIsInList(false);
-        }
-
-        setIsInListLoading(false);
+        setIsInList(isContainInList);
       }
-      if (!loggedIn) {
-        setIsInListLoading(false);
-      }
+      setIsInListLoading(false);
     })();
-  }, [id, lists, loggedIn]);
+  }, []);
 
   //Get movie information
   const { data: details } = useQuery(["movieDetail", parseInt(id)], () =>
@@ -85,7 +78,15 @@ function Detail() {
   // } = useQuery(["lists", Date.now], () => fetchLists(user._id));
 
   if (!details || !images) {
-    return <p>Yükleniyor</p>;
+    return (
+      <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
+        <SyncLoader
+          size={35}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
   }
 
   //Filmin fotoğraf url adreslerini diziye aktar.
@@ -104,13 +105,13 @@ function Detail() {
     .slice(0, 6);
 
   function renderCrew(crew, i, length) {
-    const name = crew.name;
+    const { name, id } = crew;
     if (length === i + 1) {
-      return <Link to={"/name/" + crew.id}>{name}</Link>;
+      return <Link to={"/name/" + id}>{name}</Link>;
     } else {
       return (
         <>
-          <Link to={"/name/" + crew.id}>{name}</Link>
+          <Link to={"/name/" + id}>{name}</Link>
           <span>, </span>
         </>
       );
@@ -130,7 +131,7 @@ function Detail() {
             "col-xl-2 col-sm-4 col-xs-12 justify-content-center d-flex mt-3"
           }
         >
-          <div className={styles.castContainer + " m-4 d-flex"}>
+          <div className={styles.castContainer + " d-flex"}>
             <Link
               className="d-flex flex-column"
               reloadDocument
@@ -149,7 +150,7 @@ function Detail() {
   }
 
   return (
-    <div className={styles.container + ""}>
+    <div className="container customContainer">
       <Tabs
         defaultActiveKey="movie"
         id="uncontrolled-tab-example"
@@ -291,9 +292,8 @@ function Detail() {
             </div>
           </div>
 
-          <div className="row no-gutters font-weight-bold mt-3">Top cast</div>
-
-          <div className="row no-gutters">
+          <div className="row">
+            <div className="col-12 font-weight-bold h2 mt-5">Top cast</div>
             {actingCrew ? (
               actingCrew.map(renderActingCrew)
             ) : (

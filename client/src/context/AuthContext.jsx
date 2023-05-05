@@ -1,32 +1,11 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  CSSProperties,
-} from "react";
-import { fetchLogout, fetchMe, fetchAccessTokenByRefreshToken } from "../api";
+import React, { createContext, useEffect, useState } from "react";
+import { fetchMe, fetchAccessTokenByRefreshToken } from "../api";
 import { useLocation, useNavigate } from "react-router-dom";
 
+//React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
 
-const override = {
-  display: "block",
-  margin: "0 auto",
-  borderColor: "red",
-};
-
 const AuthContext = createContext();
-
-const style = {
-  position: "absolute",
-  display: "flex",
-  width: "100vw",
-  height: "100vh",
-  justifyContent: "center",
-  alignItems: "center",
-  color: "red",
-};
 
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
@@ -99,16 +78,8 @@ export function AuthProvider({ children }) {
 
   if (loading) {
     return (
-      // <div style={style} ><p>Yükleniyor...</p></div>
-      <div style={style}>
-        <SyncLoader
-          // color={color}
-          loading={loading}
-          cssOverride={override}
-          size={35}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
+      <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
+        <SyncLoader size={35} />
       </div>
     );
   }

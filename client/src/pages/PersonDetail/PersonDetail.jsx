@@ -60,62 +60,63 @@ function PersonDetail() {
   const profileImgUrl = "https://image.tmdb.org/t/p/h632" + person.profile_path;
   const imdb_id = person.imdb_id;
   const imdbUrl = "https://www.imdb.com/name/" + imdb_id;
-  const imageURL = "https://www.themoviedb.org/t/p/w780";
 
   return (
-    <div className={styles.container}>
-      <div className={styles.gridContainer}>
-        <div className={styles.gridColAll}>
-          <div className={styles.nameContainer}>
+    <div className="container customContainer">
+      <div className="row no-gutters">
+        <div className="col-12">
+          <div className="h2 font-weight-bold m-0">
             <p>{person.name}</p>
           </div>
-          <div className={styles.jobContainer}>
+          <div className="h5 m-0">
             <p>{person.known_for_department}</p>
           </div>
         </div>
 
-        <div className={styles.personImgContainer}>
-          <img className={styles.personImg} src={profileImgUrl} />
-        </div>
+        <div className="row mt-4">
+          <div className="col-auto col-sm-5 col-lg-3">
+            <img className="w-100 rounded" src={profileImgUrl} />
+          </div>
 
-        <div className={styles.infoContainer}>
-          <p>
-            <span>Birthday:</span>{" "}
-            {person.birthday
-              ? moment(person.birthday).format("DD/MM/YYYY")
-              : "Kayıtlarımızda doğum tarihi ile ilgili bir kayıt bulunmamaktadır."}
-          </p>
-          {person.deathday && (
-            <p>
-              <span>Day of Death:</span>{" "}
-              {moment(person.deathday).format("DD/MM/YYYY")}
-            </p>
-          )}
-          <p>
-            <span>Place of Birth:</span> {person.place_of_birth}
-          </p>
-          <div className={styles.biographyContainer}>
-            <p>
-              {person.biography
-                ? person.biography
-                : "Kayıtlarımızda " +
-                  person.name +
-                  " için biyografimiz bulunmamaktadır."}
-            </p>
+          <div className="col-auto col-sm-7 col-lg-9 mt-4 mt-sm-0">
+            <div className="row no-gutters">
+              <div className="col-12">
+                <span className="font-weight-bold">Birthday:</span>{" "}
+                {person.birthday
+                  ? moment(person.birthday).format("DD/MM/YYYY")
+                  : "Kayıtlarımızda doğum tarihi ile ilgili bir kayıt bulunmamaktadır."}
+              </div>
+
+              {person.deathday && (
+                <div className="col-12">
+                  <span className="font-weight-bold">Day of Death:</span>{" "}
+                  {moment(person.deathday).format("DD/MM/YYYY")}
+                </div>
+              )}
+
+              <div className="col-12">
+                <span className="font-weight-bold">Place of Birth:</span>{" "}
+                {person.place_of_birth}
+              </div>
+
+              <div className="col-12 mt-3">
+                {person.biography
+                  ? person.biography
+                  : "Kayıtlarımızda " +
+                    person.name +
+                    " için biyografimiz bulunmamaktadır."}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* <div className={styles.gridColAll}>
-                    <p></p>
-                </div> */}
-
         {personCredits && (
-          <div className={styles.credit + " " + styles.gridColAll}>
+          <div className="col-12">
             <MovieSlider movies={personCredits}>Known For</MovieSlider>
           </div>
         )}
 
-        <div>
+        <div className="col-12">
           <a href={imdbUrl} target="_blank">
             Imdb Sayfası
           </a>

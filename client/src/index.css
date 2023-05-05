@@ -6,3 +6,13 @@
   box-sizing: border-box;
   font-family: "Roboto", sans-serif !important;
 }
+
+.top0 {
+  top: 0;
+}
+
+.customContainer {
+  width: 85% !important;
+  max-width: 100% !important;
+  padding: 0;
+}

@@ -1,4 +1,6 @@
 const User = require("../../models/user");
+const bcrypt = require("bcrypt");
+
 const {
   signAccessToken,
   signRefreshToken,
@@ -7,18 +9,25 @@ const {
 // const user = require("../../models/user");
 
 const Register = async (req, res) => {
-  const input = req.body;
+  const { name, email, password } = req.body;
+  //req.headers
 
   try {
-    const isExist = await User.exists({ email: input.email });
+    const isExist = await User.exists({ email });
+
     if (isExist) {
-      throw new Error(
-        "Daha önce bu email ile oluşturulan bir hesap bulunuyor."
-      );
+      throw new Error("User already exist.");
     }
 
-    const registeredUser = await User.create(input);
-    // console.log(registeredUser);
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
+    const registeredUser = await User.create({
+      name,
+      email: email.toLowerCase(),
+      password: encryptedPassword,
+    });
+
+    console.log(registeredUser);
 
     const accessToken = signAccessToken({ user_id: registeredUser._id });
     const refreshToken = signRefreshToken({ user_id: registeredUser._id });
@@ -34,32 +43,28 @@ const Register = async (req, res) => {
 };
 
 const Login = async (req, res) => {
-  const input = req.body;
+  const { email, password } = req.body;
 
   try {
+    if (!(email && password)) {
+      throw new Error("Please fill in all fields.");
+    }
+
     // const findUser = await User.findOne({email: input.email, password: input.password}).select("-password");
-    const findUser = await User.findOne({ email: input.email });
+    const findUser = await User.findOne({ email: email });
 
-    if (!findUser) {
-      throw new Error("Hatalı email.");
+    if (findUser && (await bcrypt.compare(password, findUser.password))) {
+      const accessToken = signAccessToken({ user_id: findUser._id });
+      const refreshToken = signRefreshToken({ user_id: findUser._id });
+
+      return res.json({
+        user: findUser,
+        accessToken,
+        refreshToken,
+      });
     }
 
-    if (findUser.password !== input.password) {
-      throw new Error("Hatalı şifre");
-    }
-
-    const accessToken = signAccessToken({ user_id: findUser._id });
-    const refreshToken = signRefreshToken({ user_id: findUser._id });
-
-    // const userData = findUser.toObject();
-    // delete userData.password;
-    // delete userData.__v;
-
-    return res.json({
-      user: findUser,
-      accessToken,
-      refreshToken,
-    });
+    throw new Error("No user found!");
   } catch (err) {
     res.status(400).send(err.message);
   }

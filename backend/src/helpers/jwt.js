@@ -14,17 +14,17 @@ function verifyAccessToken(req, res, next) {
 
   if (!token) {
     // next(res.sendStatus(401));
-    res.sendStatus(400);
-  } else {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-      if (err) {
-        // return next(res.sendStatus(401));
-        return res.sendStatus(401);
-      }
-      req.payload = payload;
-      next();
-    });
+    return res.sendStatus(400);
   }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
+    if (err) {
+      // return next(res.sendStatus(401));
+      return res.sendStatus(401);
+    }
+    req.payload = payload;
+    return next();
+  });
 }
 
 function signRefreshToken(data) {

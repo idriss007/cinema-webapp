@@ -34,7 +34,7 @@ function List({ calledType }) {
   }
 
   return (
-    <div className="container">
+    <div className="container customContainer">
       <div className="row no-gutters mb-4">
         <div className="col-12">
           <p className="display-4">{list.name}</p>

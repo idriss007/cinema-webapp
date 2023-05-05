@@ -316,18 +316,18 @@ export async function PostComment(user_id, movie_id, body, parent_id) {
   return data;
 }
 
-export async function DeleteComment(comment_id) {
+export async function DeleteComment(comment_id, user_id) {
   const url = "http://localhost:4000/comment/";
 
-  const { data } = await axios.delete(url, { data: { comment_id } });
+  const { data } = await axios.delete(url, { data: { comment_id, user_id } });
 
   return data;
 }
 
-export async function UpdateComment(comment_id, body) {
+export async function UpdateComment(comment_id, body, user_id) {
   const url = "http://localhost:4000/comment/";
 
-  const { data } = await axios.put(url, { comment_id, body });
+  const { data } = await axios.put(url, { comment_id, body, user_id });
 
   return data;
 }

@@ -43,7 +43,7 @@ function Home() {
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.container}>
+      <div className={styles.container + " container customContainer"}>
         <LatestTrailerSection upcomingMovies={upcomingMovies} />
         <MovieSlider key={"1"} movies={nowPlayingMovies?.results}>
           In theaters

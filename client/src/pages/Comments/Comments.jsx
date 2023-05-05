@@ -65,10 +65,10 @@ function Comments({ movie_id }) {
     setActiveComment(null);
   }
 
-  async function deleteComment(comment_id) {
+  async function deleteComment(comment_id, user_id) {
     if (window.confirm("Are you sure that you want to remove the comment?")) {
       // navigate(0);
-      const deletedComment = await DeleteComment(comment_id);
+      const deletedComment = await DeleteComment(comment_id, user_id);
       const filteredComments = comments.filter(
         (comment) => comment._id !== deletedComment._id
       );
@@ -76,8 +76,8 @@ function Comments({ movie_id }) {
     }
   }
 
-  async function updateComment(body, comment_id) {
-    await UpdateComment(comment_id, body);
+  async function updateComment(body, comment_id, user_id) {
+    await UpdateComment(comment_id, body, user_id);
     const updatedComments = comments.map((comment) => {
       if (comment._id === comment_id) {
         return { ...comment, body: body };

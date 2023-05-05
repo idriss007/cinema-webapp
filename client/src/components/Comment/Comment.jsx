@@ -69,7 +69,9 @@ function Comment({
               submitLabel="Update"
               hasCancelButton
               initialText={comment.body}
-              handleSubmit={(text) => updateComment(text, comment._id)}
+              handleSubmit={(text) =>
+                updateComment(text, comment._id, comment.user._id)
+              }
               handleCancel={() => setActiveComment(null)}
             />
           )}
@@ -97,7 +99,7 @@ function Comment({
               {canDelete && (
                 <button
                   className="btn p-0 mr-1 ml-1"
-                  onClick={() => deleteComment(comment._id)}
+                  onClick={() => deleteComment(comment._id, comment.user._id)}
                 >
                   <MdDelete
                     size="25"

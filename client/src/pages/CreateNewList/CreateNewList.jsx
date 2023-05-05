@@ -18,10 +18,12 @@ function CreateNewList() {
   }
 
   return (
-    <div className="container">
-      <div className="row no-gutters justify-content-center align-items-center">
-        <div className="col-auto w-75">
+    <div className="container customContainer">
+      <div className="row no-gutters justify-content-center">
+        <div className="col-12 d-flex justify-content-center">
           <p className="h3">Create New List</p>
+        </div>
+        <div className="col-auto w-50">
           <form action="http://localhost:3000/profile" onSubmit={handleSubmit}>
             <div className="form-group">
               <label for="exampleInputEmail1">List Title</label>

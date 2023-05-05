@@ -25,7 +25,7 @@ function MovieCard(props) {
     props.movie.genres.map((genre) => genres.push(genre.id));
 
   return (
-    <div className={"container mb-5 p-4 " + styles.container}>
+    <div className={"mb-5 p-4 " + styles.container}>
       <div className="row">
         <div className={"col-md-auto " + styles.centerContainer}>
           <div className={styles.imageContainer + " mr-3 ml-3"}>
@@ -91,7 +91,7 @@ function MovieCard(props) {
           <div className={"row " + styles.centerContainer}>
             Votes: {props.movie.vote_count.toLocaleString()}
           </div>
-          {props.listName !== "Rated" && (
+          {props.listName !== "Rated" && props.listName && (
             <div className="row no gutters">
               <button
                 className="btn btn-danger col-auto ml-auto"
