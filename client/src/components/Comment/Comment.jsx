@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 
 //Bootstrap
@@ -6,7 +6,9 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 //FontAwesome
-import { FaUserCircle } from "react-icons/fa";
+import { FaUserCircle, FaEdit } from "react-icons/fa";
+import { MdDelete, MdAddComment } from "react-icons/md";
+
 //Style File
 import styles from "./comment.module.css";
 
@@ -36,8 +38,12 @@ function Comment({
     activeComment.id === comment._id;
   const replyId = parentId ? parentId : comment._id;
 
+  const [hoverDelete, setHoverDelete] = useState();
+  const [hoverEdit, setHoverEdit] = useState();
+  const [hoverReply, setHoverReply] = useState();
+
   return (
-    <Container className="mb-5 mt-5" fluid>
+    <Container className="mb-5 mt-5 border rounded p-3" fluid>
       <Row>
         <Col className="d-flex w-100" md="auto">
           <div>
@@ -69,34 +75,58 @@ function Comment({
           )}
 
           {user && !isEditing && (
-            <div className="d-flex align-items-center mt-3 mb-3">
+            <div className="d-flex align-items-center mt-3">
               {canReply && (
-                <div
-                  className="mr-2 btn btn-success"
+                <button
+                  className="btn p-0 mr-1 ml-1"
                   onClick={() =>
                     setActiveComment({ id: comment._id, type: "replying" })
                   }
                 >
-                  Reply
-                </div>
+                  <MdAddComment
+                    size="21"
+                    onClick={() => setHoverReply(false)}
+                    color={hoverReply ? "green" : null}
+                    onMouseOver={() =>
+                      setHoverReply({ isOver: true, for: "delete" })
+                    }
+                    onMouseOut={() => setHoverReply(false)}
+                  />
+                </button>
               )}
               {canDelete && (
-                <div
-                  className="mr-2 btn btn-danger"
+                <button
+                  className="btn p-0 mr-1 ml-1"
                   onClick={() => deleteComment(comment._id)}
                 >
-                  Delete
-                </div>
+                  <MdDelete
+                    size="25"
+                    onClick={() => setHoverDelete(false)}
+                    color={hoverDelete ? "red" : null}
+                    onMouseOver={() =>
+                      setHoverDelete({ isOver: true, for: "delete" })
+                    }
+                    onMouseOut={() => setHoverDelete(false)}
+                  />
+                </button>
               )}
               {canEdit && (
-                <div
-                  className="btn btn-warning"
+                <button
+                  className="btn p-0 mr-1 ml-1"
                   onClick={() =>
                     setActiveComment({ id: comment._id, type: "editing" })
                   }
                 >
-                  Edit
-                </div>
+                  <FaEdit
+                    size="23"
+                    color={hoverEdit ? "orange" : null}
+                    onClick={() => setHoverEdit(false)}
+                    onMouseOver={() =>
+                      setHoverEdit({ isOver: true, for: "delete" })
+                    }
+                    onMouseOut={() => setHoverEdit(false)}
+                  />
+                </button>
               )}
               {/* {canEdit && (<div className="btn btn-warning" onClick={handleUpdate}>Edit</div>)} */}
             </div>

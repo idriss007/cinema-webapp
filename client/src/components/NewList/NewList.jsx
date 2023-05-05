@@ -26,7 +26,10 @@ function NewList({ lists, movie }) {
       aria-hidden="true"
     >
       <div
-        className="modal-dialog d-flex justify-content-center align-items-center w-100 h-100 mw-100 m-0"
+        className={
+          "modal-dialog d-flex justify-content-center align-items-center w-100 h-100 mw-100 m-0 " +
+          styles.modal
+        }
         role="document"
       >
         <div className={"modal-content rounded-0 w-auto " + styles.container}>

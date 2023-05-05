@@ -49,7 +49,7 @@ function Signup() {
       }
     },
   });
-
+  console.log(formik.errors);
   return (
     <div className={styles.container}>
       <div className={styles.headTitleContainer}>
@@ -70,9 +70,17 @@ function Signup() {
             value={formik.values.name}
             name="name"
             type="text"
-            className="form-control form-control-lg"
+            className={
+              "form-control form-control-lg " +
+              (formik.errors.name && formik.touched.name
+                ? "border border-danger " + styles.border
+                : null)
+            }
             placeholder="Enter your name"
           />
+          {formik.errors.name && formik.touched.name && (
+            <p className="mt-1 text-danger">{formik.errors.name}</p>
+          )}
         </div>
         <div className="form-group">
           <label className={styles.lbl} name="email">
@@ -84,9 +92,17 @@ function Signup() {
             value={formik.values.email}
             name="email"
             type="email"
-            className="form-control form-control-lg"
+            className={
+              "form-control form-control-lg " +
+              (formik.errors.email && formik.touched.email
+                ? "border border-danger " + styles.border
+                : null)
+            }
             placeholder="Enter your email"
           />
+          {formik.errors.email && formik.touched.email && (
+            <p className="mt-1 text-danger">{formik.errors.email}</p>
+          )}
         </div>
         <div className="form-group">
           <label className={styles.lbl} name="password">
@@ -98,9 +114,17 @@ function Signup() {
             value={formik.values.password}
             name="password"
             type="password"
-            className="form-control form-control-lg"
+            className={
+              "form-control form-control-lg " +
+              (formik.errors.password && formik.touched.password
+                ? "border border-danger " + styles.border
+                : null)
+            }
             placeholder="Enter your password"
           />
+          {formik.errors.password && formik.touched.password && (
+            <p className="mt-1 text-danger">{formik.errors.password}</p>
+          )}
         </div>
         <div className="form-group">
           <label className={styles.lbl} name="passwordConfirm">
@@ -112,9 +136,17 @@ function Signup() {
             value={formik.values.passwordConfirm}
             name="passwordConfirm"
             type="password"
-            className="form-control form-control-lg"
+            className={
+              "form-control form-control-lg " +
+              (formik.errors.passwordConfirm && formik.touched.passwordConfirm
+                ? "border border-danger " + styles.border
+                : null)
+            }
             placeholder="Re-enter your password"
           />
+          {formik.errors.passwordConfirm && formik.touched.passwordConfirm && (
+            <p className="mt-1 text-danger">{formik.errors.passwordConfirm}</p>
+          )}
         </div>
         <button type="submit" className="btn btn-primary">
           Sign Up

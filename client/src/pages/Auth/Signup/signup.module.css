@@ -19,3 +19,7 @@
   font-weight: bold;
   margin-bottom: 10px;
 }
+
+.border {
+  border-width: 2px !important;
+}

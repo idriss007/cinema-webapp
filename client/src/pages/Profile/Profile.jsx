@@ -62,14 +62,20 @@ function Profile() {
             <button
               className={styles.button + " p-2 rounded bg-danger"}
               onClick={() => {
-                DeleteList(list._id);
+                if (
+                  window.confirm(
+                    "Are you sure that you want to delete the list?"
+                  )
+                ) {
+                  DeleteList(list._id);
 
-                setLists(() => {
-                  const newLists = lists.filter(
-                    (listItem) => listItem._id !== list._id
-                  );
-                  return newLists;
-                });
+                  setLists(() => {
+                    const newLists = lists.filter(
+                      (listItem) => listItem._id !== list._id
+                    );
+                    return newLists;
+                  });
+                }
               }}
             >
               Delete List

@@ -27,6 +27,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 //Stylesheet
 import styles from "./starcard.module.css";
+import "./starcard.css";
 
 function StarCard({ movie, size, formOfCalling }) {
   const navigate = useNavigate();
@@ -108,7 +109,12 @@ function StarCard({ movie, size, formOfCalling }) {
         )}
       </div>
 
-      <Modal centered show={show} onHide={handleClose}>
+      <Modal
+        centered
+        show={show}
+        onHide={handleClose}
+        className="p-0 d-flex justify-content-center align-items-center"
+      >
         <Modal.Header className={styles.container}>
           <Modal.Title className={styles.modalRatingTxt}>
             {rating ? rating : "Puanla"}

@@ -127,7 +127,6 @@ const RemoveFromList = async (req, res) => {
 
 const DeleteList = async (req, res) => {
   const { list_id } = req.body;
-  console.log(list_id);
 
   try {
     await List.findByIdAndDelete(list_id);

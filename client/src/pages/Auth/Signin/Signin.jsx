@@ -45,10 +45,18 @@ function Signin() {
             onBlur={formik.handleBlur}
             value={formik.values.email}
             name="email"
-            className="form-control form-control-lg"
+            className={
+              "form-control form-control-lg " +
+              (formik.errors.email && formik.touched.email
+                ? "border border-danger " + styles.border
+                : null)
+            }
             type="email"
             placeholder="Enter your email"
           />
+          {formik.errors.email && formik.touched.email && (
+            <p className="mt-1 text-danger">{formik.errors.email}</p>
+          )}
         </div>
 
         <div className="form-group">
@@ -58,10 +66,18 @@ function Signin() {
             onBlur={formik.handleBlur}
             value={formik.values.password}
             name="password"
-            className="form-control form-control-lg"
+            className={
+              "form-control form-control-lg " +
+              (formik.errors.password && formik.touched.password
+                ? "border border-danger " + styles.border
+                : null)
+            }
             type="password"
             placeholder="Enter your password"
           />
+          {formik.errors.password && formik.touched.password && (
+            <p className="mt-1 text-danger">{formik.errors.password}</p>
+          )}
         </div>
 
         <button type="submit" className="btn btn-primary">

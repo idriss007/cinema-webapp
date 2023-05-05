@@ -16,3 +16,7 @@
 .button:active {
     background-color: rgb(103, 103, 103);
 }
+
+.modal {
+    width: 100% !important;
+}
