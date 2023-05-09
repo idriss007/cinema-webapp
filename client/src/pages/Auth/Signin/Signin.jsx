@@ -1,12 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useFormik } from "formik";
 import styles from "../Signup/signup.module.css";
 import validationSchema from "./validation";
-import { fetchLogin } from "../../../api";
+// import { fetchLogin } from "../../../api";
+import { fetchLogin } from "../../../internalApi";
 import AuthContext from "../../../context/AuthContext";
 
-function Signin() {
+function Signin({ title }) {
   const { login } = useContext(AuthContext);
+
+  useEffect(() => {
+    document.title = title;
+  }, []);
 
   const formik = useFormik({
     initialValues: {

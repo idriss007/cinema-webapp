@@ -2,6 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //API CALLS
+// import {
+//   addRating,
+//   AddToList,
+//   DeleteRating,
+//   fetchLists,
+//   GetRating,
+//   RemoveFromList,
+// } from "../../api";
 import {
   addRating,
   AddToList,
@@ -9,7 +17,7 @@ import {
   fetchLists,
   GetRating,
   RemoveFromList,
-} from "../../api";
+} from "../../internalApi";
 
 //Contexts
 import AuthContext from "../../context/AuthContext";
@@ -52,19 +60,28 @@ function StarCard({ movie, size, formOfCalling }) {
             user_id: user._id,
             movie_id: movie.id,
           });
+          const listsData = await fetchLists(user._id);
+          setLists(listsData);
           setRatedValue(ratedValue);
           setLoading(false);
         } catch (err) {
           setLoading(false);
         }
-
-        const listsData = await fetchLists(user._id);
-        setLists(listsData);
       } else {
         setLoading(false);
+        // setRating(null);
+        setRatedValue(null);
       }
     })();
-  }, []);
+  }, [loggedIn, movie.id, user?._id]);
+
+  if (loading) {
+    return (
+      <div className="">
+        <ClipLoader />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -81,11 +98,7 @@ function StarCard({ movie, size, formOfCalling }) {
           setRating(ratedValue);
         }}
       >
-        {loading ? (
-          <div className="">
-            <ClipLoader />
-          </div>
-        ) : ratedValue ? (
+        {ratedValue ? (
           formOfCalling === "inDetailPage" ? (
             <div className="d-flex align-items-center">
               <BsStarFill size="30" />
@@ -154,8 +167,8 @@ function StarCard({ movie, size, formOfCalling }) {
               variant="secondary"
               onClick={() => {
                 if (loggedIn) {
-                  DeleteRating({ user_id: user._id, movie_id: movie.id });
-                  RemoveFromList(lists[1]._id, movie);
+                  DeleteRating({ movie_id: movie.id });
+                  RemoveFromList(lists[1]?._id, movie);
                   setRating(null);
                   setRatedValue(null);
                 }
@@ -177,7 +190,6 @@ function StarCard({ movie, size, formOfCalling }) {
                 if (loggedIn) {
                   AddToList(lists[1]._id, movie);
                   addRating({
-                    user_id: user._id,
                     movie_id: movie.id,
                     ratingValue: rating,
                   });

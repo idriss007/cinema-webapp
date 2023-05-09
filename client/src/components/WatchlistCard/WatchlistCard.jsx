@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
 //React Spinners
 import ClipLoader from "react-spinners/ClipLoader";
 //Stylesheet
 import styles from "./watchlistcard.module.css";
 import NewList from "../NewList/NewList";
+import { Link, useLocation } from "react-router-dom";
 
 function WatchlistCard({
   handleAddWatchlistClicked,
+  loggedIn,
   isInList,
   setIsInList,
   movie,
@@ -16,13 +18,19 @@ function WatchlistCard({
   width,
   lists,
 }) {
+  const { pathname } = useLocation();
+
+  if (isInListLoading) {
+    return (
+      <div className="">
+        <ClipLoader />
+      </div>
+    );
+  }
+
   return (
     <>
-      {isInListLoading ? (
-        <div className="d-flex justify-content-center align-items-center pt-3 pb-3 pl-4 pr-4">
-          <ClipLoader />
-        </div>
-      ) : (
+      {
         <div className={"d-flex align-items-center " + width}>
           <div
             className={
@@ -36,18 +44,35 @@ function WatchlistCard({
               handleAddWatchlistClicked(isInList, setIsInList, movie)
             }
           >
-            <p className="d-flex justify-content-center align-items-center text-nowrap">
-              {isInList
-                ? called === "DetailPage"
-                  ? "✓ In Watchlist"
-                  : "✓ Watchlist"
-                : called === "DetailPage"
-                ? "+ Add to Watchlist"
-                : "+  Watchlist"}
-            </p>
+            {loggedIn ? (
+              <p className="d-flex justify-content-center align-items-center text-nowrap">
+                {isInList
+                  ? called === "DetailPage"
+                    ? "✓ In Watchlist"
+                    : "✓ Watchlist"
+                  : called === "DetailPage"
+                  ? "+ Add to Watchlist"
+                  : "+  Watchlist"}
+              </p>
+            ) : (
+              <Link
+                reloadDocument={true}
+                className="d-flex justify-content-center align-items-center text-nowrap text-decoration-none color-inherit no-hover"
+                to="/login"
+                state={{ previousPath: pathname }}
+              >
+                {isInList
+                  ? called === "DetailPage"
+                    ? "✓ In Watchlist"
+                    : "✓ Watchlist"
+                  : called === "DetailPage"
+                  ? "+ Add to Watchlist"
+                  : "+  Watchlist"}
+              </Link>
+            )}
           </div>
 
-          {called === "DetailPage" && (
+          {loggedIn && called === "DetailPage" && (
             <div
               role="button"
               id="asd"
@@ -62,9 +87,9 @@ function WatchlistCard({
             </div>
           )}
         </div>
-      )}
+      }
 
-      <NewList lists={lists} movie={movie} />
+      {<NewList lists={lists} movie={movie} />}
     </>
   );
 }

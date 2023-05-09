@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
-import { fetchMe, fetchAccessTokenByRefreshToken } from "../api";
+// import { fetchMe, fetchAccessTokenByRefreshToken } from "../api";
+import { fetchMe, fetchAccessTokenByRefreshToken } from "../internalApi";
 import { useLocation, useNavigate } from "react-router-dom";
 
 //React Spinners
@@ -9,7 +10,7 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const prevLocation = useLocation();
+  const { state } = useLocation();
 
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -53,8 +54,7 @@ export function AuthProvider({ children }) {
     setUser(data.user);
     localStorage.setItem("access-token", data.accessToken);
     localStorage.setItem("refresh-token", data.refreshToken);
-
-    navigate("/profile");
+    state ? navigate(state.previousPath) : navigate("/profile");
   }
 
   async function logout() {
@@ -66,7 +66,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("access-token");
     localStorage.removeItem("refresh-token");
 
-    navigate("/");
+    // navigate("/");
   }
 
   const values = {

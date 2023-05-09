@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useQuery } from "react-query";
-import { GetRating } from "../../api";
+// import { GetRating } from "../../api";
+import { GetRating } from "../../internalApi";
 import { Link } from "react-router-dom";
 import styles from "./recentlyratedmoviecard.module.css";
 
@@ -15,7 +16,7 @@ function RecentlyRatedMovieCard({ list, index, movie, user }) {
       <div className="">
         <Link
           className=""
-          reloadDocument
+          reloadDocument={true}
           style={{ textDecoration: "none", color: "inherit" }}
           to={"/detail/" + movie.id}
         >
@@ -29,7 +30,7 @@ function RecentlyRatedMovieCard({ list, index, movie, user }) {
       <div className={"w-100 d-flex justify-content-center mt-2 p-1"}>
         <Link
           className={styles.title}
-          reloadDocument
+          reloadDocument={true}
           style={{ textDecoration: "none", color: "inherit" }}
           to={"/detail/" + movie.id}
         >

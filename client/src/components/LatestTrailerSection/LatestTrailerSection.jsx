@@ -46,7 +46,7 @@ function LatestTrailerSection({ upcomingMovies }) {
                       <div className="col-lg-2 col-md-12 d-flex justify-content-center align-items-center">
                         <Link
                           className="d-flex justify-content-center"
-                          reloadDocument
+                          reloadDocument={true}
                           style={{ textDecoration: "none", color: "inherit" }}
                           to={"/detail/" + movie.id}
                         >
@@ -55,7 +55,9 @@ function LatestTrailerSection({ upcomingMovies }) {
                               "https://image.tmdb.org/t/p/w342" +
                               movie.poster_path
                             }
-                            className={"d-block rounded " + styles.poster}
+                            className={
+                              "d-block rounded mh-100 " + styles.poster
+                            }
                             alt="..."
                           />
                         </Link>

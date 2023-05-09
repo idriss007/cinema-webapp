@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
-import { postList } from "../../api";
+// import { postList } from "../../api";
+import { postList } from "../../internalApi";
 
 function CreateNewList() {
   const { user } = useContext(AuthContext);
@@ -9,7 +10,6 @@ function CreateNewList() {
   async function handleSubmit() {
     await postList({
       name: title,
-      user: user._id,
     });
   }
 
@@ -21,7 +21,7 @@ function CreateNewList() {
     <div className="container customContainer">
       <div className="row no-gutters justify-content-center">
         <div className="col-12 d-flex justify-content-center">
-          <p className="h3">Create New List</p>
+          <p className="h3 line-height-1">Create New List</p>
         </div>
         <div className="col-auto w-50">
           <form action="http://localhost:3000/profile" onSubmit={handleSubmit}>

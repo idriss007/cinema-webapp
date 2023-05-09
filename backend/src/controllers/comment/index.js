@@ -1,92 +1,87 @@
+const BadRequestError = require("../../../errors/BadRequestError");
+const UnAuthenticatedError = require("../../../errors/UnAuthenticatedError");
 const Comment = require("../../models/comment");
+const { tryCatch } = require("../../utils/tryCatch");
 
-const CreateComment = async (req, res) => {
-  const { user_id, movie_id, body, parent_id } = req.body;
+const CreateComment = tryCatch(async (req, res) => {
+  const { movie_id, body, parent_id } = req.body;
 
-  if (!user_id || !movie_id || !body) {
-    return res.sendStatus(400);
+  if (!movie_id || !body) {
+    throw new BadRequestError("Wrong or missing data.");
   }
 
-  try {
-    const newComment = await (
-      await Comment.create({
-        user: user_id,
-        movie_id,
-        body,
-        parentId: parent_id,
-      })
-    ).populate("user");
-    return res.send(newComment);
-  } catch (err) {
-    console.log(err);
-  }
-};
+  const newComment = await (
+    await Comment.create({
+      user: req.payload.user_id,
+      movie_id,
+      body,
+      parentId: parent_id,
+    })
+  ).populate("user");
 
-const DeleteComment = async (req, res) => {
-  const { comment_id, user_id } = req.body;
+  return res.send(newComment);
+});
 
-  if (!comment_id || !user_id) {
-    return res.sendStatus(400);
+const DeleteComment = tryCatch(async (req, res) => {
+  const { comment_id } = req.body;
+
+  if (!comment_id || !req.payload.user_id) {
+    throw new BadRequestError("Wrong or missing data.");
   }
 
-  try {
-    await Comment.deleteMany({ parentId: comment_id });
-    const response = await Comment.findByIdAndDelete(comment_id).populate(
-      "user"
-    );
-    return res.send(response);
-  } catch (err) {
-    console.log(err);
+  //Get comment
+  const foundComment = await Comment.findById(comment_id);
+  //Check is delete request came from the comment writer
+  if (req.payload.user_id !== foundComment.user.toString()) {
+    throw new UnAuthenticatedError("User not authenticated!");
   }
-};
 
-const UpdateComment = async (req, res) => {
+  await Comment.deleteMany({ parentId: comment_id });
+  const response = await Comment.findByIdAndDelete(comment_id).populate("user");
+  return res.send(response);
+});
+
+const UpdateComment = tryCatch(async (req, res) => {
   const { comment_id, body } = req.body;
 
   if (!comment_id || !body) {
-    return res.sendStatus(400);
+    throw new BadRequestError("Wrong or missing data.");
   }
 
-  try {
-    const comment = await Comment.findById(comment_id);
-    comment.body = body;
-    comment.updatedAt = new Date();
-    const updatedComment = await comment.save();
-    res.send(updatedComment);
-  } catch (err) {
-    console.log(err);
+  //Get comment
+  const foundComment = await Comment.findById(comment_id);
+  //Check is delete request came from the comment writer
+  if (req.payload.user_id !== foundComment.user.toString()) {
+    throw new UnAuthenticatedError("User not authenticated!");
   }
-};
 
-const GetAllComments = async (req, res) => {
+  foundComment.body = body;
+  foundComment.updatedAt = new Date();
+  const updatedComment = await foundComment.save();
+  res.send(updatedComment);
+});
+
+const GetAllComments = tryCatch(async (req, res) => {
   const { movie_id } = req.params;
 
   if (!movie_id) {
-    return res.sendStatus(400);
+    throw new BadRequestError("Wrong or missing data.");
   }
 
-  try {
-    const comments = await Comment.find({ movie_id }).populate("user");
-    return res.send(comments);
-  } catch (err) {
-    console.log(err);
-  }
-};
+  const comments = await Comment.find({ movie_id }).populate("user");
+  return res.send(comments);
+});
 
-const GetUserComments = async (req, res) => {
+const GetUserComments = tryCatch(async (req, res) => {
   const { user_id } = req.params;
 
   if (!user_id) {
-    return res.sendStatus(400);
+    throw new BadRequestError("Wrong or missing data.");
   }
 
-  try {
-    const comments = await Comment.find({ user: user_id }).populate("user");
-    return res.send(comments);
-  } catch (err) {
-    console.log(err);
-  }
-};
+  const comments = await Comment.find({ user: user_id }).populate("user");
+  return res.send(comments);
+});
 
 module.exports = {
   CreateComment,

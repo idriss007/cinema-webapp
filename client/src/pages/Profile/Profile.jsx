@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 //API Functions
-import { DeleteList, fetchLists } from "../../api";
+// import { DeleteList, fetchLists } from "../../api";
+import { DeleteList, fetchLists } from "../../internalApi";
 //Contexts
 import AuthContext from "../../context/AuthContext";
 //Stylesheet
@@ -16,12 +17,13 @@ import RecentlyRatedMovieCard from "../../components/RecentlyRatedMovieCard/Rece
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
 
-function Profile() {
+function Profile({ title }) {
   const [lists, setLists] = useState();
 
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
+    document.title = title;
     (async () => {
       const data = await fetchLists(user._id);
       setLists(data);
@@ -38,7 +40,7 @@ function Profile() {
 
   function renderLists(list, key) {
     return (
-      <div className={"col-12 mt-1 mb-1 p-3"}>
+      <div key={key} className={"col-12 mt-1 mb-1 p-3"}>
         <div className="row no-gutters">
           {list.movies.length > 0 && (
             <div className="col-auto mr-2">
@@ -55,7 +57,7 @@ function Profile() {
           <div className="col-auto">
             <Link
               style={{ color: "inherit" }}
-              reloadDocument
+              reloadDocument={true}
               to={"/list/" + list._id}
             >
               <p className="h4 mb-0">{list.name}</p>
@@ -156,7 +158,7 @@ function Profile() {
               <div className="mt-4">
                 <Link
                   style={{ color: "inherit" }}
-                  reloadDocument
+                  reloadDocument={true}
                   to={"/user/" + user._id + "/ratings"}
                 >
                   <p>
@@ -180,7 +182,7 @@ function Profile() {
             </div>
             <div className="col-auto ">
               <Link
-                reloadDocument
+                reloadDocument={true}
                 style={{ color: "inherit" }}
                 to="/list/create"
               >
@@ -197,7 +199,7 @@ function Profile() {
             <p className="col-auto">Create your own movie list.</p>
             <Link
               className="col-auto ml-1"
-              reloadDocument
+              reloadDocument={true}
               style={{ color: "inherit" }}
               to="/list/create"
             >

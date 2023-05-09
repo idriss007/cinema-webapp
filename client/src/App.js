@@ -35,12 +35,12 @@ function App() {
                 <Route path=":name_id" element={<PersonDetail />} />
               </Route>
               <Route element={<ProtectedRoute2 />}>
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Signin />} />
+                <Route path="/signup" element={<Signup title="Sign Up" />} />
+                <Route path="/login" element={<Signin title="Sign In" />} />
               </Route>
 
               <Route element={<ProtectedRoute />}>
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile" element={<Profile title="Profile" />} />
                 <Route path="/list/create" element={<CreateNewList />} />
                 <Route path="/list" element={<List />}>
                   <Route path=":listId" element={<List />} />

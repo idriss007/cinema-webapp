@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { fetchMovies } from "../../api";
 import AuthContext from "../../context/AuthContext";
 import StatesContext from "../../context/StatesContext";
@@ -16,6 +16,8 @@ function Navbar() {
   const { loggedIn, user, logout } = useContext(AuthContext);
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   const searchBoxInput = useRef(null);
 
   const { searchQuery, setSearchQuery } = useContext(StatesContext);
@@ -62,12 +64,12 @@ function Navbar() {
 
   return (
     <div
-      className={styles.container + " navbar navbar-expand-lg mb-5 pl-0 pr-0"}
+      className={styles.container + " navbar navbar-expand-lg pl-0 pr-0 mb-4"}
     >
       <div className="container customContainer">
         <div className={styles.logo + " navbar-brand"}>
           <Link
-            reloadDocument
+            reloadDocument={true}
             style={{ color: "black", fontWeight: "bold" }}
             className={styles.linkUrl + " btn bg-warning text-color-dark"}
             to="/"
@@ -110,7 +112,8 @@ function Navbar() {
           {!loggedIn && (
             <div className="navbar-nav">
               <Link
-                reloadDocument
+                reloadDocument={true}
+                state={{ previousPath: pathname }}
                 className={
                   "dropdown-item p-3 d-flex justify-content-center " +
                   styles.dropdownItem +
@@ -124,7 +127,8 @@ function Navbar() {
                 Login<span className="sr-only">(current)</span>
               </Link>
               <Link
-                reloadDocument
+                reloadDocument={true}
+                state={{ previousPath: pathname }}
                 className={
                   "dropdown-item p-3 d-flex justify-content-center " +
                   styles.dropdownItem +
@@ -143,7 +147,7 @@ function Navbar() {
           {loggedIn && (
             <>
               <Link
-                reloadDocument
+                reloadDocument={true}
                 className={
                   "nav-item nav-link p-3 " +
                   styles.navBtn +
@@ -194,7 +198,7 @@ function Navbar() {
                         " " +
                         styles.linkUrl
                       }
-                      reloadDocument
+                      reloadDocument={true}
                       to="/profile"
                     >
                       Profile
@@ -208,7 +212,7 @@ function Navbar() {
                         " " +
                         styles.linkUrl
                       }
-                      reloadDocument
+                      reloadDocument={true}
                       to={"/user/" + user._id + "/ratings"}
                     >
                       <p>Your Ratings</p>
@@ -224,7 +228,7 @@ function Navbar() {
                       " " +
                       styles.linkUrl
                     }
-                    reloadDocument
+                    reloadDocument={true}
                     onClick={() => logout()}
                   >
                     Sign out

@@ -1,10 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
+// import {
+//   DeleteComment,
+//   FetchAllComments,
+//   PostComment,
+//   UpdateComment,
+// } from "../../api";
 import {
   DeleteComment,
   FetchAllComments,
   PostComment,
   UpdateComment,
-} from "../../api";
+} from "../../internalApi";
 import Comment from "../../components/Comment/Comment";
 import AuthContext from "../../context/AuthContext";
 
@@ -60,7 +66,7 @@ function Comments({ movie_id }) {
 
   async function addComment(body, parent_id) {
     console.log(body, parent_id);
-    const addedComment = await PostComment(user._id, movie_id, body, parent_id);
+    const addedComment = await PostComment(movie_id, body, parent_id);
     setComments([addedComment, ...comments]);
     setActiveComment(null);
   }
@@ -68,7 +74,7 @@ function Comments({ movie_id }) {
   async function deleteComment(comment_id, user_id) {
     if (window.confirm("Are you sure that you want to remove the comment?")) {
       // navigate(0);
-      const deletedComment = await DeleteComment(comment_id, user_id);
+      const deletedComment = await DeleteComment(comment_id);
       const filteredComments = comments.filter(
         (comment) => comment._id !== deletedComment._id
       );
@@ -77,7 +83,7 @@ function Comments({ movie_id }) {
   }
 
   async function updateComment(body, comment_id, user_id) {
-    await UpdateComment(comment_id, body, user_id);
+    await UpdateComment(comment_id, body);
     const updatedComments = comments.map((comment) => {
       if (comment._id === comment_id) {
         return { ...comment, body: body };

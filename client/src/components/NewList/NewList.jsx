@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AddToList, RemoveFromList } from "../../api";
+// import { AddToList, RemoveFromList } from "../../api";
+import { AddToList, RemoveFromList } from "../../internalApi";
 
 //Stylesheet
 import styles from "./newlist.module.css";
@@ -20,7 +21,7 @@ function NewList({ lists, movie }) {
     <div
       className="modal fade w-100 h-100"
       id="newListModal"
-      tabindex="-1"
+      tabIndex="-1"
       role="dialog"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
@@ -33,7 +34,7 @@ function NewList({ lists, movie }) {
         role="document"
       >
         <div className={"modal-content rounded-0 w-auto " + styles.container}>
-          <div class="modal-header justify-content-center">
+          <div className="modal-header justify-content-center">
             <p className="">Add to List</p>
           </div>
           <div className="modal-body p-0">
@@ -41,9 +42,9 @@ function NewList({ lists, movie }) {
               <div className="col-12">
                 <Link
                   className=""
-                  reloadDocument
+                  reloadDocument={true}
                   style={{ textDecoration: "none", color: "inherit" }}
-                  to="/list/create"
+                  to={"/list/create"}
                 >
                   <button
                     className={
@@ -60,6 +61,7 @@ function NewList({ lists, movie }) {
                   .slice(2)
                   .map((list, index) => (
                     <ListCard
+                      key={index}
                       list={list}
                       index={index}
                       isInList={isInList}

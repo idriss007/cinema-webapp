@@ -5,6 +5,8 @@ import { fetchMovies } from "../../api";
 import { useParams } from "react-router-dom";
 import styles from "./movies.module.css";
 
+import SyncLoader from "react-spinners/SyncLoader";
+
 function Movies() {
   const { query } = useParams();
   const [page, setPage] = useState(1);
@@ -13,7 +15,16 @@ function Movies() {
     fetchMovies(query, page)
   );
 
-  if (isLoading) return "Loading...";
+  if (isLoading)
+    return (
+      <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
+        <SyncLoader
+          size={35}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
   if (error) return "An error has occurred: " + error.message;
 
   function renderProduct(item, key) {

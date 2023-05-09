@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
-import { fetchLists, getCredits, getDetail, getImages } from "../../api";
+import { getCredits, getDetail, getImages } from "../../api";
 import moment from "moment";
+import clsx from "clsx";
 
 //React Icons
 import { BsStarFill } from "react-icons/bs";
@@ -16,6 +17,7 @@ import Genre from "../../components/Genre";
 import Slider from "../../components/Slider";
 import StarCard from "../../components/StarCard/StarCard";
 import Comments from "../Comments/Comments";
+import ImdbCard from "../../components/ImdbCard/ImdbCard";
 
 //Import Contexts
 import AuthContext from "../../context/AuthContext";
@@ -51,31 +53,44 @@ function Detail() {
       }
 
       if (loggedIn && lists) {
-        const isContainInList = await lists[0]?.movies?.find(
+        const isContainInList = lists[0]?.movies?.find(
           (movieData) => movieData?.movie?.id === parseInt(id)
         );
 
-        setIsInList(isContainInList);
+        if (isContainInList) {
+          setIsInList(true);
+        }
+
+        if (!isContainInList) {
+          setIsInList(false);
+        }
+
+        setIsInListLoading(false);
       }
-      setIsInListLoading(false);
+
+      if (!loggedIn) {
+        setIsInListLoading(false);
+      }
     })();
-  }, []);
+  }, [id, isInListLoading, lists, loggedIn]);
 
   //Get movie information
-  const { data: details } = useQuery(["movieDetail", parseInt(id)], () =>
-    getDetail(id)
+  const { data: details } = useQuery(
+    ["movieDetail", parseInt(id)],
+    () => getDetail(id),
+    {
+      onSuccess: (details) => {
+        document.title = details.original_title;
+      },
+    }
   );
-  //Get Movie images
+
+  // Get Movie images
   const { data: images } = useQuery({
     enabled: details?.original_title !== null,
     queryKey: ["images", parseInt(id)],
     queryFn: () => getImages(id),
   });
-  // const {
-  //   isLoading: listsLoading,
-  //   error: listsError,
-  //   data: listsData,
-  // } = useQuery(["lists", Date.now], () => fetchLists(user._id));
 
   if (!details || !images) {
     return (
@@ -93,6 +108,7 @@ function Detail() {
   const allImages = images?.images?.backdrops?.map((item) => item.file_path);
   //Filmin türlerini genreList isimli diziye aktar.
   const genreList = details.genres.map((genre) => genre.id);
+  const imdbUrl = "https://www.imdb.com/title/" + details.imdb_id;
 
   const directors = credits?.crew?.filter(
     (person) => person.job === "Director"
@@ -107,11 +123,27 @@ function Detail() {
   function renderCrew(crew, i, length) {
     const { name, id } = crew;
     if (length === i + 1) {
-      return <Link to={"/name/" + id}>{name}</Link>;
+      return (
+        <Link
+          key={i}
+          reloadDocument={true}
+          className="text-decoration-none"
+          to={"/name/" + id}
+        >
+          {name}
+        </Link>
+      );
     } else {
       return (
         <>
-          <Link to={"/name/" + id}>{name}</Link>
+          <Link
+            key={i}
+            reloadDocument={true}
+            className="text-decoration-none"
+            to={"/name/" + id}
+          >
+            {name}
+          </Link>
           <span>, </span>
         </>
       );
@@ -119,28 +151,26 @@ function Detail() {
   }
 
   function renderActingCrew(person, i) {
-    const profileImgUrl =
-      "https://image.tmdb.org/t/p/w185" + person.profile_path;
-    if (!person.profile_path) {
+    const { profile_path, id, name } = person;
+    const profileImgUrl = `https://image.tmdb.org/t/p/w185${profile_path}`;
+    if (!profile_path) {
       return null;
     }
     return (
       <>
         <div
-          className={
-            "col-xl-2 col-sm-4 col-xs-12 justify-content-center d-flex mt-3"
-          }
+          key={i}
+          className="col-xl-2 col-sm-4 col-xs-12 justify-content-center d-flex mt-3"
         >
-          <div className={styles.castContainer + " d-flex"}>
+          <div className={clsx(styles.castContainer, "d-flex")}>
             <Link
-              className="d-flex flex-column"
-              reloadDocument
-              style={{ textDecoration: "none", color: "inherit" }}
-              to={"/name/" + person.id}
+              className="d-flex flex-column text-decoration-none color-inherit"
+              reloadDocument={true}
+              to={"/name/" + id}
             >
-              <img className="mw-100 " src={profileImgUrl} />
+              <img className="mw-100 " src={profileImgUrl} alt={name} />
               <div className="text-center d-flex align-items-center justify-content-center flex-grow-1 p-1">
-                <p className="">{person.name}</p>
+                <p className="">{name}</p>
               </div>
             </Link>
           </div>
@@ -151,40 +181,24 @@ function Detail() {
 
   return (
     <div className="container customContainer">
-      <Tabs
-        defaultActiveKey="movie"
-        id="uncontrolled-tab-example"
-        className="mb-3 mt-4"
-      >
+      <Tabs defaultActiveKey="movie" id="uncontrolled-tab-example">
         <Tab eventKey="movie" title="Movie Detail">
           <div className={"row no-gutters mb-2"}>
             <div className={"col-sm-12 col-md-12 col-lg-6 mr-auto mb-2"}>
-              <div className={styles.titleInnerContainer}>
-                <p className={styles.title}>{details.original_title}</p>
+              <div>
+                <p className={styles.title}>{details.title}</p>
               </div>
 
-              <div className={styles.releaseDateInnerContainer}>
-                <p className={styles.releaseDate}>
-                  {moment(details.release_date).format("YYYY")}
-                </p>
+              <div>
+                <p>{moment(details.release_date).format("YYYY")}</p>
               </div>
             </div>
 
             <div className="col-md-12 col-lg-auto d-flex">
               <div className="mr-3">
                 {details.status.toUpperCase() !== "RELEASED" ? null : (
-                  <div
-                    className={
-                      styles.userRatingContainer +
-                      " d-flex flex-column align-items-center"
-                    }
-                  >
-                    <p
-                      className={
-                        styles.usersRatingText +
-                        " mb-2 text-nowrap font-weight-bold text-black-50"
-                      }
-                    >
+                  <div className={"d-flex flex-column align-items-center"}>
+                    <p className="mb-2 text-nowrap font-weight-bold text-black-50">
                       USERS RATING
                     </p>
                     <div className="d-flex justify-content-center align-items-center">
@@ -210,12 +224,7 @@ function Detail() {
               <div>
                 {details.status.toUpperCase() !== "RELEASED" ? null : (
                   <div className="d-flex flex-column align-items-center">
-                    <p
-                      className={
-                        styles.yourRatingText +
-                        " font-weight-bold text-black-50"
-                      }
-                    >
+                    <p className="font-weight-bold text-black-50">
                       YOUR RATING
                     </p>
                     <StarCard
@@ -272,33 +281,27 @@ function Detail() {
           </div>
 
           <div className="row no-gutters">
-            <div className="col-lg-8">{details.overview}</div>
+            <div className="col-lg-8 line-height-p">{details.overview}</div>
             <div className="col-lg-4">
               <div className="d-flex justify-content-center align-items-center ml-2">
-                {lists && (
-                  <WatchlistCard
-                    loggedIn={loggedIn}
-                    lists={lists}
-                    isInList={isInList}
-                    handleAddWatchlistClicked={handleAddWatchlistClicked}
-                    movie={details}
-                    setIsInList={setIsInList}
-                    called="DetailPage"
-                    isInListLoading={isInListLoading}
-                    // listsData={listsData.slice(2)}
-                  />
-                )}
+                <WatchlistCard
+                  loggedIn={loggedIn}
+                  lists={lists}
+                  isInList={isInList}
+                  handleAddWatchlistClicked={handleAddWatchlistClicked}
+                  movie={details}
+                  setIsInList={setIsInList}
+                  called="DetailPage"
+                  isInListLoading={isInListLoading}
+                  setIsInListLoading={setIsInListLoading}
+                />
               </div>
             </div>
           </div>
 
           <div className="row">
             <div className="col-12 font-weight-bold h2 mt-5">Top cast</div>
-            {actingCrew ? (
-              actingCrew.map(renderActingCrew)
-            ) : (
-              <p>Yükleniyor...</p>
-            )}
+            {actingCrew ? actingCrew.map(renderActingCrew) : null}
           </div>
 
           <div className="row no-gutters">
@@ -307,15 +310,9 @@ function Detail() {
             </div>
           </div>
 
-          <div className={styles.imdbIdContainer + " mt-5 mb-5"}>
+          <div className={"mt-5 mb-5"}>
             <p>
-              <a
-                href={"https://www.imdb.com/title/" + details.imdb_id}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Imdb Sayfası
-              </a>
+              <ImdbCard imdbUrl={imdbUrl} size="40" color="black" />
             </p>
           </div>
         </Tab>

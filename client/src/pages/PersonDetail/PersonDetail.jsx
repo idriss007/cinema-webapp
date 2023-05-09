@@ -7,6 +7,9 @@ import moment from "moment";
 import styles from "./persondetail.module.css";
 import MovieSlider from "../../components/MovieSlider/MovieSlider";
 
+import SyncLoader from "react-spinners/SyncLoader";
+import ImdbCard from "../../components/ImdbCard/ImdbCard";
+
 function PersonDetail() {
   const { name_id } = useParams();
 
@@ -53,8 +56,19 @@ function PersonDetail() {
     isLoading: statusPerson,
     error: errorPerson,
     data: person,
-  } = useQuery(["person", parseInt(name_id)], () => getPersonDetail(name_id));
-  if (statusPerson) return "Loading...";
+  } = useQuery(["person", parseInt(name_id)], () => getPersonDetail(name_id), {
+    onSuccess: (person) => (document.title = person.name),
+  });
+  if (statusPerson)
+    return (
+      <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
+        <SyncLoader
+          size={35}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
   if (errorPerson) return "An error has occurred: " + errorPerson.message;
 
   const profileImgUrl = "https://image.tmdb.org/t/p/h632" + person.profile_path;
@@ -65,7 +79,7 @@ function PersonDetail() {
     <div className="container customContainer">
       <div className="row no-gutters">
         <div className="col-12">
-          <div className="h2 font-weight-bold m-0">
+          <div className="h2 font-weight-bold m-0 line-height-1">
             <p>{person.name}</p>
           </div>
           <div className="h5 m-0">
@@ -88,18 +102,18 @@ function PersonDetail() {
               </div>
 
               {person.deathday && (
-                <div className="col-12">
+                <div className="col-12 mt-1">
                   <span className="font-weight-bold">Day of Death:</span>{" "}
                   {moment(person.deathday).format("DD/MM/YYYY")}
                 </div>
               )}
 
-              <div className="col-12">
+              <div className="col-12 mt-1">
                 <span className="font-weight-bold">Place of Birth:</span>{" "}
                 {person.place_of_birth}
               </div>
 
-              <div className="col-12 mt-3">
+              <div className="col-12 mt-3 line-height-p">
                 {person.biography
                   ? person.biography
                   : "Kayıtlarımızda " +
@@ -116,10 +130,8 @@ function PersonDetail() {
           </div>
         )}
 
-        <div className="col-12">
-          <a href={imdbUrl} target="_blank">
-            Imdb Sayfası
-          </a>
+        <div className="col-12 mt-5 mb-5">
+          <ImdbCard imdbUrl={imdbUrl} size="40" color="black" />
         </div>
       </div>
     </div>

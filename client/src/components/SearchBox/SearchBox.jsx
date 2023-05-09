@@ -38,7 +38,11 @@ function SearchBox({
         <div className={styles.queryResultContainer}>
           {movies?.slice(0, 5).map((movie) => {
             return (
-              <Link reloadDocument style={linkStyle} to={"detail/" + movie.id}>
+              <Link
+                reloadDocument={true}
+                style={linkStyle}
+                to={"detail/" + movie.id}
+              >
                 <div className={styles.resultMovieContainer}>
                   <div className={styles.resultMovieImgContainer}>
                     <img
@@ -49,7 +53,7 @@ function SearchBox({
                   </div>
                   <div className={styles.resultMovieInfoContainer}>
                     <div>
-                      <p>{movie.original_title}</p>
+                      <p>{movie.title}</p>
                     </div>
                     <div className={styles.resultMovieReleaseDateContainer}>
                       <p>{moment(movie.release_date).format("YYYY")}</p>

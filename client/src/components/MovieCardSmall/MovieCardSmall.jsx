@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 //Stylesheet
 import styles from "./moviecardsmall.module.css";
@@ -45,10 +45,10 @@ function MovieCardSmall({ movie, type }) {
   const poster = "https://www.themoviedb.org/t/p/w342/" + movie?.poster_path;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.posterContainer}>
+    <div className={styles.container + " row no-gutters"}>
+      <div className={styles.posterContainer + "col-12"}>
         <Link
-          reloadDocument
+          reloadDocument={true}
           style={{ textDecoration: "none", color: "inherit" }}
           to={"/detail/" + movie.id}
         >
@@ -56,14 +56,14 @@ function MovieCardSmall({ movie, type }) {
         </Link>
       </div>
       {type !== "upcoming" && (
-        <div className="d-flex align-items-center mt-2">
-          <div className={styles.vote + " d-flex pl-2 pr-2"}>
+        <div className="d-flex align-items-center mt-2 row no-gutters">
+          <div className={styles.vote + " d-flex pl-2 pr-2 col-auto"}>
             <BsStarFill className="mr-1" color="#F5C518" />
             {parseFloat(movie.vote_average).toFixed(1)}
           </div>
           <div
             className={
-              "d-flex justify-content-center align-items-center " +
+              "d-flex justify-content-center align-items-center col-auto " +
               styles.ratingInfoContainer
             }
           >
@@ -78,13 +78,14 @@ function MovieCardSmall({ movie, type }) {
       <div
         className={
           type !== "upcoming"
-            ? styles.title + " pl-2"
-            : styles.title + " pl-2 mt-2"
+            ? styles.title + " col-12 pl-2"
+            : styles.title + " col-12 pl-2 mt-2"
         }
       >
-        {movie.original_title}
+        {/* {movie.original_title} */}
+        {movie.title}
       </div>
-      <div className="d-flex justify-content-center align-items-center p-2">
+      <div className="d-flex justify-content-center align-items-center p-2 col-12">
         <WatchlistCard
           loggedIn={loggedIn}
           lists={lists}

@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { AddToList, RemoveFromList, fetchLists } from "../api";
+// import { AddToList, RemoveFromList, fetchLists } from "../api";
+import { AddToList, RemoveFromList, fetchLists } from "../internalApi";
 import AuthContext from "./AuthContext";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
 
 const ListContext = createContext();
 
@@ -13,26 +14,31 @@ export function ListProvider({ children }) {
 
   const [lists, setLists] = useState();
 
-  useEffect(() => {
-    (async () => {
-      if (loggedIn) {
-        //Aktif kullanıcının oluşturduğu listeler veritabanından çekilir.
-        const data = await fetchLists(user._id);
-        setLists(data);
-      }
-    })();
-  }, []);
+  const { data } = useQuery(
+    ["lists"],
+    () => fetchLists(user._id),
+    { enabled: user ? true : false },
+    {
+      onSuccess: (data) => {
+        if (loggedIn) {
+          setLists(data);
+        }
+      },
+    }
+  );
 
   function handleAddWatchlistClicked(isInList, setIsInList, movie) {
     //Kullanıcı giriş yapmışsa izleme listesine film ekleyip çıkarabilsin
     if (loggedIn === true) {
       if (isInList) {
-        removeFromList(lists[0], movie, isInList, setIsInList);
+        removeFromList(lists[0], movie);
         setIsInList(false);
+        return;
       }
       if (!isInList) {
-        addToList(lists[0], movie, isInList, setIsInList);
+        addToList(lists[0], movie);
         setIsInList(true);
+        return;
       }
     }
     //Kullanıcı giriş yapmamışsa login sayfasına yönlendirilsin
@@ -41,25 +47,19 @@ export function ListProvider({ children }) {
     }
   }
 
-  async function addToList(list, movieData, isInList, setIsInList) {
-    if (isInList === false) {
-      try {
-        const response = await AddToList(list._id, movieData);
-        setIsInList(true);
-      } catch (err) {
-        return console.log(err);
-      }
+  async function addToList(list, movieData) {
+    try {
+      await AddToList(list._id, movieData);
+    } catch (err) {
+      return console.log(err);
     }
   }
 
-  async function removeFromList(list, movieData, isInList, setIsInList) {
-    if (isInList === true) {
-      try {
-        await RemoveFromList(list._id, movieData);
-        setIsInList(false);
-      } catch (err) {
-        return console.log(err);
-      }
+  async function removeFromList(list, movieData) {
+    try {
+      await RemoveFromList(list._id, movieData);
+    } catch (err) {
+      return console.log(err);
     }
   }
 

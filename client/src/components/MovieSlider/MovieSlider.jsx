@@ -17,21 +17,21 @@ function MovieSlider({ movies, children, type }) {
     initialSlide: 0,
     responsive: [
       {
-        breakpoint: 1300, // width to change options
+        breakpoint: 1500, // width to change options
         settings: {
           slidesToScroll: 4,
           slidesToShow: 4,
         },
       },
       {
-        breakpoint: 1100, // width to change options
+        breakpoint: 1200, // width to change options
         settings: {
           slidesToScroll: 3,
           slidesToShow: 3,
         },
       },
       {
-        breakpoint: 840, // width to change options
+        breakpoint: 900, // width to change options
         settings: {
           slidesToScroll: 2,
           slidesToShow: 2,
@@ -39,7 +39,7 @@ function MovieSlider({ movies, children, type }) {
         },
       },
       {
-        breakpoint: 590, // width to change options
+        breakpoint: 600, // width to change options
         settings: {
           slidesToScroll: 1,
           slidesToShow: 1,
@@ -73,16 +73,25 @@ function MovieSlider({ movies, children, type }) {
   }
 
   return (
-    <>
-      {children && <div className={styles.title}>{children}</div>}
+    <div className={styles.container + " mt-4 pt-4 pb-5 row no-gutters"}>
+      {children && (
+        <div
+          className={
+            styles.title +
+            " p-0 m-0 mb-4 d-flex justify-content-center justify-content-md-start col-12"
+          }
+        >
+          {children}
+        </div>
+      )}
       {movies?.length > 0 && (
-        <div className={styles.container}>
+        <div className="col-12">
           <Slider {...settings}>
             {movies?.map((movie, key) => renderMovies(movie, key))}
           </Slider>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

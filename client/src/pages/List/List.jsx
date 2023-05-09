@@ -1,26 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { RemoveFromList, fetchList, fetchLists } from "../../api";
+// import { RemoveFromList, fetchList, fetchLists } from "../../api";
+import { RemoveFromList, fetchList, fetchLists } from "../../internalApi";
 
 import MovieCard from "../../components/MovieCard/MovieCard";
+import { useQuery } from "react-query";
+
+import SyncLoader from "react-spinners/SyncLoader";
+import AuthContext from "../../context/AuthContext";
 
 function List({ calledType }) {
   const { listId, userId } = useParams();
   const [list, setList] = useState();
+  const { user } = useContext(AuthContext);
 
-  useEffect(() => {
-    (async () => {
-      const data = listId ? await fetchList(listId) : await fetchLists(userId);
-      listId
-        ? setList(data)
-        : calledType === "watchlist"
-        ? setList(data[0])
-        : setList(data[1]);
-    })();
-  }, []);
+  const { data: lists } = useQuery(
+    ["list"],
+    () => (listId ? fetchList(listId) : fetchLists(userId)),
+    {
+      onSuccess: (lists) => {
+        handleSuccess(lists);
+      },
+    }
+  );
 
   if (!list) {
-    return null;
+    return (
+      <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
+        <SyncLoader
+          size={35}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
+  }
+
+  function handleSuccess(lists) {
+    if (listId) {
+      document.title = lists.name;
+      setList(lists);
+      return;
+    }
+
+    if (calledType === "watchlist") {
+      document.title = lists[0].name;
+      setList(lists[0]);
+      return;
+    }
+
+    setList(lists[1]);
+    document.title = lists[1].name;
   }
 
   function handleDeleteBtn(movieData) {
@@ -37,7 +67,7 @@ function List({ calledType }) {
     <div className="container customContainer">
       <div className="row no-gutters mb-4">
         <div className="col-12">
-          <p className="display-4">{list.name}</p>
+          <p className="display-4 line-height-1">{list.name}</p>
         </div>
         <div className="col-12">
           <p className="text-muted">
@@ -53,8 +83,9 @@ function List({ calledType }) {
             key={key}
             index={key}
             movie={movie.movie}
-            listName={list.name}
+            list={list}
             handleDeleteBtn={handleDeleteBtn}
+            user_id={user._id}
           />
         ))}
       </div>

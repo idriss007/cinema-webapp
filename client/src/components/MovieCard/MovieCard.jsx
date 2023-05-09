@@ -25,12 +25,12 @@ function MovieCard(props) {
     props.movie.genres.map((genre) => genres.push(genre.id));
 
   return (
-    <div className={"mb-5 p-4 " + styles.container}>
+    <div className={"mb-5 p-4 w-100 " + styles.container}>
       <div className="row">
         <div className={"col-md-auto " + styles.centerContainer}>
           <div className={styles.imageContainer + " mr-3 ml-3"}>
             <Link
-              reloadDocument
+              reloadDocument={true}
               style={{ textDecoration: "none", color: "inherit" }}
               to={"/detail/" + props.movie.id}
             >
@@ -46,7 +46,7 @@ function MovieCard(props) {
             className={"row mb-2 align-items-center " + styles.centerContainer}
           >
             <Link
-              reloadDocument
+              reloadDocument={true}
               style={{ textDecoration: "none", color: "inherit" }}
               to={"/detail/" + props.movie.id}
             >
@@ -56,7 +56,7 @@ function MovieCard(props) {
             <div className="ml-2 d-flex justify-content-center align-items-center">
               ({moment(props.movie.release_date).format("YYYY")})
             </div>
-            {/* {props.listName !== "Rated" && (
+            {/* {props.list.name !== "Rated" && (
               <div className="col-auto ml-lg-auto">
                 <button
                   className="btn btn-danger"
@@ -91,16 +91,18 @@ function MovieCard(props) {
           <div className={"row " + styles.centerContainer}>
             Votes: {props.movie.vote_count.toLocaleString()}
           </div>
-          {props.listName !== "Rated" && props.listName && (
-            <div className="row no gutters">
-              <button
-                className="btn btn-danger col-auto ml-auto"
-                onClick={() => props.handleDeleteBtn(props.movie)}
-              >
-                Delete
-              </button>
-            </div>
-          )}
+          {props.list.user === props.user_id &&
+            props.list.name !== "Rated" &&
+            props.list.name && (
+              <div className="row no gutters">
+                <button
+                  className="btn btn-danger col-auto ml-auto"
+                  onClick={() => props.handleDeleteBtn(props.movie)}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
         </div>
       </div>
     </div>

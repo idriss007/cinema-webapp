@@ -13,17 +13,15 @@ function verifyAccessToken(req, res, next) {
   const token = req.headers["authorization"];
 
   if (!token) {
-    // next(res.sendStatus(401));
-    return res.sendStatus(400);
+    return res.status(400).send("Access token not found!");
   }
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
     if (err) {
-      // return next(res.sendStatus(401));
       return res.sendStatus(401);
     }
     req.payload = payload;
-    return next();
+    next();
   });
 }
 
