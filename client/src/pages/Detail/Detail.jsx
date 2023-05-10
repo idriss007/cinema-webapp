@@ -52,18 +52,12 @@ function Detail() {
         console.log(err.message);
       }
 
-      if (loggedIn && lists) {
-        const isContainInList = lists[0]?.movies?.find(
+      if (lists) {
+        const isContainInList = lists[0].movies.find(
           (movieData) => movieData?.movie?.id === parseInt(id)
         );
 
-        if (isContainInList) {
-          setIsInList(true);
-        }
-
-        if (!isContainInList) {
-          setIsInList(false);
-        }
+        setIsInList(isContainInList);
 
         setIsInListLoading(false);
       }
@@ -95,11 +89,7 @@ function Detail() {
   if (!details || !images) {
     return (
       <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
-        <SyncLoader
-          size={35}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
+        <SyncLoader size={35} />
       </div>
     );
   }
@@ -310,7 +300,7 @@ function Detail() {
             </div>
           </div>
 
-          <div className={"mt-5 mb-5"}>
+          <div className={"mt-4 mb-4"}>
             <p>
               <ImdbCard imdbUrl={imdbUrl} size="40" color="black" />
             </p>

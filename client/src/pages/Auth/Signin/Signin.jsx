@@ -53,7 +53,7 @@ function Signin({ title }) {
             className={
               "form-control form-control-lg " +
               (formik.errors.email && formik.touched.email
-                ? "border border-danger " + styles.border
+                ? "border border-danger error-border"
                 : null)
             }
             type="email"
@@ -74,7 +74,7 @@ function Signin({ title }) {
             className={
               "form-control form-control-lg " +
               (formik.errors.password && formik.touched.password
-                ? "border border-danger " + styles.border
+                ? "border border-danger error-border"
                 : null)
             }
             type="password"

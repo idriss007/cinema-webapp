@@ -17,13 +17,13 @@ export function ListProvider({ children }) {
   const { data } = useQuery(
     ["lists"],
     () => fetchLists(user._id),
-    { enabled: user ? true : false },
+    { enabled: loggedIn },
     {
-      onSuccess: (data) => {
-        if (loggedIn) {
-          setLists(data);
-        }
-      },
+      // onSuccess: (data) => {
+      //   if (loggedIn) {
+      //     setLists(data);
+      //   }
+      // },
     }
   );
 
@@ -31,12 +31,12 @@ export function ListProvider({ children }) {
     //Kullanıcı giriş yapmışsa izleme listesine film ekleyip çıkarabilsin
     if (loggedIn === true) {
       if (isInList) {
-        removeFromList(lists[0], movie);
+        removeFromList(data[0], movie);
         setIsInList(false);
         return;
       }
       if (!isInList) {
-        addToList(lists[0], movie);
+        addToList(data[0], movie);
         setIsInList(true);
         return;
       }
@@ -66,7 +66,7 @@ export function ListProvider({ children }) {
   const values = {
     addToList,
     removeFromList,
-    lists,
+    lists: data,
     handleAddWatchlistClicked,
   };
 

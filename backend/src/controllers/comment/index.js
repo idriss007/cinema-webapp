@@ -2,20 +2,21 @@ const BadRequestError = require("../../../errors/BadRequestError");
 const UnAuthenticatedError = require("../../../errors/UnAuthenticatedError");
 const Comment = require("../../models/comment");
 const { tryCatch } = require("../../utils/tryCatch");
+const { validateComment, validateUpdateComment } = require("./validations");
 
 const CreateComment = tryCatch(async (req, res) => {
-  const { movie_id, body, parent_id } = req.body;
+  const { error, value } = validateComment(req.body);
 
-  if (!movie_id || !body) {
-    throw new BadRequestError("Wrong or missing data.");
+  if (error) {
+    throw error;
   }
 
   const newComment = await (
     await Comment.create({
       user: req.payload.user_id,
-      movie_id,
-      body,
-      parentId: parent_id,
+      movie_id: value.movie_id,
+      body: value.body,
+      parentId: value.parent_id,
     })
   ).populate("user");
 
@@ -42,20 +43,21 @@ const DeleteComment = tryCatch(async (req, res) => {
 });
 
 const UpdateComment = tryCatch(async (req, res) => {
-  const { comment_id, body } = req.body;
+  const { error, value } = validateUpdateComment(req.body);
 
-  if (!comment_id || !body) {
-    throw new BadRequestError("Wrong or missing data.");
+  if (error) {
+    throw error;
   }
 
   //Get comment
-  const foundComment = await Comment.findById(comment_id);
-  //Check is delete request came from the comment writer
+  const foundComment = await Comment.findById(value.comment_id);
+
+  //Check is update request came from the comment writer
   if (req.payload.user_id !== foundComment.user.toString()) {
     throw new UnAuthenticatedError("User not authenticated!");
   }
 
-  foundComment.body = body;
+  foundComment.body = value.body;
   foundComment.updatedAt = new Date();
   const updatedComment = await foundComment.save();
   res.send(updatedComment);

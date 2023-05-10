@@ -19,26 +19,29 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     (async () => {
       try {
-        const me = await fetchMe();
+        if (localStorage.getItem("access-token")) {
+          const me = await fetchMe();
 
-        setLoggedIn(true);
-        setUser(me);
+          setLoggedIn(true);
+          setUser(me);
 
-        console.log("me " + JSON.stringify(me));
+          console.log("me " + JSON.stringify(me));
+        }
         setLoading(false);
       } catch (err) {
-        //Kullanıcı eğer giriş yapmamışsa veya giriş yapılmış fakat access token kullanım süresi...
-        //....bitmişse aşağıdaki kodlar çalışacaktır.
+        //Access token kullanım süresi bitmişse aşağıdaki kodlar çalışacaktır.
         //------------------------------------------------
-        try {
-          const data = await fetchAccessTokenByRefreshToken();
-          login(data);
-          setLoading(false);
-          // navigate("/");
-          // navigate(prevLocation.pathname);
-          return;
-        } catch (err) {
-          setLoading(false);
+        if (localStorage.getItem("refresh-token")) {
+          try {
+            const data = await fetchAccessTokenByRefreshToken();
+            login(data);
+            setLoading(false);
+            // navigate("/");
+            // navigate(prevLocation.pathname);
+            return;
+          } catch (err) {
+            setLoading(false);
+          }
         }
         //-----------------------------------------------
 

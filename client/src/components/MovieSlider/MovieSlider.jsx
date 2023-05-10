@@ -9,7 +9,7 @@ import "./slick-theme.css";
 function MovieSlider({ movies, children, type }) {
   const settings = {
     className: "center",
-    dots: true,
+    dots: false,
     infinite: false,
     centerPadding: "60px",
     slidesToScroll: 5,

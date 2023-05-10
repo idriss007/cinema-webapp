@@ -5,13 +5,13 @@ const validator = (schema) => (payload) =>
 
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().min(5).required(),
+  password: Joi.string().trim().min(5).required(),
 });
 
 const registerSchema = Joi.object({
-  name: Joi.string().min(5).required(),
+  name: Joi.string().trim().min(5).required(),
   email: Joi.string().email().required(),
-  password: Joi.string().min(5).required(),
+  password: Joi.string().trim().min(5).required(),
   passwordConfirm: Joi.ref("password"),
 });
 

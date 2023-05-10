@@ -81,7 +81,7 @@ function Signup({ title }) {
             className={
               "form-control form-control-lg " +
               (formik.errors.name && formik.touched.name
-                ? "border border-danger " + styles.border
+                ? "border border-danger error-border"
                 : null)
             }
             placeholder="Enter your name"
@@ -103,7 +103,7 @@ function Signup({ title }) {
             className={
               "form-control form-control-lg " +
               (formik.errors.email && formik.touched.email
-                ? "border border-danger " + styles.border
+                ? "border border-danger error-border"
                 : null)
             }
             placeholder="Enter your email"
@@ -125,7 +125,7 @@ function Signup({ title }) {
             className={
               "form-control form-control-lg " +
               (formik.errors.password && formik.touched.password
-                ? "border border-danger " + styles.border
+                ? "border border-danger error-border"
                 : null)
             }
             placeholder="Enter your password"
@@ -147,7 +147,7 @@ function Signup({ title }) {
             className={
               "form-control form-control-lg " +
               (formik.errors.passwordConfirm && formik.touched.passwordConfirm
-                ? "border border-danger " + styles.border
+                ? "border border-danger error-border"
                 : null)
             }
             placeholder="Re-enter your password"

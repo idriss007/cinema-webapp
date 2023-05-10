@@ -3,13 +3,7 @@ const { tryCatch } = require("../../utils/tryCatch");
 const BadRequestError = require("../../../errors/BadRequestError");
 
 const CreateRatingList = tryCatch(async (req, res) => {
-  const { user_id } = req.body;
-
-  if (!user_id) {
-    return res.sendStatus(400);
-  }
-
-  const newList = await Rating.create({ user_id });
+  const newList = await Rating.create({ user_id: req.payload.user_id });
   res.send(newList);
 });
 

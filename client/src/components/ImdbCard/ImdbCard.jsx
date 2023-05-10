@@ -2,10 +2,12 @@ import React from "react";
 
 import { FaImdb } from "react-icons/fa";
 
-function ImdbCard({ imdbUrl, size, color }) {
+import styles from "./imdbcard.module.css";
+
+function ImdbCard({ imdbUrl, size }) {
   return (
-    <a href={imdbUrl} target="_blank" rel="noreferrer">
-      <FaImdb size={size} color={color} />
+    <a className={styles.logo} href={imdbUrl} target="_blank" rel="noreferrer">
+      <FaImdb size={size} />
     </a>
   );
 }

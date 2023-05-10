@@ -4,17 +4,21 @@ const UnAuthenticatedError = require("../../../errors/UnAuthenticatedError");
 
 const List = require("../../models/list");
 const { tryCatch } = require("../../utils/tryCatch");
+const { validateList } = require("./validations");
 
 //Girilen bilgilere göre yeni liste oluşturma veya yeni kayıt olurken her kullanıcıya watchlist isminde
 //bir liste oluştruma.
 const CreateList = tryCatch(async (req, res) => {
-  const { name } = req.body;
+  const { error, value } = validateList(req.body);
 
-  if (!name) {
-    throw new BadRequestError("Wrong or missing data.");
+  if (error) {
+    throw error;
   }
 
-  const newList = await List.create({ name: name, user: req.payload.user_id });
+  const newList = await List.create({
+    name: value.name,
+    user: req.payload.user_id,
+  });
 
   res.send({ newList });
 });
@@ -95,11 +99,10 @@ const RemoveFromList = tryCatch(async (req, res) => {
 
 const DeleteList = tryCatch(async (req, res) => {
   const { list_id } = req.body;
-  const { payload } = req;
 
   const foundList = await List.findById(list_id);
 
-  if (foundList.user.toString() !== payload.user_id) {
+  if (foundList.user.toString() !== req.payload.user_id) {
     throw new UnAuthenticatedError("User not authenticated!");
   }
 

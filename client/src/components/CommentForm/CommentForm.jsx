@@ -11,7 +11,7 @@ function CommentForm({
   handleCancel,
 }) {
   const [body, setBody] = useState(initialText);
-  const isTextAreaDisabled = body.length === 0;
+  const isTextAreaDisabled = body.length < 15;
 
   function onSubmit(event) {
     event.preventDefault();
@@ -20,7 +20,7 @@ function CommentForm({
   }
 
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit} className="mt-3">
       <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
         <Form.Control
           as="textarea"

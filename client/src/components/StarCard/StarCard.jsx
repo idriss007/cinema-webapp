@@ -75,13 +75,13 @@ function StarCard({ movie, size, formOfCalling }) {
     })();
   }, [loggedIn, movie.id, user?._id]);
 
-  if (loading) {
-    return (
-      <div className="">
-        <ClipLoader />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="">
+  //       <ClipLoader />
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -98,7 +98,11 @@ function StarCard({ movie, size, formOfCalling }) {
           setRating(ratedValue);
         }}
       >
-        {ratedValue ? (
+        {loading ? (
+          <div>
+            <ClipLoader size="15px" />
+          </div>
+        ) : ratedValue ? (
           formOfCalling === "inDetailPage" ? (
             <div className="d-flex align-items-center">
               <BsStarFill size="30" />

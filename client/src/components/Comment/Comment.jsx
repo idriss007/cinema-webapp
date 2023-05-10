@@ -51,10 +51,13 @@ function Comment({
           </div>
           <div className="d-flex flex-column justify-content-center ml-3">
             <div>{comment.user.name}</div>
-            <div>{moment(comment.createdAt).format("DD/MM/YYYY")}</div>
+            <div>{moment(comment.createdAt).format("DD/MM/YYYY hh:mm:ss")}</div>
             {/* <div>{comment.createdAt}</div> */}
-            {comment.updatedAt !== comment.createdAt && (
-              <div>{comment.updatedAt} tarihinde güncellendi.</div>
+            {comment.updatedAt && (
+              <div>
+                {moment(comment.updatedAt).format("DD/MM/YYYY hh:mm:ss")}{" "}
+                tarihinde güncellendi.
+              </div>
             )}
             {/* {(comment.updatedAt !== comment.createdAt) && (<div>{moment(comment.updatedAt).format("DD/MM/YYYY")} tarihinde güncellendi.</div>)} */}
           </div>

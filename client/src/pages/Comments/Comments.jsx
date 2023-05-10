@@ -14,8 +14,6 @@ import {
 import Comment from "../../components/Comment/Comment";
 import AuthContext from "../../context/AuthContext";
 
-import Container from "react-bootstrap/Container";
-
 import CommentForm from "../../components/CommentForm/CommentForm";
 
 function Comments({ movie_id }) {
@@ -46,7 +44,7 @@ function Comments({ movie_id }) {
         console.log(err);
       }
     })();
-  }, []);
+  }, [comments]);
 
   function renderComments(rootComment, index) {
     return (
@@ -65,7 +63,6 @@ function Comments({ movie_id }) {
   }
 
   async function addComment(body, parent_id) {
-    console.log(body, parent_id);
     const addedComment = await PostComment(movie_id, body, parent_id);
     setComments([addedComment, ...comments]);
     setActiveComment(null);
@@ -96,13 +93,13 @@ function Comments({ movie_id }) {
 
   return (
     <>
-      <Container fluid>
+      <div>
         {loggedIn ? (
           <CommentForm submitLabel="Send Comment" handleSubmit={addComment} />
         ) : (
           "Sign in to write a comment."
         )}
-      </Container>
+      </div>
 
       {rootComments
         ?.sort(

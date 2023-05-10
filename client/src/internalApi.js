@@ -166,7 +166,6 @@ export async function FetchAllComments(movie_id, user_id) {
 
 export async function PostComment(movie_id, body, parent_id) {
   const url = "comment/";
-  console.log(body);
 
   const { data } = await internalApiAxios.post(url, {
     movie_id,

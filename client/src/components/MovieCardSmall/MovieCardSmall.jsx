@@ -23,24 +23,28 @@ function MovieCardSmall({ movie, type }) {
 
   useEffect(() => {
     (async () => {
-      if (loggedIn && lists) {
-        const isContainInList = await lists[0]?.movies?.find(
+      if (lists) {
+        const isContainInList = await lists[0].movies.find(
           (movieData) => movieData?.movie?.id === parseInt(movie?.id)
         );
 
-        if (isContainInList) {
-          setIsInList(true);
-        }
-        if (!isContainInList) {
-          setIsInList(false);
-        }
+        // if (isContainInList) {
+        //   setIsInList(true);
+        // }
+        // if (!isContainInList) {
+        //   setIsInList(false);
+        // }
+
+        setIsInList(isContainInList);
 
         setIsInListLoading(false);
-      } else {
+      }
+
+      if (!loggedIn) {
         setIsInListLoading(false);
       }
     })();
-  }, [lists, loggedIn, movie?.id]);
+  }, [lists]);
 
   const poster = "https://www.themoviedb.org/t/p/w342/" + movie?.poster_path;
 
