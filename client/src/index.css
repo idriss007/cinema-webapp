@@ -29,10 +29,18 @@
   color: inherit;
 }
 
+.color-inherit:hover {
+  color: inherit;
+}
+
 .no-hover:hover {
   color: inherit;
 }
 
 .error-border {
   border-width: 2px !important;
+}
+
+.margin-end-to-page {
+  margin-bottom: 50px;
 }

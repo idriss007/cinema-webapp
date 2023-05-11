@@ -32,14 +32,28 @@ const DeleteComment = tryCatch(async (req, res) => {
 
   //Get comment
   const foundComment = await Comment.findById(comment_id);
+
   //Check is delete request came from the comment writer
   if (req.payload.user_id !== foundComment.user.toString()) {
     throw new UnAuthenticatedError("User not authenticated!");
   }
 
-  await Comment.deleteMany({ parentId: comment_id });
-  const response = await Comment.findByIdAndDelete(comment_id).populate("user");
-  return res.send(response);
+  const childComments = await Comment.find({ parentId: comment_id });
+
+  if (childComments.length > 0) {
+    foundComment.body = "This comment has been deleted by the author.";
+    foundComment.updatedAt = new Date();
+    foundComment.isDeleted = true;
+    const deletedComment = await (await foundComment.save()).populate("user");
+    console.log(deletedComment);
+
+    return res.send(deletedComment);
+  }
+
+  const deletedComment = await Comment.findByIdAndDelete(comment_id).populate(
+    "user"
+  );
+  return res.send(deletedComment);
 });
 
 const UpdateComment = tryCatch(async (req, res) => {

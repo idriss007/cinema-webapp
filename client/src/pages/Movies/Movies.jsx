@@ -6,56 +6,43 @@ import { useParams } from "react-router-dom";
 import styles from "./movies.module.css";
 
 import SyncLoader from "react-spinners/SyncLoader";
+import PaginationCard from "../../components/PaginationCard/PaginationCard";
 
 function Movies() {
-  const { query } = useParams();
-  const [page, setPage] = useState(1);
+  const { query, pageId } = useParams();
 
-  const { isLoading, error, data } = useQuery(["movies", query + page], () =>
-    fetchMovies(query, page)
+  const movies = useQuery(["movies", { pageId }], () =>
+    fetchMovies(query, pageId)
   );
 
-  if (isLoading)
+  if (movies.isLoading)
     return (
       <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
-        <SyncLoader
-          size={35}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
+        <SyncLoader size={35} />
       </div>
     );
-  if (error) return "An error has occurred: " + error.message;
+
+  if (movies.isError) return "An error has occurred: " + movies.error.message;
 
   function renderProduct(item, key) {
     return <MovieCard key={key} index={key} movie={item} />;
   }
 
-  const pageNumbers = [];
-
-  for (let i = 1; i <= data.total_pages; i++) {
-    pageNumbers.push(i);
-  }
-
   return (
     <div className="container customContainer">
-      {data.results.map(renderProduct)}
+      <div className="row no-gutters">
+        {movies.data.results.map(renderProduct)}
 
-      <nav className="mb-3">
-        <ul className="pagination justify-content-center">
-          {pageNumbers.map((number) => (
-            <li
-              key={number}
-              className={"page-item " + (number === page && "active")}
-              onClick={() => setPage(number)}
-            >
-              <a className="page-link" href="#">
-                {number}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+        <div className="col-12 justify-content-center d-flex margin-end-to-page">
+          <div className="row no-gutters">
+            <PaginationCard
+              addToUrl={query}
+              pageId={pageId}
+              totalPages={movies.data.total_pages}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

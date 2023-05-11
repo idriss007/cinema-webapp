@@ -1,8 +1,17 @@
 import React from "react";
-import style from "./genrecard.module.css";
+import styles from "./genrecard.module.css";
+import { Link } from "react-router-dom";
 
 function GenreCard({ item }) {
-  return <div className={style.container + " mr-2 mb-2"}>{item}</div>;
+  return (
+    <Link
+      reloadDocument={true}
+      className={"text-decoration-none mr-2 mb-2 " + styles.container}
+      to={"/genre/" + item.name.toLowerCase()}
+    >
+      {item.name}
+    </Link>
+  );
 }
 
 export default GenreCard;

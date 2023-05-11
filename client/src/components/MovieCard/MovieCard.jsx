@@ -15,11 +15,17 @@ import { BsStarFill } from "react-icons/bs";
 function MovieCard(props) {
   const url = "https://image.tmdb.org/t/p/w500/" + props.movie.poster_path;
 
-  if (!props.movie.poster_path) {
-    return null;
-  }
+  // if (!props.movie.poster_path) {
+  //   return null;
+  // }
 
   let genres = [];
+
+  const isReleased =
+    moment(new Date()).format("YYYYMMDD") >
+    moment(props.movie.release_date).format("YYYYMMDD");
+
+  console.log(isReleased);
 
   !props.movie.genre_ids &&
     props.movie.genres.map((genre) => genres.push(genre.id));
@@ -74,24 +80,30 @@ function MovieCard(props) {
               <Genre genres={genres} />
             )}
           </div>
-          <div
-            className={
-              "row d-flex align-items-center mb-2 " + styles.centerContainer
-            }
-          >
-            <div className="d-flex align-items-center mr-1">
-              <BsStarFill className="mr-1" color="#F5C518" size="17" />
-              {parseFloat(props.movie.vote_average).toFixed(1)}
+          {isReleased && (
+            <div
+              className={
+                "row d-flex align-items-center mb-2 " + styles.centerContainer
+              }
+            >
+              <div className="d-flex align-items-center mr-1">
+                <BsStarFill className="mr-1" color="#F5C518" size="17" />
+                {parseFloat(props.movie.vote_average).toFixed(1)}
+              </div>
+              <StarCard movie={props.movie} />
             </div>
-            <StarCard movie={props.movie} />
-          </div>
+          )}
           <div className="row mb-2">
             <p className={styles.detail}>{props.movie.overview}</p>
           </div>
-          <div className={"row " + styles.centerContainer}>
-            Votes: {props.movie.vote_count.toLocaleString()}
-          </div>
-          {props.list.user === props.user_id &&
+          {isReleased && (
+            <div className={"row " + styles.centerContainer}>
+              Votes: {props.movie.vote_count.toLocaleString()}
+            </div>
+          )}
+
+          {props.called === "List" &&
+            props.list.user === props.user_id &&
             props.list.name !== "Rated" &&
             props.list.name && (
               <div className="row no gutters">

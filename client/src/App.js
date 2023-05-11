@@ -15,6 +15,7 @@ import { ListProvider } from "./context/ListContext";
 import PersonDetail from "./pages/PersonDetail/PersonDetail";
 import List from "./pages/List/List";
 import CreateNewList from "./pages/CreateNewList/CreateNewList";
+import SearchMovieByGenreResults from "./pages/SearchMovieByGenreResults/SearchMovieByGenreResults";
 
 function App() {
   return (
@@ -26,7 +27,20 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/search" element={<Movies />}>
-                <Route path=":query" element={<Movies />} />
+                <Route path=":query" element={<Movies />}>
+                  <Route path=":pageId" element={<Movies />} />
+                </Route>
+              </Route>
+              <Route path="/genre" element={<SearchMovieByGenreResults />}>
+                <Route
+                  path=":genreName"
+                  element={<SearchMovieByGenreResults />}
+                >
+                  <Route
+                    path=":pageId"
+                    element={<SearchMovieByGenreResults />}
+                  />
+                </Route>
               </Route>
               <Route path="/detail" element={<Detail />}>
                 <Route path=":id" element={<Detail />} />
@@ -34,6 +48,7 @@ function App() {
               <Route path="/name" element={<PersonDetail />}>
                 <Route path=":name_id" element={<PersonDetail />} />
               </Route>
+
               <Route element={<ProtectedRoute2 />}>
                 <Route path="/signup" element={<Signup title="Sign Up" />} />
                 <Route path="/login" element={<Signin title="Sign In" />} />

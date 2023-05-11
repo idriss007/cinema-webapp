@@ -4,8 +4,6 @@ function signAccessToken(data) {
   const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: "1h",
   });
-  // const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET);
-  // res.json({accessToken});
   return accessToken;
 }
 
@@ -38,7 +36,7 @@ function verifyRefreshToken(refresh_token) {
       (err, payload) => {
         if (err) {
           /* eslint-disable-next-line*/ /*Aşağıdaki res kullanımı yanlış. Res diye bir şey yok burada*/
-          return reject(res.sendStatus(401));
+          return reject(err);
         } else {
           const { user_id } = payload;
           return resolve(user_id);
@@ -47,20 +45,6 @@ function verifyRefreshToken(refresh_token) {
     );
   });
 }
-
-// function verifyTokens(req, res, next) {
-//     const data = req.headers["authorization"];
-//     const tokens = data.split(",");
-//     const token = tokens[0];
-//     const refreshToken = tokens[1];
-
-//     console.log(token);
-//     console.log(refreshToken);
-
-//     // res.sendStatus(401);
-//     return next();
-
-// }
 
 module.exports = {
   signAccessToken,

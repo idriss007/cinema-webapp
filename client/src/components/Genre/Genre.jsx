@@ -13,7 +13,7 @@ function Genre(props) {
   for (let i = 0; i < genres?.length; i++) {
     for (let j = 0; j < props?.genres?.length; j++) {
       if (genres[i].id === props.genres[j]) {
-        resultGenres.push(genres[i].name);
+        resultGenres.push(genres[i]);
       }
     }
   }

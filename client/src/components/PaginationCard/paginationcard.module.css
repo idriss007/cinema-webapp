@@ -1,0 +1,14 @@
+.button {
+    background-color: rgb(152, 152, 152);
+    transition: .2s;
+}
+
+.button:hover {
+    background-color: black;
+    color: white;
+}
+
+.activeButton {
+    background-color: black !important;
+    color: white !important;
+}

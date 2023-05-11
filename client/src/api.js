@@ -12,15 +12,12 @@ externalApiAxios.interceptors.request.use(function (config) {
 
 // axios.defaults.baseURL = "https://api.themoviedb.org/3/";
 
-export async function fetchMovies(query, page) {
-  let addIfPageExist = "";
-  if (page) {
-    addIfPageExist = `&page=${page}`;
-  }
-  const url = `search/movie?api_key=${process.env.REACT_APP_API_URL}&query=${query}&${addIfPageExist}`;
+export async function fetchMovies(query, page_number) {
+  const url = `search/movie?api_key=${
+    process.env.REACT_APP_API_URL
+  }&query=${query}&page=${page_number ? page_number : 1}`;
 
   const { data } = await externalApiAxios.get(url);
-
   return data;
 }
 
@@ -88,8 +85,12 @@ export async function getCredits(movie_id) {
   return data;
 }
 
-export async function getMoviesByGenre(genre_id) {
-  const url = `discover/movie?${process.env.REACT_APP_API_URL}&sort_by=vote_count.desc&with_genres=${genre_id}`;
+export async function getMoviesByGenre(genre_id, page_number) {
+  const url = `discover/movie?include_adult=false&api_key=${
+    process.env.REACT_APP_API_URL
+  }&sort_by=popularity.desc&with_genres=${genre_id}&page=${
+    page_number ? page_number : 1
+  }`;
 
   const { data } = await externalApiAxios.get(url);
 

@@ -86,6 +86,7 @@ function List({ calledType }) {
             list={list}
             handleDeleteBtn={handleDeleteBtn}
             user_id={user._id}
+            called="List"
           />
         ))}
       </div>

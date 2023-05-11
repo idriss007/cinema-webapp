@@ -270,10 +270,10 @@ function Detail() {
             ) : null}
           </div>
 
-          <div className="row no-gutters">
+          <div className="row">
             <div className="col-lg-8 line-height-p">{details.overview}</div>
-            <div className="col-lg-4">
-              <div className="d-flex justify-content-center align-items-center ml-2">
+            <div className="col-lg-4 d-flex justify-content-lg-end justify-content-start align-items-center mt-4 mt-lg-0">
+              <div className="">
                 <WatchlistCard
                   loggedIn={loggedIn}
                   lists={lists}
