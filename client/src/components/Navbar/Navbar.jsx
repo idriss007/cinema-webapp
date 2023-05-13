@@ -205,7 +205,7 @@ function Navbar() {
                         "dropdown-item p-3 d-flex justify-content-center"
                       )}
                       reloadDocument={true}
-                      to="/profile"
+                      to={`/user/${user._id}`}
                     >
                       Profile
                     </Link>

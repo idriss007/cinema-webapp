@@ -12,10 +12,14 @@ import { BsStarFill, BsImage } from "react-icons/bs";
 
 //Stylesheet
 import styles from "./moviecard.module.css";
+import { useQuery } from "react-query";
+import { GetRating } from "internalApi";
 
 function MovieCard(props) {
   const url = "https://image.tmdb.org/t/p/w185/" + props.movie.poster_path;
   let isPosterExist = true;
+
+  const isAdmin = props?.user?._id === props.userId;
 
   if (!props.movie.poster_path) {
     isPosterExist = false;
@@ -27,10 +31,14 @@ function MovieCard(props) {
     moment(new Date()).format("YYYYMMDD") >
     moment(props.movie.release_date).format("YYYYMMDD");
 
-  console.log(isReleased);
-
   !props.movie.genre_ids &&
     props.movie.genres.map((genre) => genres.push(genre.id));
+
+  const rating = useQuery(
+    ["rating", props.movie.id],
+    () => GetRating({ user_id: props.userId, movie_id: props.movie.id }),
+    { enabled: !isAdmin ? true : false }
+  );
 
   return (
     <div className={clsx(styles.container, "mb-5 p-4 w-100")}>
@@ -108,6 +116,12 @@ function MovieCard(props) {
                 <BsStarFill className="mr-1" color="#F5C518" size="17" />
                 {parseFloat(props.movie.vote_average).toFixed(1)}
               </div>
+              {!isAdmin && (
+                <div className="d-flex align-items-center mr-1">
+                  <BsStarFill className="ml-3 mr-1" color="green" size="17" />
+                  {rating.data}
+                </div>
+              )}
               <StarCard movie={props.movie} />
             </div>
           )}
@@ -121,7 +135,7 @@ function MovieCard(props) {
           )}
 
           {props.called === "List" &&
-            props.list.user === props.user_id &&
+            props.list.user === props?.user_id &&
             props.list.name !== "Rated" &&
             props.list.name && (
               <div className="row no gutters">

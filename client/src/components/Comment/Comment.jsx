@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import moment from "moment";
 
 //React Bootstrap
@@ -46,10 +47,22 @@ function Comment({
       <Row>
         <Col className="d-flex w-100" md="auto">
           <div>
-            <FaUserCircle size="50" />
+            <Link
+              reloadDocument={true}
+              to={`/user/${comment.user._id}`}
+              style={{ color: "inherit" }}
+            >
+              <FaUserCircle size="50" />
+            </Link>
           </div>
           <div className="d-flex flex-column justify-content-center ml-3">
-            <div>{comment.user.name}</div>
+            <Link
+              reloadDocument={true}
+              to={`/user/${comment.user._id}`}
+              style={{ color: "inherit" }}
+            >
+              <div>{comment.user.name}</div>
+            </Link>
             <div>
               Created on{" "}
               {moment(comment.createdAt).format("DD/MM/YYYY hh:mm:ss")}

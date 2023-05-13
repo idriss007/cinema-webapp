@@ -54,6 +54,9 @@ function App() {
               <Route path="/name" element={<PersonDetail />}>
                 <Route path=":name_id" element={<PersonDetail />} />
               </Route>
+              <Route path="/user" element={<Profile />}>
+                <Route path=":user_id" element={<Profile />} />
+              </Route>
 
               <Route element={<ProtectedRoute2 />}>
                 <Route path="/signup" element={<Signup title="Sign Up" />} />
@@ -61,7 +64,7 @@ function App() {
               </Route>
 
               <Route element={<ProtectedRoute />}>
-                <Route path="/profile" element={<Profile title="Profile" />} />
+                {/* <Route path="/profile" element={<Profile title="Profile" />} /> */}
                 <Route path="/list/create" element={<CreateNewList />} />
                 <Route path="/list" element={<List />}>
                   <Route path=":listId" element={<List />} />

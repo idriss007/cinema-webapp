@@ -12,9 +12,9 @@ import { BsStarFill } from "react-icons/bs";
 //Stylesheet
 import styles from "./recentlyratedmoviecard.module.css";
 
-function RecentlyRatedMovieCard({ list, index, movie, user }) {
+function RecentlyRatedMovieCard({ list, index, movie, userId }) {
   const { data: rating } = useQuery(["movieRating", parseInt(movie.id)], () =>
-    GetRating({ user_id: user._id, movie_id: movie.id })
+    GetRating({ user_id: userId, movie_id: movie.id })
   );
   return (
     <div className="col-3 d-flex justify-content-center align-items-center flex-column">

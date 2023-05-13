@@ -91,8 +91,9 @@ function List({ calledType }) {
             movie={movie.movie}
             list={list}
             handleDeleteBtn={handleDeleteBtn}
-            user_id={user._id}
             called="List"
+            userId={userId}
+            user={user}
           />
         ))}
       </div>

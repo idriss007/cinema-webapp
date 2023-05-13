@@ -4,12 +4,14 @@ const auth = require("./auth");
 const list = require("./list");
 const rating = require("./rating");
 const comment = require("./comment");
+const user = require("./user");
 
 const router = express.Router();
 
 router.use("/auth", auth);
-router.use("/list", list);
-router.use("/rating", rating);
-router.use("/comment", comment);
+router.use("/lists", list);
+router.use("/ratings", rating);
+router.use("/comments", comment);
+router.use("/users", user);
 
 module.exports = router;

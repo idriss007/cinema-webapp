@@ -61,7 +61,7 @@ export async function fetchLogout() {
 //List İşlemleri
 
 export async function postList(input) {
-  const url = "list";
+  const url = "lists";
 
   const { data } = await internalApiAxios.post(url, input);
 
@@ -69,7 +69,7 @@ export async function postList(input) {
 }
 
 export async function fetchList(list_id) {
-  const url = `list/list/${list_id}`;
+  const url = `lists/${list_id}`;
 
   const { data } = await internalApiAxios.get(url);
 
@@ -77,7 +77,7 @@ export async function fetchList(list_id) {
 }
 
 export async function fetchLists(user_id) {
-  const url = `list/${user_id}`;
+  const url = `lists/users/${user_id}`;
 
   const { data } = await internalApiAxios.get(url);
 
@@ -87,7 +87,7 @@ export async function fetchLists(user_id) {
 export async function AddToList(list_id, movieData) {
   const movie_id = movieData.id;
 
-  const url = `list/add/${list_id}/${movie_id}`;
+  const url = `lists/${list_id}/${movie_id}`;
 
   const { data } = await internalApiAxios.post(url, { movieData });
 
@@ -97,15 +97,15 @@ export async function AddToList(list_id, movieData) {
 export async function RemoveFromList(list_id, movieData) {
   const movie_id = movieData.id;
 
-  const url = `list/delete/${list_id}/${movie_id}`;
+  const url = `lists/${list_id}/${movie_id}`;
 
-  const { data } = await internalApiAxios.post(url, { movieData });
+  const { data } = await internalApiAxios.delete(url, { data: { movieData } });
 
   return data;
 }
 
 export async function DeleteList(list_id) {
-  const url = "list/";
+  const url = "lists/";
 
   const { data } = await internalApiAxios.delete(url, { data: { list_id } });
 
@@ -115,7 +115,7 @@ export async function DeleteList(list_id) {
 //RatingList Methods
 
 export async function createRatingList(input) {
-  const url = "rating";
+  const url = "ratings";
 
   const { data } = await internalApiAxios.post(url, input);
 
@@ -123,23 +123,23 @@ export async function createRatingList(input) {
 }
 
 export async function addRating(input) {
-  const url = "rating/add";
+  const url = "ratings";
 
-  const { data } = await internalApiAxios.post(url, input);
+  const { data } = await internalApiAxios.put(url, input);
 
   return data;
 }
 
 export async function DeleteRating(input) {
-  const url = "rating/delete";
+  const url = "ratings";
 
-  const { data } = await internalApiAxios.post(url, input);
+  const { data } = await internalApiAxios.delete(url, { data: input });
 
   return data;
 }
 
 export async function GetRating({ user_id, movie_id }) {
-  const url = `rating/${user_id}/${movie_id}`;
+  const url = `ratings/users/${user_id}/${movie_id}`;
 
   const { data } = await internalApiAxios.get(url);
 
@@ -149,23 +149,15 @@ export async function GetRating({ user_id, movie_id }) {
 //Comment İşlemleri
 
 export async function FetchAllComments(movie_id, user_id) {
-  if (movie_id) {
-    const url = `comment/${movie_id}`;
+  const url = `comments/${movie_id}`;
 
-    const { data } = await internalApiAxios.get(url);
+  const { data } = await internalApiAxios.get(url);
 
-    return data;
-  } else {
-    const url = `comment/${user_id}`;
-
-    const { data } = await internalApiAxios.get(url);
-
-    return data;
-  }
+  return data;
 }
 
 export async function GetUsersComments(user_id) {
-  const url = `comment/user/${user_id}`;
+  const url = `comments/users/${user_id}`;
 
   const { data } = await internalApiAxios.get(url);
 
@@ -173,7 +165,7 @@ export async function GetUsersComments(user_id) {
 }
 
 export async function PostComment(movie_id, body, parent_id) {
-  const url = "comment/";
+  const url = "comments/";
 
   const { data } = await internalApiAxios.post(url, {
     movie_id,
@@ -185,7 +177,7 @@ export async function PostComment(movie_id, body, parent_id) {
 }
 
 export async function DeleteComment(comment_id) {
-  const url = "comment/";
+  const url = "comments/";
 
   const { data } = await internalApiAxios.delete(url, {
     data: { comment_id },
@@ -195,12 +187,20 @@ export async function DeleteComment(comment_id) {
 }
 
 export async function UpdateComment(comment_id, body) {
-  const url = "comment/";
+  const url = "comments/";
 
   const { data } = await internalApiAxios.put(url, {
     comment_id,
     body,
   });
+
+  return data;
+}
+
+export async function GetUser(user_id) {
+  const url = `users/${user_id}`;
+
+  const { data } = await internalApiAxios.get(url);
 
   return data;
 }

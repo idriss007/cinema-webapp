@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import clsx from "clsx";
 
 //Local Api
 // import { DeleteList, fetchLists } from "../../api";
-import { DeleteList, GetUsersComments, fetchLists } from "internalApi";
+import { DeleteList, GetUser, GetUsersComments, fetchLists } from "internalApi";
 
 //Contexts
 import AuthContext from "context/AuthContext";
@@ -16,11 +16,9 @@ import styles from "./profile.module.css";
 //Components
 import RecentlyRatedMovieCard from "components/RecentlyRatedMovieCard/RecentlyRatedMovieCard";
 
-//Pages
-import Comments from "pages/Comments/Comments";
-
 //React Icons
 import { FaUserCircle } from "react-icons/fa";
+import { TbError404 } from "react-icons/tb";
 
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
@@ -28,22 +26,46 @@ import UserCommentsSection from "components/UserCommentsSection/UserCommentsSect
 
 function Profile({ title }) {
   const [lists, setLists] = useState();
-
   const { user } = useContext(AuthContext);
+  const { user_id } = useParams();
 
-  useEffect(() => {
-    document.title = title;
-    (async () => {
-      const data = await fetchLists(user._id);
-      setLists(data);
-    })();
-  }, []);
+  const isAdmin = user?._id === user_id;
 
-  const comments = useQuery(["comments", user._id], () =>
-    GetUsersComments(user._id)
+  // useEffect(() => {
+  //   document.title = title;
+  //   (async () => {
+  //     const data = await fetchLists(user_id);
+  //     setLists(data);
+  //   })();
+  // }, []);
+
+  const listsData = useQuery(["lists", user_id], () => fetchLists(user_id), {
+    onSuccess: (listsData) => setLists(listsData),
+    retry: false,
+  });
+
+  const comments = useQuery(
+    ["comments", user_id],
+    () => GetUsersComments(user_id),
+    {
+      onSuccess: (comments) => {
+        comments.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+      },
+      retry: false,
+    }
   );
 
-  if (!lists || comments.isLoading) {
+  const foundUser = useQuery(["user", user_id], () => GetUser(user_id), {
+    // enabled: !isAdmin ? true : false,
+    onSuccess: (foundUser) => {
+      document.title = foundUser.name;
+    },
+    retry: false,
+  });
+
+  if (listsData.isLoading || comments.isLoading || foundUser?.isLoading) {
     return (
       <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
         <SyncLoader size={35} />
@@ -51,7 +73,15 @@ function Profile({ title }) {
     );
   }
 
-  console.log(comments.data);
+  if (foundUser.isError) {
+    console.log(foundUser.error.message);
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center">
+        <TbError404 size="300px" />
+        Something went wrong!
+      </div>
+    );
+  }
 
   function renderLists(list, key) {
     return (
@@ -82,29 +112,31 @@ function Profile({ title }) {
               {list.movies.length > 1 ? " titles" : " title"}
             </p>
           </div>
-          <div className="col-auto ml-auto text-white">
-            <button
-              className={clsx(styles.button, "p-2 rounded bg-danger")}
-              onClick={() => {
-                if (
-                  window.confirm(
-                    "Are you sure that you want to delete the list?"
-                  )
-                ) {
-                  DeleteList(list._id);
+          {isAdmin && (
+            <div className="col-auto ml-auto text-white">
+              <button
+                className={clsx(styles.button, "p-2 rounded bg-danger")}
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Are you sure that you want to delete the list?"
+                    )
+                  ) {
+                    DeleteList(list._id);
 
-                  setLists(() => {
-                    const newLists = lists.filter(
-                      (listItem) => listItem._id !== list._id
-                    );
-                    return newLists;
-                  });
-                }
-              }}
-            >
-              Delete List
-            </button>
-          </div>
+                    setLists(() => {
+                      const newLists = lists.filter(
+                        (listItem) => listItem._id !== list._id
+                      );
+                      return newLists;
+                    });
+                  }
+                }}
+              >
+                Delete List
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -120,7 +152,7 @@ function Profile({ title }) {
         index={index}
         list={lists[1]}
         movie={lists[1]?.movies[lists[1].movies.length - (index + 1)].movie}
-        user={user}
+        userId={user_id}
       />
     );
   }
@@ -131,91 +163,99 @@ function Profile({ title }) {
         <div className="col-12">
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaUserCircle size="100" />
-            <p className="mt-2 h5 font-weight-bold">{user?.name}</p>
+            <p className="mt-2 h5 font-weight-bold">{foundUser?.data?.name}</p>
           </div>
         </div>
       </div>
-      <div className="row no-gutters border rounded p-3 mb-4">
-        <div className="col-12">
-          <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
-            Your Ratings
-          </p>
-        </div>
 
-        <div className={"col-12 mt-1 mb-1 p-3"}>
-          {/* {lists[1]?.movies.length > 0 && (
+      {(isAdmin || lists[1].movies.length > 0) && (
+        <div className="row no-gutters border rounded p-3 mb-4">
+          <div className="col-12">
+            <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
+              {isAdmin ? "Your Ratings" : "Ratings"}
+            </p>
+          </div>
+
+          <div className={"col-12 mt-1 mb-1 p-3"}>
+            {/* {lists[1]?.movies.length > 0 && (
             <p className="mb-2 font-weight-bold text-muted">
               Most Recently Rated
             </p>
           )} */}
-          {lists[1]?.movies.length > 0 && (
-            <div className="row">
-              <p className="col-12 mb-2 font-weight-bold text-muted">
-                Most Recently Rated
-              </p>
-              {lists[1]?.movies.map(renderRecentlyRatedMovies)}
-            </div>
-          )}
-
-          {lists[1]?.movies.length > 0 ? (
-            lists[1]?.movies.length > 4 && (
-              <div className="mt-4">
-                <Link
-                  style={{ color: "inherit" }}
-                  reloadDocument={true}
-                  to={"/user/" + user._id + "/ratings"}
-                >
-                  <p>
-                    See all {lists[1]?.movies.length} ratings {">>"}
-                  </p>
-                </Link>
+            {lists[1]?.movies.length > 0 && (
+              <div className="row">
+                <p className="col-12 mb-2 font-weight-bold text-muted">
+                  Most Recently Rated
+                </p>
+                {lists[1]?.movies.map(renderRecentlyRatedMovies)}
               </div>
-            )
-          ) : (
-            <p>You haven't rated any titles yet.</p>
-          )}
+            )}
+
+            {lists[1]?.movies.length > 0 ? (
+              lists[1]?.movies.length > 4 && (
+                <div className="mt-4">
+                  <Link
+                    style={{ color: "inherit" }}
+                    reloadDocument={true}
+                    to={"/user/" + user_id + "/ratings"}
+                  >
+                    <p>
+                      See all {lists[1]?.movies.length} ratings {">>"}
+                    </p>
+                  </Link>
+                </div>
+              )
+            ) : (
+              <p>You haven't rated any titles yet.</p>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="row no-gutters border rounded p-3">
-        <div className="col-12">
-          <div className="row no-gutters align-items-center">
-            <div className="col-auto mr-auto">
-              <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
-                Your Lists
-              </p>
+      )}
+
+      {(isAdmin || lists.length > 2) && (
+        <div className="row no-gutters border rounded p-3">
+          <div className="col-12">
+            <div className="row no-gutters align-items-center">
+              <div className="col-auto mr-auto">
+                <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
+                  {isAdmin ? "Your Lists" : "Lists"}
+                </p>
+              </div>
+              {isAdmin && (
+                <div className="col-auto">
+                  <Link
+                    reloadDocument={true}
+                    style={{ color: "inherit" }}
+                    to="/list/create"
+                  >
+                    <p>Create a List</p>
+                  </Link>
+                </div>
+              )}
             </div>
-            <div className="col-auto">
+          </div>
+
+          {lists.length > 2 ? (
+            lists.slice(2).map((list, key) => renderLists(list, key))
+          ) : (
+            <div className="mt-2 p-3 row no-gutters">
+              <p className="col-auto">Create your own movie list.</p>
               <Link
+                className="col-auto ml-1"
                 reloadDocument={true}
                 style={{ color: "inherit" }}
                 to="/list/create"
               >
-                <p>Create a List</p>
+                <p>Get started!</p>
               </Link>
             </div>
-          </div>
+          )}
         </div>
-
-        {lists.length > 2 ? (
-          lists.slice(2).map((list, key) => renderLists(list, key))
-        ) : (
-          <div className="mt-2 p-3 row no-gutters">
-            <p className="col-auto">Create your own movie list.</p>
-            <Link
-              className="col-auto ml-1"
-              reloadDocument={true}
-              style={{ color: "inherit" }}
-              to="/list/create"
-            >
-              <p>Get started!</p>
-            </Link>
-          </div>
-        )}
-      </div>
+      )}
 
       {comments?.data?.length > 0 && (
         <div className="row no-gutters">
-          <UserCommentsSection comments={comments} />
+          <UserCommentsSection isAdmin={isAdmin} comments={comments} />
         </div>
       )}
     </div>

@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
     setUser(data.user);
     localStorage.setItem("access-token", data.accessToken);
     localStorage.setItem("refresh-token", data.refreshToken);
-    state ? navigate(state.previousPath) : navigate("/profile");
+    state ? navigate(state.previousPath) : navigate("/user/" + data.user._id);
   }
 
   async function logout() {
