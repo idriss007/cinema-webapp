@@ -1,8 +1,12 @@
 import React from "react";
-import MovieCardSmall from "../MovieCardSmall/MovieCardSmall";
-import styles from "./movieslider.module.css";
 import Slider from "react-slick";
+import clsx from "clsx";
 
+//Components
+import MovieCardSmall from "components/MovieCardSmall/MovieCardSmall";
+
+//Stylesheets
+import styles from "./movieslider.module.css";
 import "./slick.css";
 import "./slick-theme.css";
 
@@ -35,7 +39,7 @@ function MovieSlider({ movies, children, type }) {
         settings: {
           slidesToScroll: 2,
           slidesToShow: 2,
-          dots: true,
+          dots: false,
         },
       },
       {
@@ -73,13 +77,13 @@ function MovieSlider({ movies, children, type }) {
   }
 
   return (
-    <div className={styles.container + " mt-4 pt-4 pb-5 row no-gutters"}>
+    <div className={clsx(styles.container, "mt-4 pt-4 pb-5 row no-gutters")}>
       {children && (
         <div
-          className={
-            styles.title +
-            " p-0 m-0 mb-4 d-flex justify-content-center justify-content-md-start col-12"
-          }
+          className={clsx(
+            styles.title,
+            "p-0 m-0 mb-4 d-flex justify-content-center justify-content-md-start col-12"
+          )}
         >
           {children}
         </div>

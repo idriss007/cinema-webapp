@@ -1,6 +1,11 @@
+//Models
 const Rating = require("../../models/rating");
+
+//Utils
 const { tryCatch } = require("../../utils/tryCatch");
-const BadRequestError = require("../../../errors/BadRequestError");
+
+//Errors
+const BadRequestError = require("../../errors/BadRequestError");
 
 const CreateRatingList = tryCatch(async (req, res) => {
   const newList = await Rating.create({ user_id: req.payload.user_id });

@@ -164,6 +164,14 @@ export async function FetchAllComments(movie_id, user_id) {
   }
 }
 
+export async function GetUsersComments(user_id) {
+  const url = `comment/user/${user_id}`;
+
+  const { data } = await internalApiAxios.get(url);
+
+  return data;
+}
+
 export async function PostComment(movie_id, body, parent_id) {
   const url = "comment/";
 

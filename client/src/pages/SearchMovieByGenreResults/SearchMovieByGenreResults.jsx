@@ -1,9 +1,15 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
-import { getGenreList, getMoviesByGenre } from "../../api";
-import MovieCard from "../../components/MovieCard/MovieCard";
-import PaginationCard from "../../components/PaginationCard/PaginationCard";
+
+//External Api
+import { getGenreList, getMoviesByGenre } from "api";
+
+//Components
+import MovieCard from "components/MovieCard/MovieCard";
+import PaginationCard from "components/PaginationCard/PaginationCard";
+
+//React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
 
 function SearchMovieByGenreResults() {

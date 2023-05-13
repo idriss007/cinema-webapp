@@ -1,23 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import clsx from "clsx";
 
 //Components
-import Genre from "../Genre/Genre";
-import StarCard from "../StarCard/StarCard";
+import Genre from "components/Genre/Genre";
+import StarCard from "components/StarCard/StarCard";
+
+//React Icons
+import { BsStarFill, BsImage } from "react-icons/bs";
 
 //Stylesheet
 import styles from "./moviecard.module.css";
 
-//React Icons
-import { BsStarFill } from "react-icons/bs";
-
 function MovieCard(props) {
-  const url = "https://image.tmdb.org/t/p/w500/" + props.movie.poster_path;
+  const url = "https://image.tmdb.org/t/p/w185/" + props.movie.poster_path;
+  let isPosterExist = true;
 
-  // if (!props.movie.poster_path) {
-  //   return null;
-  // }
+  if (!props.movie.poster_path) {
+    isPosterExist = false;
+  }
 
   let genres = [];
 
@@ -31,25 +33,40 @@ function MovieCard(props) {
     props.movie.genres.map((genre) => genres.push(genre.id));
 
   return (
-    <div className={"mb-5 p-4 w-100 " + styles.container}>
+    <div className={clsx(styles.container, "mb-5 p-4 w-100")}>
       <div className="row">
-        <div className={"col-md-auto " + styles.centerContainer}>
-          <div className={styles.imageContainer + " mr-3 ml-3"}>
+        <div className={clsx(styles.centerContainer, "col-md-auto")}>
+          <div className={clsx(styles.imageContainer, "mr-3 ml-3")}>
             <Link
               reloadDocument={true}
               style={{ textDecoration: "none", color: "inherit" }}
               to={"/detail/" + props.movie.id}
             >
-              {" "}
-              <p className={styles.title}>
-                <img loading="lazy" className={styles.image} src={url} />{" "}
-              </p>{" "}
+              {/* {" "} */}
+              {/* <p className={styles.title}> */}
+              {isPosterExist ? (
+                <img loading="lazy" className={styles.image} src={url} />
+              ) : (
+                <div
+                  className={clsx(
+                    styles.posterNotFound,
+                    "d-flex justify-content-center align-items-center rounded"
+                  )}
+                >
+                  <BsImage size="40" />
+                </div>
+              )}
+              {/* {" "} */}
+              {/* </p>{" "} */}
             </Link>
           </div>
         </div>
         <div className="col">
           <div
-            className={"row mb-2 align-items-center " + styles.centerContainer}
+            className={clsx(
+              "row mb-2 align-items-center",
+              styles.centerContainer
+            )}
           >
             <Link
               reloadDocument={true}
@@ -73,7 +90,7 @@ function MovieCard(props) {
               </div>
             )} */}
           </div>
-          <div className={"row mb-1 " + styles.centerContainer}>
+          <div className={clsx(styles.centerContainer, "row mb-1")}>
             {props.movie.genre_ids ? (
               <Genre genres={props.movie.genre_ids} />
             ) : (
@@ -82,9 +99,10 @@ function MovieCard(props) {
           </div>
           {isReleased && (
             <div
-              className={
-                "row d-flex align-items-center mb-2 " + styles.centerContainer
-              }
+              className={clsx(
+                styles.centerContainer,
+                "row d-flex align-items-center mb-2"
+              )}
             >
               <div className="d-flex align-items-center mr-1">
                 <BsStarFill className="mr-1" color="#F5C518" size="17" />
@@ -97,7 +115,7 @@ function MovieCard(props) {
             <p className={styles.detail}>{props.movie.overview}</p>
           </div>
           {isReleased && (
-            <div className={"row " + styles.centerContainer}>
+            <div className={clsx(styles.centerContainer, "row")}>
               Votes: {props.movie.vote_count.toLocaleString()}
             </div>
           )}

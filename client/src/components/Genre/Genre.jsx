@@ -1,8 +1,11 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { getGenreList } from "../../api";
-import GenreCard from "../GenreCard/GenreCard";
-import style from "./genre.module.css";
+
+//External Api
+import { getGenreList } from "api";
+
+//Components
+import GenreCard from "components/GenreCard/GenreCard";
 
 function Genre(props) {
   const { data } = useQuery("genre", getGenreList);

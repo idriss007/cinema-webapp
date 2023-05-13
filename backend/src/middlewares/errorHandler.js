@@ -1,4 +1,4 @@
-const AppError = require("../../errors/AppError");
+const AppError = require("../../src/errors/AppError");
 
 function errorHandler(error, req, res, next) {
   if (error.name === "ValidationError") {

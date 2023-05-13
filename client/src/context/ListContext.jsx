@@ -1,9 +1,13 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-// import { AddToList, RemoveFromList, fetchLists } from "../api";
-import { AddToList, RemoveFromList, fetchLists } from "../internalApi";
-import AuthContext from "./AuthContext";
+import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
+
+//Local Api
+// import { AddToList, RemoveFromList, fetchLists } from "../api";
+import { AddToList, RemoveFromList, fetchLists } from "internalApi";
+
+//Contexts
+import AuthContext from "./AuthContext";
 
 const ListContext = createContext();
 

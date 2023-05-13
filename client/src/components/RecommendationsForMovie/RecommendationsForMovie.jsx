@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getRecommendationsForMovie } from "../../api";
-import MovieSlider from "../MovieSlider";
+
+//ExternalApi
+import { getRecommendationsForMovie } from "api";
+
+//Components
+import MovieSlider from "components/MovieSlider";
 
 function RecommendationsForMovie({ movie }) {
   const [movies, setMovies] = useState();

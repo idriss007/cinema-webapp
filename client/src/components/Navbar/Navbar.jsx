@@ -1,16 +1,23 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { fetchMovies } from "../../api";
-import AuthContext from "../../context/AuthContext";
-import StatesContext from "../../context/StatesContext";
-import styles from "./navbar.module.css";
+import clsx from "clsx";
 
-import moment from "moment";
-import SearchBox from "../SearchBox/SearchBox";
+//External Api
+import { fetchMovies } from "api";
 
-//FontAwesome
-import { FaUserCircle } from "react-icons/fa";
+//Contexts
+import AuthContext from "context/AuthContext";
+import StatesContext from "context/StatesContext";
+
+//Components
+import SearchBox from "components/SearchBox/SearchBox";
+
+//React Icons
+import { FaUserCircle, FaSearch } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
+
+//Stylesheet
+import styles from "./navbar.module.css";
 
 function Navbar() {
   const { loggedIn, user, logout } = useContext(AuthContext);
@@ -23,6 +30,7 @@ function Navbar() {
   const { searchQuery, setSearchQuery } = useContext(StatesContext);
 
   const [movies, setMovies] = useState();
+
   const imgPath = "https://www.themoviedb.org/t/p/w154";
 
   useEffect(() => {
@@ -64,21 +72,29 @@ function Navbar() {
 
   return (
     <div
-      className={styles.container + " navbar navbar-expand-lg pl-0 pr-0 mb-4"}
+      className={clsx(
+        styles.container,
+        "navbar navbar-expand-lg pl-0 pr-0 mb-4"
+      )}
     >
-      <div className="container customContainer">
-        <div className={styles.logo + " navbar-brand"}>
+      <div className="container customContainer d-flex justify-content-around">
+        <div className={clsx(styles.logo, "mr-auto navbar-brand")}>
           <Link
             reloadDocument={true}
             style={{ color: "black", fontWeight: "bold" }}
-            className={styles.linkUrl + " btn bg-warning text-color-dark"}
+            className={clsx(styles.linkUrl, "btn bg-warning text-color-dark")}
             to="/"
           >
             Home
           </Link>
         </div>
 
-        <div className={styles.search + " flex-lg-grow-0 flex-grow-1"}>
+        <div
+          className={clsx(
+            styles.search,
+            "flex-lg-grow-0 flex-grow-1 ml-3 ml-lg-0"
+          )}
+        >
           <SearchBox
             handleKeyPress={handleKeyPress}
             handleChange={handleChange}
@@ -103,10 +119,10 @@ function Navbar() {
           </div>
         </button>
         <div
-          className={
-            styles.menu +
-            " align-items-center collapse navbar-collapse flex-grow-0 flex-lg-row flex-column "
-          }
+          className={clsx(
+            styles.menu,
+            "align-items-center collapse navbar-collapse flex-grow-0 flex-lg-row flex-column "
+          )}
           id="navbarNavAltMarkup"
         >
           {!loggedIn && (
@@ -114,14 +130,12 @@ function Navbar() {
               <Link
                 reloadDocument={true}
                 state={{ previousPath: pathname }}
-                className={
-                  "dropdown-item p-3 d-flex justify-content-center " +
-                  styles.dropdownItem +
-                  " " +
-                  styles.navBtn +
-                  " " +
-                  styles.linkUrl
-                }
+                className={clsx(
+                  styles.dropdownItem,
+                  styles.navBtn,
+                  styles.linkUrl,
+                  "dropdown-item p-3 d-flex justify-content-center"
+                )}
                 to="/login"
               >
                 Login<span className="sr-only">(current)</span>
@@ -129,14 +143,12 @@ function Navbar() {
               <Link
                 reloadDocument={true}
                 state={{ previousPath: pathname }}
-                className={
-                  "dropdown-item p-3 d-flex justify-content-center " +
-                  styles.dropdownItem +
-                  " " +
-                  styles.navBtn +
-                  " " +
-                  styles.linkUrl
-                }
+                className={clsx(
+                  styles.dropdownItem,
+                  styles.navBtn,
+                  styles.linkUrl,
+                  "dropdown-item p-3 d-flex justify-content-center"
+                )}
                 to="/signup"
               >
                 Sign Up
@@ -148,26 +160,23 @@ function Navbar() {
             <>
               <Link
                 reloadDocument={true}
-                className={
-                  "nav-item nav-link p-3 " +
-                  styles.navBtn +
-                  " " +
-                  styles.navbarDropdown +
-                  " " +
-                  styles.linkUrl
-                }
+                className={clsx(
+                  styles.navBtn,
+                  styles.navbarDropdown,
+                  styles.linkUrl,
+                  "nav-item nav-link p-3"
+                )}
                 to={"user/" + user?._id + "/watchlist"}
               >
                 Watchlist
               </Link>
               <div className={"nav-item dropdown"}>
                 <a
-                  className={
-                    "nav-link dropdown-toggle d-flex align-items-center p-3 " +
-                    styles.navbarDropdown +
-                    " " +
-                    styles.navBtn
-                  }
+                  className={clsx(
+                    styles.navbarDropdown,
+                    styles.navBtn,
+                    "nav-link dropdown-toggle d-flex align-items-center p-3"
+                  )}
                   href="/"
                   id={"navbarDropdown"}
                   role="button"
@@ -181,23 +190,20 @@ function Navbar() {
                   </div>
                 </a>
                 <div
-                  className={
-                    "dropdown-menu m-0 p-0 dropdown-menu-right mt-2 " +
-                    " " +
-                    styles.dropdownMenu
-                  }
+                  className={clsx(
+                    styles.dropdownMenu,
+                    "dropdown-menu m-0 p-0 dropdown-menu-right mt-2"
+                  )}
                   aria-labelledby="navbarDropdown"
                 >
                   <div>
                     <Link
-                      className={
-                        "dropdown-item p-3 d-flex justify-content-center " +
-                        styles.dropdownItem +
-                        " " +
-                        styles.topItem +
-                        " " +
-                        styles.linkUrl
-                      }
+                      className={clsx(
+                        styles.dropdownItem,
+                        styles.topItem,
+                        styles.linkUrl,
+                        "dropdown-item p-3 d-flex justify-content-center"
+                      )}
                       reloadDocument={true}
                       to="/profile"
                     >
@@ -206,12 +212,11 @@ function Navbar() {
                   </div>
                   <div>
                     <Link
-                      className={
-                        "dropdown-item p-3 d-flex justify-content-center " +
-                        styles.dropdownItem +
-                        " " +
-                        styles.linkUrl
-                      }
+                      className={clsx(
+                        styles.dropdownItem,
+                        styles.linkUrl,
+                        "dropdown-item p-3 d-flex justify-content-center"
+                      )}
                       reloadDocument={true}
                       to={"/user/" + user._id + "/ratings"}
                     >
@@ -220,14 +225,12 @@ function Navbar() {
                   </div>
                   {/* <div className="dropdown-divider"></div> */}
                   <Link
-                    className={
-                      "dropdown-item p-3 d-flex justify-content-center " +
-                      styles.dropdownItem +
-                      " " +
-                      styles.bottomItem +
-                      " " +
-                      styles.linkUrl
-                    }
+                    className={clsx(
+                      styles.dropdownItem,
+                      styles.bottomItem,
+                      styles.linkUrl,
+                      "dropdown-item p-3 d-flex justify-content-center"
+                    )}
                     reloadDocument={true}
                     onClick={() => logout()}
                   >

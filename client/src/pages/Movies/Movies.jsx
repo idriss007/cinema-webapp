@@ -1,12 +1,16 @@
-import React, { useState } from "react";
-import { useQuery } from "react-query";
-import MovieCard from "../../components/MovieCard/MovieCard";
-import { fetchMovies } from "../../api";
+import React from "react";
 import { useParams } from "react-router-dom";
-import styles from "./movies.module.css";
+import { useQuery } from "react-query";
 
+//External Api
+import { fetchMovies } from "api";
+
+//Components
+import PaginationCard from "components/PaginationCard/PaginationCard";
+import MovieCard from "components/MovieCard/MovieCard";
+
+//React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
-import PaginationCard from "../../components/PaginationCard/PaginationCard";
 
 function Movies() {
   const { query, pageId } = useParams();

@@ -1,9 +1,17 @@
 import React from "react";
-// import { postList } from "../../api";
-import { postList } from "../../internalApi";
-import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import clsx from "clsx";
+
+//Local Api
+// import { postList } from "../../api";
+import { postList } from "internalApi";
+
+//Validation Schema
 import validationSchema from "./validations";
+
+//Stylesheet
+import styles from "./createnewlist.module.css";
 
 function CreateNewList() {
   const navigate = useNavigate();
@@ -26,12 +34,14 @@ function CreateNewList() {
   });
 
   return (
-    <div className="container customContainer">
-      <div className="row no-gutters justify-content-center">
+    <div className={styles.container}>
+      <div className="row no-gutters justify-content-center rounded p-5 form">
         <div className="col-12 d-flex justify-content-center">
-          <p className="h3 line-height-1 mb-4">Create New List</p>
+          <p className="h3 line-height-1 mb-4 justify-content-center d-flex">
+            Create New List
+          </p>
         </div>
-        <div className="col-auto w-50">
+        <div className="col-auto w-100">
           <form
             action="http://localhost:3000/profile"
             onSubmit={formik.handleSubmit}
@@ -51,21 +61,23 @@ function CreateNewList() {
                 value={formik.values.listName}
                 type="text"
                 name="listName"
-                className={
-                  "form-control " +
-                  (formik.errors.listName &&
+                className={clsx(
+                  formik.errors.listName &&
                     formik.touched.listName &&
-                    "border border-danger error-border")
-                }
+                    "border border-danger error-border",
+                  "form-control"
+                )}
                 placeholder="Enter list name"
               />
               {formik.errors.listName && formik.touched.listName && (
                 <p className="mt-1 text-danger">{formik.errors.listName}</p>
               )}
             </div>
-            <button type="submit" class="btn btn-primary">
-              Create
-            </button>
+            <div className="d-flex justify-content-center">
+              <button type="submit" class="btn btn-dark font-weight-bold">
+                Create
+              </button>
+            </div>
           </form>
         </div>
       </div>

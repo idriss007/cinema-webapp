@@ -1,13 +1,19 @@
 import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-// import { RemoveFromList, fetchList, fetchLists } from "../../api";
-import { RemoveFromList, fetchList, fetchLists } from "../../internalApi";
-
-import MovieCard from "../../components/MovieCard/MovieCard";
 import { useQuery } from "react-query";
 
+//Local Api
+// import { RemoveFromList, fetchList, fetchLists } from "../../api";
+import { RemoveFromList, fetchList, fetchLists } from "internalApi";
+
+//Components
+import MovieCard from "components/MovieCard/MovieCard";
+
+//Context
+import AuthContext from "context/AuthContext";
+
+//React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
-import AuthContext from "../../context/AuthContext";
 
 function List({ calledType }) {
   const { listId, userId } = useParams();

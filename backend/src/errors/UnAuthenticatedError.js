@@ -1,9 +1,9 @@
 const AppError = require("./AppError");
 
 class UnAuthenticatedError extends AppError {
+  statusCode = 401;
   constructor(message) {
-    const statusCode = 401;
-    super(message, statusCode);
+    super(message);
   }
 }
 

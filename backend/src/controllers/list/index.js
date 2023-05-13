@@ -1,9 +1,15 @@
-const ListNotFoundError = require("../../../errors/ListNotFoundError");
-const BadRequestError = require("../../../errors/BadRequestError");
-const UnAuthenticatedError = require("../../../errors/UnAuthenticatedError");
+//Errors
+const ListNotFoundError = require("../../errors/ListNotFoundError");
+const BadRequestError = require("../../errors/BadRequestError");
+const UnAuthenticatedError = require("../../errors/UnAuthenticatedError");
 
+//Models
 const List = require("../../models/list");
+
+//Utils
 const { tryCatch } = require("../../utils/tryCatch");
+
+//Validations
 const { validateList } = require("./validations");
 
 //Girilen bilgilere göre yeni liste oluşturma veya yeni kayıt olurken her kullanıcıya watchlist isminde

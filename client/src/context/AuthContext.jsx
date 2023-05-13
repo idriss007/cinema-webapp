@@ -1,7 +1,9 @@
 import React, { createContext, useEffect, useState } from "react";
-// import { fetchMe, fetchAccessTokenByRefreshToken } from "../api";
-import { fetchMe, fetchAccessTokenByRefreshToken } from "../internalApi";
 import { useLocation, useNavigate } from "react-router-dom";
+
+//Local Api
+// import { fetchMe, fetchAccessTokenByRefreshToken } from "../api";
+import { fetchMe, fetchAccessTokenByRefreshToken } from "internalApi";
 
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
@@ -64,12 +66,8 @@ export function AuthProvider({ children }) {
     setLoggedIn(false);
     setUser(null);
 
-    // await fetchLogout();
-
     localStorage.removeItem("access-token");
     localStorage.removeItem("refresh-token");
-
-    // navigate("/");
   }
 
   const values = {

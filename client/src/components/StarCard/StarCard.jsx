@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import clsx from "clsx";
 
+//Local Api
 //API CALLS
 // import {
 //   addRating,
@@ -17,12 +19,12 @@ import {
   fetchLists,
   GetRating,
   RemoveFromList,
-} from "../../internalApi";
+} from "internalApi";
 
 //Contexts
-import AuthContext from "../../context/AuthContext";
+import AuthContext from "context/AuthContext";
 
-//React Bootstrap Components
+//React Bootstrap
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -30,10 +32,10 @@ import Modal from "react-bootstrap/Modal";
 import { BsStar } from "react-icons/bs";
 import { BsStarFill } from "react-icons/bs";
 
-//Loader
+//React Spinners
 import ClipLoader from "react-spinners/ClipLoader";
 
-//Stylesheet
+//Stylesheets
 import styles from "./starcard.module.css";
 import "./starcard.css";
 
@@ -86,10 +88,10 @@ function StarCard({ movie, size, formOfCalling }) {
   return (
     <>
       <div
-        className={
-          styles.starBtn +
-          " d-flex align-align-items-center justify-content-center"
-        }
+        className={clsx(
+          styles.starBtn,
+          "d-flex align-align-items-center justify-content-center"
+        )}
         type="button"
         data-toggle="modal"
         data-target="#exampleModal"
@@ -106,21 +108,23 @@ function StarCard({ movie, size, formOfCalling }) {
           formOfCalling === "inDetailPage" ? (
             <div className="d-flex align-items-center">
               <BsStarFill size="30" />
-              <p className={styles.ratingBtnTxtBig + " ml-2"}>
+              <p className={clsx(styles.ratingBtnTxtBig, "ml-2")}>
                 {ratedValue}/10
               </p>
             </div>
           ) : (
             <div className="d-flex justify-content-center align-items-center">
               <BsStarFill size={size} />
-              <p className={styles.ratingBtnTxtSmall + " ml-1"}>{ratedValue}</p>
+              <p className={clsx(styles.ratingBtnTxtSmall, "ml-1")}>
+                {ratedValue}
+              </p>
             </div>
           )
         ) : (
           <div className="d-flex align-items-center">
             <BsStar className={styles.star} size={size} />
             {formOfCalling === "inDetailPage" && (
-              <div className={"ml-2 " + styles.ratingBtnTxtBig}>Rate</div>
+              <div className={clsx(styles.ratingBtnTxtBig, "ml-2")}>Rate</div>
             )}
           </div>
         )}

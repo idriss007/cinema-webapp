@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+
+//Stylesheet
 import styles from "./slider.module.css";
 
 function Slider({ allImages }) {

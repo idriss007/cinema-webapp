@@ -28,6 +28,13 @@
   font-weight: bold;
 }
 
+.posterNotFound {
+  width: 100px;
+  height: 150.26px;
+  background-color: rgb(219, 219, 219);
+  color: rgb(181, 181, 181);
+}
+
 @media (max-width: 767.2px) {
   .centerContainer {
     display: flex;

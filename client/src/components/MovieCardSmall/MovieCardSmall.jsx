@@ -1,25 +1,44 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-
-//Stylesheet
-import styles from "./moviecardsmall.module.css";
+import { Link } from "react-router-dom";
+import clsx from "clsx";
+import moment from "moment";
 
 //Components
-import StarCard from "../StarCard/StarCard";
-import WatchlistCard from "../WatchlistCard/WatchlistCard";
+import StarCard from "components/StarCard/StarCard";
+import WatchlistCard from "components/WatchlistCard/WatchlistCard";
+
+//Contexts
+import AuthContext from "context/AuthContext";
+import ListContext from "context/ListContext";
 
 //React Icons
 import { BsStarFill } from "react-icons/bs";
 
-//Contexts
-import AuthContext from "../../context/AuthContext";
-import ListContext from "../../context/ListContext";
+//Stylesheet
+import styles from "./moviecardsmall.module.css";
+import { useQuery } from "react-query";
+import { getCreditDetails } from "api";
 
 function MovieCardSmall({ movie, type }) {
   const { loggedIn } = useContext(AuthContext);
   const { lists, handleAddWatchlistClicked } = useContext(ListContext);
   const [isInList, setIsInList] = useState();
   const [isInListLoading, setIsInListLoading] = useState(true);
+
+  const credit = useQuery(
+    ["credit", movie.credit_id],
+    () => getCreditDetails(movie.credit_id),
+    {
+      enabled: movie.credit_id ? true : false,
+      // onSuccess: (credit) => console.log(credit),
+    }
+  );
+
+  // const job =
+  //   credit?.data?.job?.toLowerCase() === "actor" &&
+  //   credit.data.person.gender === 1
+  //     ? "Actress"
+  //     : "Actor";
 
   useEffect(() => {
     (async () => {
@@ -46,11 +65,15 @@ function MovieCardSmall({ movie, type }) {
     })();
   }, [lists]);
 
+  const isReleased =
+    moment(new Date()).format("YYYYMMDD") >
+    moment(movie.release_date).format("YYYYMMDD");
+
   const poster = "https://www.themoviedb.org/t/p/w342/" + movie?.poster_path;
 
   return (
-    <div className={styles.container + " row no-gutters"}>
-      <div className={styles.posterContainer + "col-12"}>
+    <div className={clsx(styles.container, "row no-gutters")}>
+      <div className={clsx(styles.posterContainer, "col-12")}>
         <Link
           reloadDocument={true}
           style={{ textDecoration: "none", color: "inherit" }}
@@ -59,17 +82,27 @@ function MovieCardSmall({ movie, type }) {
           <img className={styles.poster} src={poster} />
         </Link>
       </div>
-      {type !== "upcoming" && (
-        <div className="d-flex align-items-center mt-2 row no-gutters">
-          <div className={styles.vote + " d-flex pl-2 pr-2 col-auto"}>
+
+      <div className="d-flex align-items-center mt-1 mb-1 row no-gutters">
+        <div
+          className={clsx(
+            styles.vote,
+            "d-flex pl-2 pr-2 col-auto justify-content-center align-items-center"
+          )}
+        >
+          {isReleased ? (
             <BsStarFill className="mr-1" color="#F5C518" />
-            {parseFloat(movie.vote_average).toFixed(1)}
-          </div>
+          ) : (
+            <BsStarFill className="mr-1" color="#9E9E9E" />
+          )}
+          {isReleased ? parseFloat(movie.vote_average).toFixed(1) : ""}
+        </div>
+        {isReleased && (
           <div
-            className={
-              "d-flex justify-content-center align-items-center col-auto " +
-              styles.ratingInfoContainer
-            }
+            className={clsx(
+              styles.ratingInfoContainer,
+              "d-flex justify-content-center align-items-center col-auto"
+            )}
           >
             <StarCard
               movie={movie}
@@ -77,18 +110,20 @@ function MovieCardSmall({ movie, type }) {
               formOfCalling="inMovieCardComponent"
             />
           </div>
-        </div>
-      )}
-      <div
-        className={
-          type !== "upcoming"
-            ? styles.title + " col-12 pl-2"
-            : styles.title + " col-12 pl-2 mt-2"
-        }
-      >
+        )}
+      </div>
+
+      <div className={styles.title + " col-12 pl-2"}>
         {/* {movie.original_title} */}
         {movie.title}
       </div>
+
+      {credit.data ? (
+        <div className="col-12 text-white pl-2">
+          {`(${credit?.data?.department})`}
+        </div>
+      ) : null}
+
       <div className="d-flex justify-content-center align-items-center p-2 col-12">
         <WatchlistCard
           loggedIn={loggedIn}

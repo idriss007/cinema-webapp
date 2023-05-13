@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
-import styles from "./searchbox.module.css";
 import { Link } from "react-router-dom";
+import clsx from "clsx";
+
+//React Icons
+import { BsImage } from "react-icons/bs";
+import { FaSearch } from "react-icons/fa";
+
+//Stylesheet
+import styles from "./searchbox.module.css";
 
 const linkStyle = {
   textDecoration: "none",
@@ -19,7 +26,7 @@ function SearchBox({
 }) {
   return (
     <>
-      <div className={styles.searchInputs}>
+      <div className={clsx(styles.searchInputs)}>
         <form action={"http://localhost:3000/search/" + searchQuery}>
           <input
             onKeyDown={handleKeyPress}
@@ -30,7 +37,6 @@ function SearchBox({
             ref={searchBoxInput}
             type="text"
           />
-          {/* <button type="submit">Search</button> */}
         </form>
       </div>
 
@@ -45,11 +51,23 @@ function SearchBox({
               >
                 <div className={styles.resultMovieContainer}>
                   <div className={styles.resultMovieImgContainer}>
-                    <img
-                      className={styles.resultMovieImg}
-                      src={imgPath + movie.poster_path}
-                      alt=""
-                    />
+                    {movie?.poster_path ? (
+                      <img
+                        className={styles.resultMovieImg}
+                        src={imgPath + movie.poster_path}
+                        alt=""
+                      />
+                    ) : (
+                      <div
+                        role="img"
+                        className={clsx(
+                          styles.imageNotFound,
+                          "w-100 rounded d-flex justify-content-center align-items-center"
+                        )}
+                      >
+                        <BsImage size="20" />
+                      </div>
+                    )}
                   </div>
                   <div className={styles.resultMovieInfoContainer}>
                     <div>

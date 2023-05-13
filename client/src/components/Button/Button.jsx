@@ -18,7 +18,7 @@ function Button({
   };
 
   return (
-    <div className="">
+    <div>
       <button style={style}>{children}</button>
     </div>
   );

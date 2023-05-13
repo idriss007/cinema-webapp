@@ -1,9 +1,9 @@
 const AppError = require("./AppError");
 
 class ListNotFoundError extends AppError {
+  statusCode = 404;
   constructor(message) {
-    const statusCode = 404;
-    super(message, statusCode);
+    super(message);
   }
 }
 

@@ -1,11 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useQuery } from "react-query";
-// import { GetRating } from "../../api";
-import { GetRating } from "../../internalApi";
 import { Link } from "react-router-dom";
-import styles from "./recentlyratedmoviecard.module.css";
 
+//Local Api
+// import { GetRating } from "../../api";
+import { GetRating } from "internalApi";
+
+//React Icons
 import { BsStarFill } from "react-icons/bs";
+
+//Stylesheet
+import styles from "./recentlyratedmoviecard.module.css";
 
 function RecentlyRatedMovieCard({ list, index, movie, user }) {
   const { data: rating } = useQuery(["movieRating", parseInt(movie.id)], () =>
@@ -13,9 +18,8 @@ function RecentlyRatedMovieCard({ list, index, movie, user }) {
   );
   return (
     <div className="col-3 d-flex justify-content-center align-items-center flex-column">
-      <div className="">
+      <div>
         <Link
-          className=""
           reloadDocument={true}
           style={{ textDecoration: "none", color: "inherit" }}
           to={"/detail/" + movie.id}

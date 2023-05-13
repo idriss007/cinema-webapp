@@ -44,3 +44,16 @@
 .margin-end-to-page {
   margin-bottom: 50px;
 }
+
+.form {
+  background-color: rgb(246, 246, 246);
+  /* border: 1px solid black; */
+}
+
+.form-text-color {
+  color: rgb(255, 202, 24);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

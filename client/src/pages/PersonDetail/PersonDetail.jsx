@@ -1,56 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { getPersonCredit, getPersonDetail } from "../../api";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import moment from "moment";
+import clsx from "clsx";
 
-import styles from "./persondetail.module.css";
-import MovieSlider from "../../components/MovieSlider/MovieSlider";
+//External Api
+import { getPersonCredit, getPersonDetail } from "api";
 
+//Components
+import MovieSlider from "components/MovieSlider/MovieSlider";
+import ImdbCard from "components/ImdbCard/ImdbCard";
+
+//React Icons
+import { BsImage } from "react-icons/bs";
+
+//React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
-import ImdbCard from "../../components/ImdbCard/ImdbCard";
+
+//Stylesheet
+import styles from "./persondetail.module.css";
 
 function PersonDetail() {
   const { name_id } = useParams();
 
-  const [personCredits, setPersonCredits] = useState();
+  const [allCredits, setAllCredits] = useState();
 
-  useEffect(() => {
-    (async () => {
-      const credits = await getPersonCredit(name_id);
-      const sortedCastCredits = credits?.cast?.sort((a, b) => {
-        return a.order - b.order || b.vote_count - a.vote_count;
-      });
-      const sortedCrewCredits = credits?.crew?.sort((a, b) => {
-        return a.order - b.order || b.vote_count - a.vote_count;
-      });
+  const credits = useQuery(["credits"], () => getPersonCredit(name_id), {
+    onSuccess: (credits) => {
+      const a = [credits.crew];
+      const b = [credits.cast];
+      setAllCredits(() => {
+        const c = a.concat(b);
+        let allCreditsData = [];
 
-      // if (credits?.cast.length > credits?.crew.length) {
-      //     //Başrol ve oy sıralamasına göre yapımları sırala
-      //     const sortedCredits = credits?.cast?.sort((a, b) => { return a.order - b.order || b.vote_count - a.vote_count});
-      //     setPersonCredits(sortedCredits);
-      // } else {
-      //     const sortedCredits = credits?.crew?.sort((a, b) => { return a.order - b.order || b.vote_count - a.vote_count});
-      //     // const sortedCredits = credits?.crew?.sort((a, b) => { return b.vote_count - a.vote_count });
-      //     setPersonCredits(sortedCredits);
-      // }
-
-      //Kişinin asıl mesleğinin oyuncu mu yoksa başka meslek mi olduğuna bak
-      if (sortedCrewCredits.length <= 0) {
-        setPersonCredits(sortedCastCredits);
-      } else if (sortedCastCredits.length <= 0) {
-        setPersonCredits(sortedCrewCredits);
-      } else {
-        if (sortedCastCredits?.length > sortedCrewCredits?.length) {
-          //Başrol ve oy sıralamasına göre yapımları sırala
-          setPersonCredits(sortedCastCredits);
-        } else {
-          console.log(personCredits);
-          setPersonCredits(sortedCrewCredits);
+        for (let i = 0; i < c[0].length; i++) {
+          allCreditsData.push(c[0][i]);
         }
-      }
-    })();
-  }, []);
+        for (let i = 0; i < c[1].length; i++) {
+          allCreditsData.push(c[1][i]);
+        }
+        allCreditsData.sort((a, b) => {
+          return a.order - b.order || b.vote_count - a.vote_count;
+        });
+        const uniq = allCreditsData.filter(
+          (value, index, self) =>
+            index === self.findIndex((t) => t.id === value.id)
+        );
+        return uniq;
+      });
+    },
+  });
 
   const {
     isLoading: statusPerson,
@@ -59,6 +58,8 @@ function PersonDetail() {
   } = useQuery(["person", parseInt(name_id)], () => getPersonDetail(name_id), {
     onSuccess: (person) => (document.title = person.name),
   });
+  console.log(person);
+
   if (statusPerson)
     return (
       <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
@@ -74,6 +75,16 @@ function PersonDetail() {
   const profileImgUrl = "https://image.tmdb.org/t/p/h632" + person.profile_path;
   const imdb_id = person.imdb_id;
   const imdbUrl = "https://www.imdb.com/name/" + imdb_id;
+  const job =
+    person.known_for_department.toLowerCase() === "directing"
+      ? "Director"
+      : person.known_for_department.toLowerCase() === "acting"
+      ? person.gender === 1
+        ? "Actress"
+        : "Actor"
+      : person.known_for_department.toLowerCase() === "writing"
+      ? "Writer"
+      : null;
 
   return (
     <div className="container customContainer">
@@ -83,22 +94,34 @@ function PersonDetail() {
             <p>{person.name}</p>
           </div>
           <div className="h5 m-0">
-            <p>{person.known_for_department}</p>
+            <p>{job ? job : person.known_for_department}</p>
           </div>
         </div>
 
-        <div className="row mt-4">
-          <div className="col-auto col-sm-5 col-lg-3">
-            <img className="w-100 rounded" src={profileImgUrl} />
+        <div className="row mt-4 w-100">
+          <div className="col-12 col-md-5 col-lg-3">
+            {person.profile_path ? (
+              <img className="w-100 rounded" src={profileImgUrl} />
+            ) : (
+              <div
+                role="img"
+                className={clsx(
+                  styles.imageNotFound,
+                  "w-100 rounded d-flex justify-content-center align-items-center"
+                )}
+              >
+                <BsImage size="80" />
+              </div>
+            )}
           </div>
 
-          <div className="col-auto col-sm-7 col-lg-9 mt-4 mt-sm-0">
+          <div className="col-12 col-md-7 col-lg-9 mt-4 mt-sm-0">
             <div className="row no-gutters">
               <div className="col-12">
                 <span className="font-weight-bold">Birthday:</span>{" "}
                 {person.birthday
                   ? moment(person.birthday).format("DD/MM/YYYY")
-                  : "Kayıtlarımızda doğum tarihi ile ilgili bir kayıt bulunmamaktadır."}
+                  : "-"}
               </div>
 
               {person.deathday && (
@@ -110,23 +133,21 @@ function PersonDetail() {
 
               <div className="col-12 mt-1">
                 <span className="font-weight-bold">Place of Birth:</span>{" "}
-                {person.place_of_birth}
+                {person.place_of_birth ? person.place_of_birth : "-"}
               </div>
 
               <div className="col-12 mt-3 line-height-p">
                 {person.biography
                   ? person.biography
-                  : "Kayıtlarımızda " +
-                    person.name +
-                    " için biyografimiz bulunmamaktadır."}
+                  : "We don't have a biography for " + person.name + "."}
               </div>
             </div>
           </div>
         </div>
 
-        {personCredits && (
+        {allCredits && (
           <div className="col-12">
-            <MovieSlider movies={personCredits}>Known For</MovieSlider>
+            <MovieSlider movies={allCredits}>Known For</MovieSlider>
           </div>
         )}
 

@@ -1,7 +1,14 @@
-const BadRequestError = require("../../../errors/BadRequestError");
-const UnAuthenticatedError = require("../../../errors/UnAuthenticatedError");
+//Errors
+const BadRequestError = require("../../errors/BadRequestError");
+const UnAuthenticatedError = require("../../errors/UnAuthenticatedError");
+
+//Models
 const Comment = require("../../models/comment");
+
+//Utils
 const { tryCatch } = require("../../utils/tryCatch");
+
+//Validations
 const { validateComment, validateUpdateComment } = require("./validations");
 
 const CreateComment = tryCatch(async (req, res) => {
@@ -38,22 +45,37 @@ const DeleteComment = tryCatch(async (req, res) => {
     throw new UnAuthenticatedError("User not authenticated!");
   }
 
-  const childComments = await Comment.find({ parentId: comment_id });
+  //Silinecek yorumun parentId'si var ise(yani yoruma yazılan bir yorum ise) direk silinir.
+  //Ve eğer parent yorum silinmişse ve hiçbir childComment'i kalmamışsa parentComment da tamamen silinir.
+  if (foundComment.parentId) {
+    const deletedComment = await Comment.findByIdAndDelete(comment_id).populate(
+      "user"
+    );
+    const parentComment = await Comment.findById(deletedComment.parentId);
+    const childs = await Comment.find({ parentId: deletedComment.parentId });
+    if (childs.length <= 0 && parentComment.isDeleted) {
+      await Comment.findByIdAndDelete(parentComment._id);
+      return res.send({ deletedComment, deleteParent: true });
+    }
+    return res.send(deletedComment);
+  }
+
+  //Silinecek yorum paretn yani ana yorum ise önce alt yorumlar var mı diye kontrol edilir.
+  const childComments = await Comment.find({ parentId: foundComment._id });
 
   if (childComments.length > 0) {
     foundComment.body = "This comment has been deleted by the author.";
     foundComment.updatedAt = new Date();
     foundComment.isDeleted = true;
+    //Aslında yorumu silmedik güncelledik.(Silinmiş olarak gözükecek.)
     const deletedComment = await (await foundComment.save()).populate("user");
-    console.log(deletedComment);
 
     return res.send(deletedComment);
   }
 
-  const deletedComment = await Comment.findByIdAndDelete(comment_id).populate(
-    "user"
-  );
-  return res.send(deletedComment);
+  //Ana yoruma yazılmış alt yorum yok ise direk ana yorumu sil.
+  const deletedComment = await Comment.findByIdAndDelete(foundComment._id);
+  res.send(deletedComment);
 });
 
 const UpdateComment = tryCatch(async (req, res) => {
@@ -95,7 +117,10 @@ const GetUserComments = tryCatch(async (req, res) => {
     throw new BadRequestError("Wrong or missing data.");
   }
 
-  const comments = await Comment.find({ user: user_id }).populate("user");
+  const comments = await Comment.find({
+    user: user_id,
+    isDeleted: false,
+  }).populate("user");
   return res.send(comments);
 });
 

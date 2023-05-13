@@ -1,21 +1,30 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import clsx from "clsx";
 
-//API Functions
+//Local Api
 // import { DeleteList, fetchLists } from "../../api";
-import { DeleteList, fetchLists } from "../../internalApi";
+import { DeleteList, GetUsersComments, fetchLists } from "internalApi";
+
 //Contexts
-import AuthContext from "../../context/AuthContext";
+import AuthContext from "context/AuthContext";
+
 //Stylesheet
 import styles from "./profile.module.css";
+
 //Components
-import Comments from "../Comments/Comments";
-//FontAwesome
+import RecentlyRatedMovieCard from "components/RecentlyRatedMovieCard/RecentlyRatedMovieCard";
+
+//Pages
+import Comments from "pages/Comments/Comments";
+
+//React Icons
 import { FaUserCircle } from "react-icons/fa";
-import RecentlyRatedMovieCard from "../../components/RecentlyRatedMovieCard/RecentlyRatedMovieCard";
 
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
+import UserCommentsSection from "components/UserCommentsSection/UserCommentsSection";
 
 function Profile({ title }) {
   const [lists, setLists] = useState();
@@ -30,7 +39,11 @@ function Profile({ title }) {
     })();
   }, []);
 
-  if (!lists) {
+  const comments = useQuery(["comments", user._id], () =>
+    GetUsersComments(user._id)
+  );
+
+  if (!lists || comments.isLoading) {
     return (
       <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
         <SyncLoader size={35} />
@@ -38,9 +51,11 @@ function Profile({ title }) {
     );
   }
 
+  console.log(comments.data);
+
   function renderLists(list, key) {
     return (
-      <div key={key} className={"col-12 mt-1 mb-1 p-3"}>
+      <div key={key} className="col-12 mt-1 mb-1 p-3">
         <div className="row no-gutters">
           {list.movies.length > 0 && (
             <div className="col-auto mr-2">
@@ -69,7 +84,7 @@ function Profile({ title }) {
           </div>
           <div className="col-auto ml-auto text-white">
             <button
-              className={styles.button + " p-2 rounded bg-danger"}
+              className={clsx(styles.button, "p-2 rounded bg-danger")}
               onClick={() => {
                 if (
                   window.confirm(
@@ -112,17 +127,6 @@ function Profile({ title }) {
 
   return (
     <div className="container customContainer">
-      {/* <div className="row no-gutters">
-        <div className="col-12">
-          <p className="h2 ">Hoşgeldin {user?.name}</p>
-        </div>
-        <div className="col-12">
-          <p>Email adresin: {user?.email}</p>
-        </div>
-        <div className="col-12">
-          <p>Şifren: {user?.password}</p>
-        </div>
-      </div> */}
       <div className="row no-gutters">
         <div className="col-12">
           <div className="d-flex flex-column justify-content-center align-items-center">
@@ -133,7 +137,7 @@ function Profile({ title }) {
       </div>
       <div className="row no-gutters border rounded p-3 mb-4">
         <div className="col-12">
-          <p className={"font-weight-bold " + styles.yourListstxt}>
+          <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
             Your Ratings
           </p>
         </div>
@@ -176,11 +180,11 @@ function Profile({ title }) {
         <div className="col-12">
           <div className="row no-gutters align-items-center">
             <div className="col-auto mr-auto">
-              <p className={"font-weight-bold " + styles.yourListstxt}>
+              <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
                 Your Lists
               </p>
             </div>
-            <div className="col-auto ">
+            <div className="col-auto">
               <Link
                 reloadDocument={true}
                 style={{ color: "inherit" }}
@@ -208,6 +212,12 @@ function Profile({ title }) {
           </div>
         )}
       </div>
+
+      {comments?.data?.length > 0 && (
+        <div className="row no-gutters">
+          <UserCommentsSection comments={comments} />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,15 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useQuery } from "react-query";
-import {
-  fetchNowPlayingOrUpcomingMovies,
-  fetchUpcomingMovies,
-} from "../../api";
-
 import moment from "moment";
+import clsx from "clsx";
+
+//Exrenal Api
+import { fetchNowPlayingOrUpcomingMovies, fetchUpcomingMovies } from "api";
 
 //Components
-import MovieSlider from "../../components/MovieSlider/MovieSlider";
-import LatestTrailerSection from "../../components/LatestTrailerSection/LatestTrailerSection";
+import MovieSlider from "components/MovieSlider/MovieSlider";
+import LatestTrailerSection from "components/LatestTrailerSection/LatestTrailerSection";
 
 //Stylesheet
 import styles from "./home.module.css";
@@ -43,7 +42,7 @@ function Home() {
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.container + " container customContainer"}>
+      <div className={clsx(styles.container, "container customContainer")}>
         <LatestTrailerSection upcomingMovies={upcomingMovies} />
         <MovieSlider key={"1"} movies={nowPlayingMovies?.results}>
           In theaters

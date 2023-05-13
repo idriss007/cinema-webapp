@@ -113,6 +113,14 @@ export async function getPersonCredit(name_id) {
   return data;
 }
 
+export async function getCreditDetails(credit_id) {
+  const url = `credit/${credit_id}?api_key=${process.env.REACT_APP_API_URL}`;
+
+  const { data } = await externalApiAxios.get(url);
+
+  return data;
+}
+
 // //USER İŞLEMLERİ
 
 // export async function fetchRegister(values) {

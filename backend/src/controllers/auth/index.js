@@ -1,12 +1,16 @@
-const User = require("../../models/user");
 const bcrypt = require("bcrypt");
+
+//Models
+const User = require("../../models/user");
+
+//Utils
 const { tryCatch } = require("../../utils/tryCatch");
 
 //Validation Methods
 const { validateLogin, validateRegister } = require("./validations");
 
-//Base Error Class
-const AppError = require("../../../errors/AppError");
+//Errors
+const AppError = require("../../errors/AppError");
 
 //Jwt Methods
 const {

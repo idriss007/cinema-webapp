@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import clsx from "clsx";
 
+//Stylesheet
 import styles from "./paginationcard.module.css";
 
 function PaginationCard({ pageId, addToUrl, totalPages }) {
@@ -25,7 +27,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
       {pageId !== "1" && (
         <div className="col-auto">
           <Link
-            className={"btn rounded-0 " + styles.button}
+            className={clsx(styles.button, "btn rounded-0")}
             reloadDocument={true}
             to={
               addToUrl +
@@ -45,7 +47,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
       {pageId !== "1" && (
         <div className="col-auto">
           <Link
-            className={"btn rounded-0 " + styles.button}
+            className={clsx(styles.button, "btn rounded-0")}
             reloadDocument={true}
             to={
               addToUrl +
@@ -64,7 +66,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
 
       <div className="col-auto">
         <Link
-          className={"btn rounded-0 " + styles.activeButton}
+          className={clsx(styles.activeButton, "btn rounded-0")}
           reloadDocument={true}
           to={addToUrl + "/" + pageId}
         >
@@ -77,7 +79,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
         totalPages - parseInt(pageId) >= 1 && (
           <div className="col-auto">
             <Link
-              className={"btn rounded-0 " + styles.button}
+              className={clsx(styles.button, "btn rounded-0")}
               reloadDocument={true}
               to={addToUrl + "/" + (pageId ? parseInt(pageId) + 1 : 2)}
             >
@@ -90,7 +92,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
         totalPages - parseInt(pageId) >= 1 && (
           <div className="col-auto">
             <Link
-              className={"btn rounded-0 " + styles.button}
+              className={clsx(styles.button, "btn rounded-0")}
               reloadDocument={true}
               to={addToUrl + "/" + (pageId ? parseInt(pageId) + 1 : 2)}
             >
@@ -103,7 +105,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
         totalPages - parseInt(pageId) > 1 && (
           <div className="col-auto">
             <Link
-              className={"btn rounded-0 " + styles.button}
+              className={clsx(styles.button, "btn rounded-0")}
               reloadDocument={true}
               to={addToUrl + "/" + totalPages}
             >

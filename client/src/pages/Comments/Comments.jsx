@@ -1,4 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
+import { useQuery } from "react-query";
+
+//Local Api
 // import {
 //   DeleteComment,
 //   FetchAllComments,
@@ -10,18 +13,21 @@ import {
   FetchAllComments,
   PostComment,
   UpdateComment,
-} from "../../internalApi";
-import Comment from "../../components/Comment/Comment";
-import AuthContext from "../../context/AuthContext";
+} from "internalApi";
 
-import CommentForm from "../../components/CommentForm/CommentForm";
+//Components
+import Comment from "components/Comment/Comment";
+import CommentForm from "components/CommentForm/CommentForm";
+
+//Context
+import AuthContext from "context/AuthContext";
 
 function Comments({ movie_id }) {
   const [comments, setComments] = useState();
   //hangi yorumda edit mi reply mi ettiğimizi depolayacak state.
   const [activeComment, setActiveComment] = useState();
 
-  const rootComments = comments?.filter((comment) => comment.parentId === null);
+  let rootComments = comments?.filter((comment) => comment.parentId === null);
 
   //Parent id'si parametre olarak gönderilen comment id ile eşleşen commentleri al.
   function getReplies(comment_id) {
@@ -35,16 +41,11 @@ function Comments({ movie_id }) {
 
   const { loggedIn, user } = useContext(AuthContext);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const allComments = await FetchAllComments(movie_id);
-        setComments(allComments);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, [comments]);
+  const allComments = useQuery(["comments"], () => FetchAllComments(movie_id), {
+    onSuccess: (allComments) => {
+      setComments(allComments);
+    },
+  });
 
   function renderComments(rootComment, index) {
     return (
@@ -71,11 +72,26 @@ function Comments({ movie_id }) {
   async function deleteComment(comment_id, user_id) {
     if (window.confirm("Are you sure that you want to remove the comment?")) {
       // navigate(0);
+
       const deletedComment = await DeleteComment(comment_id);
-      const filteredComments = comments.filter(
-        (comment) => comment._id !== deletedComment._id
-      );
-      setComments(filteredComments);
+
+      if (!deletedComment.deleteParent) {
+        const filteredComments = comments.filter(
+          (comment) => comment._id !== deletedComment._id
+        );
+        setComments(filteredComments);
+      }
+
+      if (deletedComment.deleteParent) {
+        let filteredComments = comments.filter(
+          (comment) => comment._id !== deletedComment.deletedComment._id
+        );
+        filteredComments = filteredComments.filter(
+          (comment) => comment._id !== deletedComment.deletedComment.parentId
+        );
+        setComments(filteredComments);
+        rootComments = comments?.filter((comment) => comment.parentId === null);
+      }
     }
   }
 
@@ -93,7 +109,7 @@ function Comments({ movie_id }) {
 
   return (
     <>
-      <div>
+      <div className="mt-2">
         {loggedIn ? (
           <CommentForm submitLabel="Send Comment" handleSubmit={addComment} />
         ) : (

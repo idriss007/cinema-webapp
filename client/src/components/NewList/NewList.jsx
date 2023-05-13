@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import clsx from "clsx";
+
+//Local Api
 // import { AddToList, RemoveFromList } from "../../api";
-import { AddToList, RemoveFromList } from "../../internalApi";
+import { AddToList, RemoveFromList } from "internalApi";
+
+//Components
+import ListCard from "components/ListCard/ListCard";
 
 //Stylesheet
 import styles from "./newlist.module.css";
-import ListCard from "../ListCard/ListCard";
 
 function NewList({ lists, movie }) {
   const [isInList, setIsInList] = useState([]);
@@ -27,13 +32,15 @@ function NewList({ lists, movie }) {
       aria-hidden="true"
     >
       <div
-        className={
-          "modal-dialog d-flex justify-content-center align-items-center w-100 h-100 mw-100 m-0 " +
-          styles.modal
-        }
+        className={clsx(
+          styles.modal,
+          "modal-dialog d-flex justify-content-center align-items-center w-100 h-100 mw-100 m-0"
+        )}
         role="document"
       >
-        <div className={"modal-content rounded-0 w-auto " + styles.container}>
+        <div
+          className={clsx(styles.container, "modal-content rounded-0 w-auto")}
+        >
           <div className="modal-header justify-content-center">
             <p className="">Add to List</p>
           </div>
@@ -41,15 +48,15 @@ function NewList({ lists, movie }) {
             <div className="row no-gutters">
               <div className="col-12">
                 <Link
-                  className=""
                   reloadDocument={true}
                   style={{ textDecoration: "none", color: "inherit" }}
                   to={"/list/create"}
                 >
                   <button
-                    className={
-                      "w-100 p-3 d-flex justify-content-start " + styles.button
-                    }
+                    className={clsx(
+                      styles.button,
+                      "w-100 p-3 d-flex justify-content-start"
+                    )}
                   >
                     Create new List
                   </button>

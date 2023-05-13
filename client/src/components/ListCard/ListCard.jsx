@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
+import clsx from "clsx";
 
+//Stylesheet
 import styles from "./listcard.module.css";
 
 function ListCard({
@@ -23,7 +25,10 @@ function ListCard({
   return (
     <div key={index} className="col-12 d-flex">
       <button
-        className={"w-100 p-3 d-flex justify-content-start " + styles.button}
+        className={clsx(
+          styles.button,
+          "w-100 p-3 d-flex justify-content-start"
+        )}
         onClick={() => {
           if (!isInList.includes(index)) {
             addToList(list._id, movie);

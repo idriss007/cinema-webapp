@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import clsx from "clsx";
 
-// React Bootstrap Components
+//Components
+import TrailerCard from "components/TrailerCard/TrailerCard";
+
+//React Bootstrap
 import Modal from "react-bootstrap/Modal";
 
-// Stylesheets
+//Stylesheets
 import styles from "./latesttrailersection.module.css";
 import "./latesttrailersection.css";
-import TrailerCard from "../TrailerCard/TrailerCard";
-import { Link } from "react-router-dom";
 
 function LatestTrailerSection({ upcomingMovies }) {
   const [fullscreen, setFullscreen] = useState(true);
@@ -55,17 +58,19 @@ function LatestTrailerSection({ upcomingMovies }) {
                               "https://image.tmdb.org/t/p/w342" +
                               movie.poster_path
                             }
-                            className={
-                              "d-block rounded mh-100 " + styles.poster
-                            }
+                            className={clsx(
+                              styles.poster,
+                              "d-block rounded mh-100"
+                            )}
                             alt="..."
                           />
                         </Link>
                       </div>
                       <div
-                        className={
-                          "col-lg-10 col-md-12 " + styles.trailerCardContainer
-                        }
+                        className={clsx(
+                          styles.trailerCardContainer,
+                          "col-lg-10 col-md-12"
+                        )}
                       >
                         <TrailerCard
                           movie={movie}

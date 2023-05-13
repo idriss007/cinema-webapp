@@ -1,21 +1,27 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+//Pages
 import Detail from "./pages/Detail/Detail";
-import Navbar from "./components/Navbar/Navbar";
-import { StatesProvider } from "./context/StatesContext";
 import Movies from "./pages/Movies/Movies";
 import Signup from "./pages/Auth/Signup/Signup";
 import Signin from "./pages/Auth/Signin/Signin";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
-import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import ProtectedRoute2 from "./pages/ProtectedRoute2";
-import { ListProvider } from "./context/ListContext";
 import PersonDetail from "./pages/PersonDetail/PersonDetail";
 import List from "./pages/List/List";
 import CreateNewList from "./pages/CreateNewList/CreateNewList";
 import SearchMovieByGenreResults from "./pages/SearchMovieByGenreResults/SearchMovieByGenreResults";
+
+//Contexts
+import { ListProvider } from "./context/ListContext";
+import { AuthProvider } from "./context/AuthContext";
+import { StatesProvider } from "./context/StatesContext";
+
+//Components
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   return (

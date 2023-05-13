@@ -1,10 +1,15 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { fetchTrailer } from "../../api";
+import clsx from "clsx";
 
-import styles from "./trailercard.module.css";
+//External Api
+import { fetchTrailer } from "api";
 
+//React Icons
 import { IoPlayCircleOutline } from "react-icons/io5";
+
+//Stylesheet
+import styles from "./trailercard.module.css";
 
 function TrailerCard({ movie, handleTrailer, handleShow }) {
   const {
@@ -30,10 +35,10 @@ function TrailerCard({ movie, handleTrailer, handleShow }) {
     >
       <img
         src={"https://image.tmdb.org/t/p/w1280" + movie.backdrop_path}
-        className={"d-block w-100 rounded " + styles.trailerImg}
+        className={clsx(styles.trailerImg, "d-block w-100 rounded")}
         alt="..."
       />
-      <div className={styles.infoContainer + " p-2"}>
+      <div className={clsx(styles.infoContainer, "p-2")}>
         <IoPlayCircleOutline className={styles.playIcon} />
         <p className={styles.title}>{movie.title}</p>
       </div>

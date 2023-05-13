@@ -1,5 +1,6 @@
 .searchInputs {
   color: white;
+  width: 100%;
 }
 
 .searchBoxInput {
@@ -14,17 +15,6 @@
 .searchBoxInput:focus {
   border: 3px solid rgb(245, 197, 24);
 }
-
-/* .searchButton {
-    padding: 7px 10px;
-    margin-left: 10px;
-    border-radius: 10px;
-    background-color: rgb(241, 248, 23);
-    color:black;
-    font-weight: bold;
-    transition: 0.3s;
-    
-} */
 
 .searchButton:hover {
   background-color: black;
@@ -69,4 +59,11 @@
 
 .resultMovieReleaseDateContainer {
   color: rgb(188, 188, 188);
+}
+
+.imageNotFound {
+  --r: 154/231;
+  aspect-ratio: var(--r);
+  background-color: rgb(219, 219, 219);
+  color: rgb(181, 181, 181);
 }

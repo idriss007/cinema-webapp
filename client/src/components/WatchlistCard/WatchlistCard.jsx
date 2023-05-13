@@ -1,11 +1,15 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import clsx from "clsx";
+
+//Components
+import NewList from "components/NewList/NewList";
 
 //React Spinners
 import ClipLoader from "react-spinners/ClipLoader";
+
 //Stylesheet
 import styles from "./watchlistcard.module.css";
-import NewList from "../NewList/NewList";
-import { Link, useLocation } from "react-router-dom";
 
 function WatchlistCard({
   handleAddWatchlistClicked,
@@ -19,6 +23,7 @@ function WatchlistCard({
   lists,
 }) {
   const { pathname } = useLocation();
+
   let inList = "";
   let addList = "";
 
@@ -40,15 +45,13 @@ function WatchlistCard({
 
   return (
     <>
-      <div className={"d-flex align-items-center " + width}>
+      <div className={clsx(width, "d-flex align-items-center")}>
         <div
-          className={
-            called === "DetailPage"
-              ? styles.addToWatchlistBtn +
-                " d-flex align-items-center justify-content-center p-3 w-100"
-              : styles.addToWatchlistBtn +
-                " d-flex align-items-center justify-content-center pl-3 pr-3 pt-2 pb-2 w-100"
-          }
+          className={clsx(
+            styles.addToWatchlistBtn,
+            "d-flex align-items-center justify-content-center w-100",
+            called === "DetailPage" ? "p-3" : "pl-3 pr-3 pt-2 pb-2"
+          )}
           onClick={() =>
             handleAddWatchlistClicked(isInList, setIsInList, movie)
           }
@@ -63,7 +66,7 @@ function WatchlistCard({
             </p>
           ) : (
             <Link
-              reloadDocument={true}
+              // reloadDocument={true}
               className="d-flex justify-content-center align-items-center text-nowrap text-decoration-none color-inherit no-hover"
               to="/login"
               state={{ previousPath: pathname }}
@@ -88,10 +91,10 @@ function WatchlistCard({
                 id="asd"
                 data-toggle="modal"
                 data-target="#newListModal"
-                className={
-                  "ml-1 d-flex align-items-center justify-content-center p-3 w-100 " +
-                  styles.addToWatchlistBtn
-                }
+                className={clsx(
+                  styles.addToWatchlistBtn,
+                  "ml-1 d-flex align-items-center justify-content-center p-3 w-100"
+                )}
               >
                 ▼
               </div>

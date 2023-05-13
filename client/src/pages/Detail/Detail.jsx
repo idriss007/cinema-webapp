@@ -1,34 +1,39 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
-import { getCredits, getDetail, getImages } from "../../api";
 import moment from "moment";
 import clsx from "clsx";
 
 //React Icons
-import { BsStarFill } from "react-icons/bs";
+import { BsStarFill, BsImage } from "react-icons/bs";
+
+//React Spinners
+import SyncLoader from "react-spinners/SyncLoader";
 
 //Bootstrap
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 
+//Api
+import { getCredits, getDetail, getImages } from "api";
+
 //Import components
-import Genre from "../../components/Genre";
-import Slider from "../../components/Slider";
-import StarCard from "../../components/StarCard/StarCard";
-import Comments from "../Comments/Comments";
-import ImdbCard from "../../components/ImdbCard/ImdbCard";
+import Genre from "components/Genre";
+import Slider from "components/Slider";
+import StarCard from "components/StarCard/StarCard";
+import ImdbCard from "components/ImdbCard/ImdbCard";
+import RecommendationsForMovie from "components/RecommendationsForMovie/RecommendationsForMovie";
+import WatchlistCard from "components/WatchlistCard/WatchlistCard";
 
-//Import Contexts
-import AuthContext from "../../context/AuthContext";
-import ListContext from "../../context/ListContext";
+//Pages
+import Comments from "pages/Comments/Comments";
 
-//Import css file
+//Contexts
+import AuthContext from "context/AuthContext";
+import ListContext from "context/ListContext";
+
+//Css file
 import styles from "./detail.module.css";
-import RecommendationsForMovie from "../../components/RecommendationsForMovie/RecommendationsForMovie";
-import WatchlistCard from "../../components/WatchlistCard/WatchlistCard";
-
-import SyncLoader from "react-spinners/SyncLoader";
 
 function Detail() {
   const { loggedIn } = useContext(AuthContext);
@@ -74,7 +79,7 @@ function Detail() {
     () => getDetail(id),
     {
       onSuccess: (details) => {
-        document.title = details.original_title;
+        document.title = details.title;
       },
     }
   );
@@ -106,45 +111,57 @@ function Detail() {
   const writers = credits?.crew?.filter((person) => {
     return person.job === "Screenplay" || person.job === "Writer";
   });
-  const actingCrew = credits?.cast
-    ?.filter((people) => people.profile_path !== null)
-    .slice(0, 6);
+  // const actingCrew = credits?.cast
+  //   ?.filter((people) => people.profile_path !== null)
+  //   .slice(0, 6);
+  const actingCrew = credits?.cast.slice(0, 6);
 
   function renderCrew(crew, i, length) {
     const { name, id } = crew;
-    if (length === i + 1) {
-      return (
+    return (
+      <span key={i}>
+        <span>{i ? ", " : ""}</span>
         <Link
-          key={i}
           reloadDocument={true}
           className="text-decoration-none"
-          to={"/name/" + id}
+          to={`/name/${id}`}
         >
           {name}
         </Link>
-      );
-    } else {
-      return (
-        <>
-          <Link
-            key={i}
-            reloadDocument={true}
-            className="text-decoration-none"
-            to={"/name/" + id}
-          >
-            {name}
-          </Link>
-          <span>, </span>
-        </>
-      );
-    }
+      </span>
+    );
   }
 
   function renderActingCrew(person, i) {
     const { profile_path, id, name } = person;
     const profileImgUrl = `https://image.tmdb.org/t/p/w185${profile_path}`;
     if (!profile_path) {
-      return null;
+      return (
+        <div
+          key={i}
+          className="col-xl-2 col-sm-4 col-xs-12 justify-content-center d-flex mt-3 flex-column"
+        >
+          <div className={clsx(styles.castContainer)}>
+            <Link
+              className="d-flex flex-column text-decoration-none color-inherit"
+              reloadDocument={true}
+              to={"/name/" + id}
+            >
+              <div
+                className={clsx(
+                  styles.posterNotFound,
+                  "w-100 d-flex justify-content-center align-items-center"
+                )}
+              >
+                <BsImage size="40" />
+              </div>
+              <div className="text-center d-flex align-items-center justify-content-center flex-grow-1 p-1">
+                <p className="">{name}</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+      );
     }
     return (
       <>
@@ -158,9 +175,9 @@ function Detail() {
               reloadDocument={true}
               to={"/name/" + id}
             >
-              <img className="mw-100 " src={profileImgUrl} alt={name} />
+              <img className="mw-100" src={profileImgUrl} alt={name} />
               <div className="text-center d-flex align-items-center justify-content-center flex-grow-1 p-1">
-                <p className="">{name}</p>
+                <p>{name}</p>
               </div>
             </Link>
           </div>
@@ -173,7 +190,7 @@ function Detail() {
     <div className="container customContainer">
       <Tabs defaultActiveKey="movie" id="uncontrolled-tab-example">
         <Tab eventKey="movie" title="Movie Detail">
-          <div className={"row no-gutters mb-2"}>
+          <div className={"row no-gutters mb-2 mt-2"}>
             <div className={"col-sm-12 col-md-12 col-lg-6 mr-auto mb-2"}>
               <div>
                 <p className={styles.title}>{details.title}</p>
@@ -187,13 +204,13 @@ function Detail() {
             <div className="col-md-12 col-lg-auto d-flex">
               <div className="mr-3">
                 {details.status.toUpperCase() !== "RELEASED" ? null : (
-                  <div className={"d-flex flex-column align-items-center"}>
+                  <div className="d-flex flex-column align-items-center">
                     <p className="mb-2 text-nowrap font-weight-bold text-black-50">
                       USERS RATING
                     </p>
                     <div className="d-flex justify-content-center align-items-center">
                       <BsStarFill className="mr-1" color="#F5C518" size="30" />
-                      <div className="">
+                      <div>
                         <div>
                           <p className="font-weight-bold">
                             {parseFloat(details.vote_average).toFixed(1)}/10
@@ -228,47 +245,54 @@ function Detail() {
             </div>
           </div>
 
-          <div className={styles.middleContainer + " mb-4"}>
-            <img
-              className={styles.poster}
-              src={imageURL + details?.poster_path}
-              alt="movie poster"
-            />
-
-            <div className={styles.carouselContainer}>
-              {images && <Slider allImages={allImages} />}
-            </div>
+          {/* {details.poster_path && allImages?.length > 0 && ( */}
+          <div className={clsx(styles.middleContainer, "mb-4")}>
+            {details?.poster_path && (
+              <img
+                className={clsx(styles.poster)}
+                src={imageURL + details?.poster_path}
+                alt="movie poster"
+              />
+            )}
+            {allImages.length > 0 && (
+              <div className={styles.carouselContainer}>
+                {images && <Slider allImages={allImages} />}
+              </div>
+            )}
           </div>
 
           <div className="row no-gutters mb-3">
             <Genre genres={genreList} />
           </div>
 
-          <div className="row no-gutters">
-            <p>
-              <span className="font-weight-bold">
-                {directors?.length > 1 ? "Directors:" : "Director:"}
-              </span>{" "}
-              {directors
-                ? directors.map((director, i, length) =>
-                    renderCrew(director, i, directors.length)
-                  )
-                : null}
-            </p>
-          </div>
-
-          <div className="row no-gutters mb-3">
-            {writers?.length > 0 ? (
+          {directors?.length > 0 && (
+            <div className="row no-gutters">
               <p>
                 <span className="font-weight-bold">
-                  {writers?.length > 1 ? "Writers:" : "Writer:"}
+                  {directors?.length > 1 ? "Directors:" : "Director:"}
+                </span>{" "}
+                {directors
+                  ? directors.map((director, i, length) =>
+                      renderCrew(director, i, directors?.length)
+                    )
+                  : null}
+              </p>
+            </div>
+          )}
+
+          {writers?.length > 0 ? (
+            <div className="row no-gutters mb-3">
+              <p>
+                <span className="font-weight-bold">
+                  {writers?.length > 0 &&
+                    (writers?.length > 1 ? "Writers:" : "Writer:")}
                 </span>{" "}
                 {writers.map((writer, i, length) =>
-                  renderCrew(writer, i, writers.length)
+                  renderCrew(writer, i, writers?.length)
                 )}
               </p>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
 
           <div className="row">
             <div className="col-lg-8 line-height-p">{details.overview}</div>
@@ -289,10 +313,12 @@ function Detail() {
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-12 font-weight-bold h2 mt-5">Top cast</div>
-            {actingCrew ? actingCrew.map(renderActingCrew) : null}
-          </div>
+          {actingCrew?.length > 0 && (
+            <div className="row">
+              <div className="col-12 font-weight-bold h2 mt-5">Top cast</div>
+              {actingCrew ? actingCrew.map(renderActingCrew) : null}
+            </div>
+          )}
 
           <div className="row no-gutters">
             <div className="col-lg-12">

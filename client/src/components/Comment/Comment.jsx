@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import moment from "moment";
 
-//Bootstrap
+//React Bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-//FontAwesome
+
+//Components
+import CommentForm from "components/CommentForm/CommentForm";
+
+//React Icons
 import { FaUserCircle, FaEdit } from "react-icons/fa";
 import { MdDelete, MdAddComment } from "react-icons/md";
-
-//Style File
-import styles from "./comment.module.css";
-
-import CommentForm from "../CommentForm/CommentForm";
 
 function Comment({
   comment,

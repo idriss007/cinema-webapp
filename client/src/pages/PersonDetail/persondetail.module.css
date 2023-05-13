@@ -1,0 +1,6 @@
+.imageNotFound {
+    --r: 421/632;
+    aspect-ratio: var(--r);
+    background-color: rgb(219, 219, 219);
+    color: rgb(181, 181, 181);
+}
