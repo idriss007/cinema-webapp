@@ -112,10 +112,13 @@ function LatestTrailerSection({ upcomingMovies }) {
       </div>
 
       <Modal
-        className="d-flex p-0"
+        className="d-flex justify-content-center"
+        centered
         show={show}
         fullscreen={fullscreen}
         onHide={() => setShow(false)}
+        dialogClassName="trailer-dialog"
+        contentClassName="trailer-content"
       >
         {/* <Modal.Header closeButton>
           <Modal.Title>Modal</Modal.Title>

@@ -28,14 +28,15 @@ function Movies() {
 
   if (movies.isError) return "An error has occurred: " + movies.error.message;
 
-  function renderProduct(item, key) {
+  function renderMovies(item, key) {
     return <MovieCard key={key} index={key} movie={item} />;
   }
 
   return (
     <div className="container customContainer">
       <div className="row no-gutters">
-        {movies.data.results.map(renderProduct)}
+        <div className="col-12 h1">{`Search results for: ${query}`}</div>
+        {movies.data.results.map(renderMovies)}
 
         <div className="col-12 justify-content-center d-flex margin-end-to-page">
           <div className="row no-gutters">

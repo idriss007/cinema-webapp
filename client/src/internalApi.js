@@ -204,3 +204,34 @@ export async function GetUser(user_id) {
 
   return data;
 }
+
+//User Settings
+
+export async function ChangeName(new_name, password) {
+  const url = "users/change-name";
+
+  const { data } = await internalApiAxios.post(url, { new_name, password });
+
+  return data;
+}
+
+export async function ChangeEmail(new_email, password) {
+  const url = "users/change-email";
+
+  const { data } = await internalApiAxios.post(url, { new_email, password });
+
+  return data;
+}
+
+export async function ChangePassword(current_password, new_password) {
+  const url = "users/change-password";
+
+  console.log(current_password, new_password);
+
+  const { data } = await internalApiAxios.post(url, {
+    current_password,
+    new_password,
+  });
+
+  return data;
+}

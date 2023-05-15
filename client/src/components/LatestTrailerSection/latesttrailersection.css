@@ -1,13 +1,10 @@
-.modal {
-    justify-content: center;
-    align-items: center;
+.trailer-dialog {
+    max-width: 80% !important;
+    width: 80% !important;
 }
 
-.modal-dialog {
-    max-width: 80%;
-    width: 100%;
-    height: 70%;
-    display: flex;
+.trailer-content {
+    height: 80vh;
 }
 
 .carousel-control-prev {

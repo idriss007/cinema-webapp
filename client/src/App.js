@@ -22,6 +22,8 @@ import { StatesProvider } from "./context/StatesContext";
 
 //Components
 import Navbar from "./components/Navbar/Navbar";
+import TopRatedMovies from "pages/TopRatedMovies/TopRatedMovies";
+import AccountSettings from "pages/AccountSettings/AccountSettings";
 
 function App() {
   return (
@@ -57,6 +59,9 @@ function App() {
               <Route path="/user" element={<Profile />}>
                 <Route path=":user_id" element={<Profile />} />
               </Route>
+              <Route path="/movies/top-rated" element={<TopRatedMovies />}>
+                <Route path=":pageId" element={<TopRatedMovies />} />
+              </Route>
 
               <Route element={<ProtectedRoute2 />}>
                 <Route path="/signup" element={<Signup title="Sign Up" />} />
@@ -77,6 +82,7 @@ function App() {
                   path="/user/:userId/ratings"
                   element={<List calledType="ratings" />}
                 />
+                <Route path="/account-settings" element={<AccountSettings />} />
               </Route>
             </Routes>
           </ListProvider>

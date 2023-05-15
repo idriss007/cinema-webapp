@@ -39,15 +39,16 @@ import ClipLoader from "react-spinners/ClipLoader";
 import styles from "./starcard.module.css";
 import "./starcard.css";
 
-function StarCard({ movie, size, formOfCalling }) {
+function StarCard({ movie, size, formOfCalling, index }) {
   const navigate = useNavigate();
 
-  const [lists, setLists] = useState(null);
   const { user, loggedIn } = useContext(AuthContext);
 
+  const [lists, setLists] = useState(null);
   const [rating, setRating] = useState(null);
   const [ratedValue, setRatedValue] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const [hover, setHover] = useState(null);
   const [show, setShow] = useState(false);
 
@@ -77,13 +78,13 @@ function StarCard({ movie, size, formOfCalling }) {
     })();
   }, [loggedIn, movie.id, user?._id]);
 
-  // if (loading) {
-  //   return (
-  //     <div className="">
-  //       <ClipLoader />
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div className="">
+        <ClipLoader size="15px" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -94,7 +95,7 @@ function StarCard({ movie, size, formOfCalling }) {
         )}
         type="button"
         data-toggle="modal"
-        data-target="#exampleModal"
+        data-target={"#exampleModal"}
         onClick={() => {
           handleShow();
           setRating(ratedValue);
@@ -134,7 +135,9 @@ function StarCard({ movie, size, formOfCalling }) {
         centered
         show={show}
         onHide={handleClose}
-        className="p-0 d-flex justify-content-center align-items-center"
+        className={clsx("d-flex justify-content-center align-items-center")}
+        contentClassName="starcard-modal-content"
+        dialogClassName="starcard-dialog"
       >
         <Modal.Header className={styles.container}>
           <Modal.Title className={styles.modalRatingTxt}>
@@ -142,31 +145,33 @@ function StarCard({ movie, size, formOfCalling }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={styles.container}>
-          {[...Array(10)].map((star, i) => {
-            const ratingValue = i + 1;
+          <div className="row no-gutters">
+            {[...Array(10)].map((star, i) => {
+              const ratingValue = i + 1;
 
-            return (
-              <label key={i}>
-                <input
-                  className={styles.starInput}
-                  type="radio"
-                  name="rating"
-                  value={ratingValue}
-                  onClick={() => setRating(ratingValue)}
-                />
+              return (
+                <label className="col-auto" key={i}>
+                  <input
+                    className={styles.starInput}
+                    type="radio"
+                    name="rating"
+                    value={ratingValue}
+                    onClick={() => setRating(ratingValue)}
+                  />
 
-                <BsStarFill
-                  size="35"
-                  className={styles.star}
-                  color={
-                    ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"
-                  }
-                  onMouseEnter={() => setHover(ratingValue)}
-                  onMouseLeave={() => setHover(null)}
-                />
-              </label>
-            );
-          })}
+                  <BsStarFill
+                    size="35"
+                    className={styles.star}
+                    color={
+                      ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"
+                    }
+                    onMouseEnter={() => setHover(ratingValue)}
+                    onMouseLeave={() => setHover(null)}
+                  />
+                </label>
+              );
+            })}
+          </div>
         </Modal.Body>
         <Modal.Footer className={styles.container}>
           {(ratedValue || rating) && (

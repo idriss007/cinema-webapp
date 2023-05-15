@@ -49,6 +49,7 @@ function SearchMovieByGenreResults() {
 
   return (
     <div className="container customContainer">
+      <div className="col-12 h1">{`Results for: ${genreName}`}</div>
       <div className="row no-gutters">
         {movies.data.results.map(renderProduct)}
 

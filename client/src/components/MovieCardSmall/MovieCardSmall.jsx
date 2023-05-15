@@ -19,7 +19,7 @@ import styles from "./moviecardsmall.module.css";
 import { useQuery } from "react-query";
 import { getCreditDetails } from "api";
 
-function MovieCardSmall({ movie, type }) {
+function MovieCardSmall({ movie, type, index }) {
   const { loggedIn } = useContext(AuthContext);
   const { lists, handleAddWatchlistClicked } = useContext(ListContext);
   const [isInList, setIsInList] = useState();
@@ -108,6 +108,8 @@ function MovieCardSmall({ movie, type }) {
               movie={movie}
               size="14"
               formOfCalling="inMovieCardComponent"
+              key={index}
+              index={index}
             />
           </div>
         )}

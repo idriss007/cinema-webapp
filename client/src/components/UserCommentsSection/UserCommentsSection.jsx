@@ -12,7 +12,7 @@ function UserCommentsSection({ comments, isAdmin }) {
 
   return (
     comments.data.length > 0 && (
-      <div className="rounded border p-3 mt-2 mb-2 w-100">
+      <div className="rounded border p-3 mt-2 mb-5 w-100">
         <button
           data-toggle="collapse"
           data-target="#collapseComments"

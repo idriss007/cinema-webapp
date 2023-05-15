@@ -47,7 +47,7 @@ function Signup({ title }) {
         });
 
         const ratedMoviesList = await postList({
-          name: "Rated",
+          name: "Ratings",
         });
 
         const ratingList = await createRatingList({

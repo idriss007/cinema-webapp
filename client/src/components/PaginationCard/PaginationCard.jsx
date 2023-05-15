@@ -10,6 +10,30 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
     pageId = "1";
   }
 
+  const last = addToUrl ? addToUrl + "/" + totalPages : "" + totalPages;
+  const next = addToUrl
+    ? addToUrl + "/" + (pageId ? parseInt(pageId) + 1 : 2)
+    : "" + (pageId ? parseInt(pageId) + 1 : 2);
+
+  const first = addToUrl ? addToUrl : "";
+  const previous = addToUrl
+    ? addToUrl +
+      "/" +
+      (pageId ? (parseInt(pageId) === 2 ? "" : parseInt(pageId) - 1) : "")
+    : "" + (pageId ? (parseInt(pageId) === 2 ? "" : parseInt(pageId) - 1) : "");
+
+  const goLeftPage = addToUrl
+    ? addToUrl +
+      "/" +
+      (pageId ? (parseInt(pageId) === 2 ? "" : parseInt(pageId) - 1) : "")
+    : "" + (pageId ? (parseInt(pageId) === 2 ? "" : parseInt(pageId) - 1) : "");
+
+  const goActivePage = addToUrl ? addToUrl + "/" + pageId : "" + pageId;
+
+  const goRightPage = addToUrl
+    ? addToUrl + "/" + (pageId ? parseInt(pageId) + 1 : 2)
+    : "" + (pageId ? parseInt(pageId) + 1 : 2);
+
   return (
     <>
       {parseInt(pageId) > 2 && (
@@ -17,7 +41,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
           <Link
             className={"btn rounded-0 " + styles.button}
             reloadDocument={true}
-            to={addToUrl}
+            to={first}
           >
             {"<<"}
           </Link>
@@ -29,15 +53,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
           <Link
             className={clsx(styles.button, "btn rounded-0")}
             reloadDocument={true}
-            to={
-              addToUrl +
-              "/" +
-              (pageId
-                ? parseInt(pageId) === 2
-                  ? ""
-                  : parseInt(pageId) - 1
-                : "")
-            }
+            to={previous}
           >
             {"<"}
           </Link>
@@ -49,15 +65,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
           <Link
             className={clsx(styles.button, "btn rounded-0")}
             reloadDocument={true}
-            to={
-              addToUrl +
-              "/" +
-              (pageId
-                ? parseInt(pageId) === 2
-                  ? ""
-                  : parseInt(pageId) - 1
-                : "")
-            }
+            to={goLeftPage}
           >
             {pageId && parseInt(pageId) - 1}
           </Link>
@@ -68,7 +76,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
         <Link
           className={clsx(styles.activeButton, "btn rounded-0")}
           reloadDocument={true}
-          to={addToUrl + "/" + pageId}
+          to={goActivePage}
         >
           {/* {pageId ? pageId : 1} */}
           {pageId}
@@ -81,7 +89,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
             <Link
               className={clsx(styles.button, "btn rounded-0")}
               reloadDocument={true}
-              to={addToUrl + "/" + (pageId ? parseInt(pageId) + 1 : 2)}
+              to={goRightPage}
             >
               {parseInt(pageId) + 1}
             </Link>
@@ -94,7 +102,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
             <Link
               className={clsx(styles.button, "btn rounded-0")}
               reloadDocument={true}
-              to={addToUrl + "/" + (pageId ? parseInt(pageId) + 1 : 2)}
+              to={next}
             >
               {">"}
             </Link>
@@ -107,7 +115,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
             <Link
               className={clsx(styles.button, "btn rounded-0")}
               reloadDocument={true}
-              to={addToUrl + "/" + totalPages}
+              to={last}
             >
               {">>"}
             </Link>

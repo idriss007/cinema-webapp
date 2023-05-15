@@ -121,6 +121,16 @@ export async function getCreditDetails(credit_id) {
   return data;
 }
 
+export async function GetTopRatedMovies(page_number) {
+  const url = `movie/top_rated?api_key=${process.env.REACT_APP_API_URL}&page=${
+    page_number ? page_number : 1
+  }`;
+
+  const { data } = await externalApiAxios.get(url);
+
+  return data;
+}
+
 // //USER İŞLEMLERİ
 
 // export async function fetchRegister(values) {

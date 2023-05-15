@@ -15,13 +15,22 @@ import styles from "./moviecard.module.css";
 import { useQuery } from "react-query";
 import { GetRating } from "internalApi";
 
-function MovieCard(props) {
-  const url = "https://image.tmdb.org/t/p/w185/" + props.movie.poster_path;
+function MovieCard({
+  movie,
+  user,
+  userId,
+  list,
+  index,
+  user_id,
+  called,
+  handleDeleteBtn,
+}) {
+  const url = "https://image.tmdb.org/t/p/w185/" + movie.poster_path;
   let isPosterExist = true;
 
-  const isAdmin = props?.user?._id === props.userId;
+  const isAdmin = user?._id === userId;
 
-  if (!props.movie.poster_path) {
+  if (!movie.poster_path) {
     isPosterExist = false;
   }
 
@@ -29,14 +38,13 @@ function MovieCard(props) {
 
   const isReleased =
     moment(new Date()).format("YYYYMMDD") >
-    moment(props.movie.release_date).format("YYYYMMDD");
+    moment(movie.release_date).format("YYYYMMDD");
 
-  !props.movie.genre_ids &&
-    props.movie.genres.map((genre) => genres.push(genre.id));
+  !movie.genre_ids && movie.genres.map((genre) => genres.push(genre.id));
 
   const rating = useQuery(
-    ["rating", props.movie.id],
-    () => GetRating({ user_id: props.userId, movie_id: props.movie.id }),
+    ["rating", movie.id],
+    () => GetRating({ user_id: userId, movie_id: movie.id }),
     { enabled: !isAdmin ? true : false }
   );
 
@@ -48,7 +56,7 @@ function MovieCard(props) {
             <Link
               reloadDocument={true}
               style={{ textDecoration: "none", color: "inherit" }}
-              to={"/detail/" + props.movie.id}
+              to={"/detail/" + movie.id}
             >
               {/* {" "} */}
               {/* <p className={styles.title}> */}
@@ -79,19 +87,19 @@ function MovieCard(props) {
             <Link
               reloadDocument={true}
               style={{ textDecoration: "none", color: "inherit" }}
-              to={"/detail/" + props.movie.id}
+              to={"/detail/" + movie.id}
             >
               {" "}
-              <p className={styles.title}> {props.movie.title} </p>{" "}
+              <p className={styles.title}> {movie.title} </p>{" "}
             </Link>
             <div className="ml-2 d-flex justify-content-center align-items-center">
-              ({moment(props.movie.release_date).format("YYYY")})
+              ({moment(movie.release_date).format("YYYY")})
             </div>
-            {/* {props.list.name !== "Rated" && (
+            {/* {list.name !== "Rated" && (
               <div className="col-auto ml-lg-auto">
                 <button
                   className="btn btn-danger"
-                  onClick={() => props.handleDeleteBtn(props.movie)}
+                  onClick={() => handleDeleteBtn(movie)}
                 >
                   Delete
                 </button>
@@ -99,8 +107,8 @@ function MovieCard(props) {
             )} */}
           </div>
           <div className={clsx(styles.centerContainer, "row mb-1")}>
-            {props.movie.genre_ids ? (
-              <Genre genres={props.movie.genre_ids} />
+            {movie.genre_ids ? (
+              <Genre genres={movie.genre_ids} />
             ) : (
               <Genre genres={genres} />
             )}
@@ -114,34 +122,34 @@ function MovieCard(props) {
             >
               <div className="d-flex align-items-center mr-1">
                 <BsStarFill className="mr-1" color="#F5C518" size="17" />
-                {parseFloat(props.movie.vote_average).toFixed(1)}
+                {parseFloat(movie.vote_average).toFixed(1)}
               </div>
-              {!isAdmin && (
+              {!isAdmin && document.title === "Ratings" && (
                 <div className="d-flex align-items-center mr-1">
                   <BsStarFill className="ml-3 mr-1" color="green" size="17" />
                   {rating.data}
                 </div>
               )}
-              <StarCard movie={props.movie} />
+              <StarCard key={index} index={index} movie={movie} />
             </div>
           )}
           <div className="row mb-2">
-            <p className={styles.detail}>{props.movie.overview}</p>
+            <p className={styles.detail}>{movie.overview}</p>
           </div>
           {isReleased && (
             <div className={clsx(styles.centerContainer, "row")}>
-              Votes: {props.movie.vote_count.toLocaleString()}
+              Votes: {movie.vote_count.toLocaleString()}
             </div>
           )}
 
-          {props.called === "List" &&
-            props.list.user === props?.user_id &&
-            props.list.name !== "Rated" &&
-            props.list.name && (
+          {called === "List" &&
+            list.user === user_id &&
+            list.name !== "Rated" &&
+            list.name && (
               <div className="row no gutters">
                 <button
                   className="btn btn-danger col-auto ml-auto"
-                  onClick={() => props.handleDeleteBtn(props.movie)}
+                  onClick={() => handleDeleteBtn(movie)}
                 >
                   Delete
                 </button>

@@ -73,7 +73,7 @@ function MovieSlider({ movies, children, type }) {
     if (!movie?.poster_path) {
       return null;
     }
-    return <MovieCardSmall key={movie.id} movie={movie} type={type} />;
+    return <MovieCardSmall key={key} index={key} movie={movie} type={type} />;
   }
 
   return (

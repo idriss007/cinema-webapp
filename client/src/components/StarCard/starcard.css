@@ -1,21 +1,40 @@
-.modal-dialog {
-    justify-content: center !important;
-    margin: 0 !important;
+.starcard-modal-content {
     width: 50% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
+.starcard-dialog {
+    justify-content: center;
+    align-items: center;
+    max-width: 70% !important;
+    width: 100% !important;
+}
 
-@media (max-width: 840px) {
-    .modal-dialog {
+@media (max-width: 1250px) {
+    .starcard-modal-content {
         width: 80% !important;
     }
 }
 
-@media (max-width: 520px) {
-    .modal-dialog {
+@media (max-width: 800px) {
+    .starcard-modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .starcard-modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .starcard-dialog {
+        justify-content: center;
+        align-items: center;
+        max-width: 100% !important;
         width: 100% !important;
     }
 }

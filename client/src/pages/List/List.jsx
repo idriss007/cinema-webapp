@@ -20,6 +20,8 @@ function List({ calledType }) {
   const [list, setList] = useState();
   const { user } = useContext(AuthContext);
 
+  const isAdmin = user._id === userId;
+
   const { data: lists } = useQuery(
     ["list"],
     () => (listId ? fetchList(listId) : fetchLists(userId)),
@@ -73,7 +75,9 @@ function List({ calledType }) {
     <div className="container customContainer">
       <div className="row no-gutters mb-4">
         <div className="col-12">
-          <p className="display-4 line-height-1">{list.name}</p>
+          <p className="display-4 line-height-1">
+            {isAdmin ? `Your ${list.name}` : list.name}
+          </p>
         </div>
         <div className="col-12">
           <p className="text-muted">

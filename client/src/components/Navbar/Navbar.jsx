@@ -21,15 +21,14 @@ import styles from "./navbar.module.css";
 
 function Navbar() {
   const { loggedIn, user, logout } = useContext(AuthContext);
+  const { searchQuery, setSearchQuery } = useContext(StatesContext);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
   const searchBoxInput = useRef(null);
 
-  const { searchQuery, setSearchQuery } = useContext(StatesContext);
-
   const [movies, setMovies] = useState();
+  const [hidden, setHidden] = useState(false);
 
   const imgPath = "https://www.themoviedb.org/t/p/w154";
 
@@ -77,8 +76,20 @@ function Navbar() {
         "navbar navbar-expand-lg pl-0 pr-0 mb-4"
       )}
     >
-      <div className="container customContainer d-flex justify-content-around">
-        <div className={clsx(styles.logo, "mr-auto navbar-brand")}>
+      <div
+        className={clsx(
+          "container customContainer d-flex justify-content-around"
+          // "flex-nowrap"
+        )}
+      >
+        <div
+          className={clsx(
+            styles.logo,
+            "mr-auto navbar-brand",
+            // hidden ? "d-none d-md-block" : null
+            hidden ? styles.hideElement : styles.item
+          )}
+        >
           <Link
             reloadDocument={true}
             style={{ color: "black", fontWeight: "bold" }}
@@ -90,9 +101,11 @@ function Navbar() {
         </div>
 
         <div
+          // id="collapseSearchBar"
           className={clsx(
             styles.search,
-            "flex-lg-grow-0 flex-grow-1 ml-3 ml-lg-0"
+            hidden ? styles.showSearchBar : styles.hideSearchBar
+            // "flex-lg-grow-0 flex-grow-1 ml-3 collapse"
           )}
         >
           <SearchBox
@@ -106,7 +119,23 @@ function Navbar() {
           />
         </div>
         <button
-          className="navbar-toggler p-0 ml-3"
+          className={clsx(
+            styles.dropdownItem,
+            styles.navBtn,
+            styles.searchIconBtn,
+            "text-white ml-0 ml-md-3 mr-0 mr-md-3 p-3 d-flex justify-content-center border-0"
+          )}
+          onClick={() => setHidden(!hidden)}
+          // data-toggle="collapse"
+          // data-target="#collapseSearchBar"
+        >
+          <FaSearch />
+        </button>
+        <button
+          className={clsx(
+            "navbar-toggler p-0 ml-0",
+            hidden ? styles.hideElement : styles.item
+          )}
           type="button"
           data-toggle="collapse"
           data-target="#navbarNavAltMarkup"
@@ -118,6 +147,7 @@ function Navbar() {
             <GiHamburgerMenu color="white" size="25" />
           </div>
         </button>
+
         <div
           className={clsx(
             styles.menu,
@@ -125,6 +155,22 @@ function Navbar() {
           )}
           id="navbarNavAltMarkup"
         >
+          <div className="">
+            <Link
+              reloadDocument={true}
+              state={{ previousPath: pathname }}
+              className={clsx(
+                styles.dropdownItem,
+                styles.navBtn,
+                styles.linkUrl,
+                "dropdown-item p-3 d-flex justify-content-center"
+              )}
+              to="/movies/top-rated"
+            >
+              Top Rated
+            </Link>
+          </div>
+
           {!loggedIn && (
             <div className="navbar-nav">
               <Link
@@ -224,6 +270,19 @@ function Navbar() {
                     </Link>
                   </div>
                   {/* <div className="dropdown-divider"></div> */}
+                  <div>
+                    <Link
+                      className={clsx(
+                        styles.dropdownItem,
+                        styles.linkUrl,
+                        "dropdown-item p-3 d-flex justify-content-center"
+                      )}
+                      reloadDocument={true}
+                      to={"/account-settings"}
+                    >
+                      <p>Account Settings</p>
+                    </Link>
+                  </div>
                   <Link
                     className={clsx(
                       styles.dropdownItem,
