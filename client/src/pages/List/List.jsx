@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 
 //Local Api
 // import { RemoveFromList, fetchList, fetchLists } from "../../api";
-import { RemoveFromList, fetchList, fetchLists } from "internalApi";
+import { AddToList, RemoveFromList, fetchList, fetchLists } from "internalApi";
 
 //Components
 import MovieCard from "components/MovieCard/MovieCard";
@@ -18,8 +18,12 @@ import SyncLoader from "react-spinners/SyncLoader";
 function List({ calledType }) {
   const { listId, userId } = useParams();
   const [list, setList] = useState();
+  const [isRatingList, setIsRatingList] = useState(null);
+  const [isWatchedlist, setIsWatchedlist] = useState(null);
+  const [isWatchlist, setIsWatchlist] = useState(null);
   const { user } = useContext(AuthContext);
 
+  //Kaldır yanlış bu. watchlist ve ratings listelerinde gidince userId olmayacak çünkü
   const isAdmin = user._id === userId;
 
   const { data: lists } = useQuery(
@@ -54,21 +58,40 @@ function List({ calledType }) {
     if (calledType === "watchlist") {
       document.title = lists[0].name;
       setList(lists[0]);
+      setIsWatchlist(true);
       return;
     }
 
-    setList(lists[1]);
-    document.title = lists[1].name;
+    if (calledType === "ratings") {
+      setList(lists[1]);
+      setIsRatingList(true);
+      document.title = lists[1].name;
+      return;
+    }
+
+    setList(lists[2]);
+    setIsWatchedlist(true);
+    document.title = lists[2].name;
   }
 
-  function handleDeleteBtn(movieData) {
+  async function handleDeleteBtn(movieData) {
     setList((prevValue) => {
       const newMovies = list.movies.filter(
         (movie) => movie.movie.id !== movieData.id
       );
       return { ...prevValue, movies: newMovies };
     });
-    RemoveFromList(list._id, movieData);
+    await RemoveFromList(list._id, movieData);
+  }
+
+  async function handleAddToWatchedlist(movieData) {
+    setList((prevValue) => {
+      const newMovies = list.movies.filter(
+        (movie) => movie.movie.id !== movieData.id
+      );
+      return { ...prevValue, movies: newMovies };
+    });
+    const response = await AddToList(lists[2]._id, movieData);
   }
 
   return (
@@ -95,9 +118,13 @@ function List({ calledType }) {
             movie={movie.movie}
             list={list}
             handleDeleteBtn={handleDeleteBtn}
+            handleAddToWatchedlist={handleAddToWatchedlist}
             called="List"
-            userId={userId}
-            user={user}
+            userIdOfListOwner={list?.user}
+            user_id={user?._id}
+            isRatingList={isRatingList}
+            isWatchedlist={isWatchedlist}
+            isWatchlist={isWatchlist}
           />
         ))}
       </div>

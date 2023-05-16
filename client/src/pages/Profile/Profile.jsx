@@ -87,13 +87,13 @@ function Profile({ title }) {
     return (
       <div key={key} className="col-12 mt-1 mb-1 p-3">
         <div className="row no-gutters">
-          {list.movies.length > 0 && (
+          {list?.movies?.length > 0 && (
             <div className="col-auto mr-2">
               <img
                 className="w-100 rounded "
                 src={
                   "https://www.themoviedb.org/t/p/w92/" +
-                  list.movies[list.movies.length - 1].movie.poster_path
+                  list?.movies[list.movies.length - 1]?.movie.poster_path
                 }
                 alt=""
               />
@@ -108,8 +108,8 @@ function Profile({ title }) {
               <p className="h4 mb-0">{list.name}</p>
             </Link>
             <p className="text-muted">
-              {list.movies.length}
-              {list.movies.length > 1 ? " titles" : " title"}
+              {list?.movies?.length}
+              {list?.movies?.length > 1 ? " titles" : " title"}
             </p>
           </div>
           {isAdmin && (
@@ -151,7 +151,7 @@ function Profile({ title }) {
         key={index}
         index={index}
         list={lists[1]}
-        movie={lists[1]?.movies[lists[1].movies.length - (index + 1)].movie}
+        movie={lists[1]?.movies[lists[1]?.movies?.length - (index + 1)].movie}
         userId={user_id}
       />
     );
@@ -160,24 +160,45 @@ function Profile({ title }) {
   return (
     <div className="container customContainer">
       <div className="row no-gutters justify-content-center">
-        <div className="col-10 col-sm-6 col-md-4 col-lg-2">
-          <div className="d-flex flex-column justify-content-center align-items-center">
+        <div className="col-10 col-sm-6 col-md-4 col-lg-12 d-flex justify-content-center">
+          <div
+            className={clsx(
+              styles.avatarContainer,
+              "d-flex flex-column align-items-center"
+            )}
+          >
             {foundUser?.data?.profile_image ? (
               <img
-                className="w-75"
+                className={clsx(styles.avatar, "w-100")}
                 src={foundUser?.data?.profile_image}
                 alt="avatar"
               />
             ) : (
               <FaUserCircle size="100" />
             )}
-            {/* <FaUserCircle size="150" /> */}
             <p className="mt-2 h5 font-weight-bold">{foundUser?.data?.name}</p>
           </div>
         </div>
       </div>
 
-      {(isAdmin || lists[1].movies.length > 0) && (
+      <div className="row no-gutters justify-content-around p-3 border mb-3">
+        <div className="col-12 col-sm-4 d-flex justify-content-center">
+          {listsData?.data[1]?.movies?.length > 0
+            ? listsData?.data[1]?.movies?.length
+            : 0}
+          {listsData?.data[1]?.movies?.length > 1 ? " Ratings" : " Rating"}
+        </div>
+        <div className="col-12 col-sm-4 d-flex justify-content-center">
+          {comments.data.length ? comments.data.length : 0}
+          {comments.data.length > 1 ? " Comments" : " Comment"}
+        </div>
+        <div className="col-12 col-sm-4 d-flex justify-content-center">
+          {listsData.data.length > 0 && listsData.data.length - 3}
+          {listsData.data.length > 4 ? " Lists" : " List"}
+        </div>
+      </div>
+
+      {(isAdmin || lists[1]?.movies?.length > 0) && (
         <div className="row no-gutters border rounded p-3 mb-4">
           <div className="col-12">
             <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
@@ -191,17 +212,17 @@ function Profile({ title }) {
               Most Recently Rated
             </p>
           )} */}
-            {lists[1]?.movies.length > 0 && (
+            {lists[1]?.movies?.length > 0 && (
               <div className="row">
                 <p className="col-12 mb-2 font-weight-bold text-muted">
                   Most Recently Rated
                 </p>
-                {lists[1]?.movies.map(renderRecentlyRatedMovies)}
+                {lists[1]?.movies?.map(renderRecentlyRatedMovies)}
               </div>
             )}
 
-            {lists[1]?.movies.length > 0 ? (
-              lists[1]?.movies.length > 4 && (
+            {lists[1]?.movies?.length > 0 ? (
+              lists[1]?.movies?.length > 4 && (
                 <div className="mt-4">
                   <Link
                     style={{ color: "inherit" }}
@@ -209,7 +230,7 @@ function Profile({ title }) {
                     to={"/user/" + user_id + "/ratings"}
                   >
                     <p>
-                      See all {lists[1]?.movies.length} ratings {">>"}
+                      See all {lists[1]?.movies?.length} ratings {">>"}
                     </p>
                   </Link>
                 </div>
@@ -244,8 +265,8 @@ function Profile({ title }) {
             </div>
           </div>
 
-          {lists.length > 2 ? (
-            lists.slice(2).map((list, key) => renderLists(list, key))
+          {lists.length > 3 ? (
+            lists.slice(3).map((list, key) => renderLists(list, key))
           ) : (
             <div className="mt-2 p-3 row no-gutters">
               <p className="col-auto">Create your own movie list.</p>

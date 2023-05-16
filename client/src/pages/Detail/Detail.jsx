@@ -139,7 +139,7 @@ function Detail() {
       return (
         <div
           key={i}
-          className="col-xl-2 col-sm-4 col-xs-12 justify-content-center d-flex mt-3 flex-column"
+          className="col-xl-2 col-sm-4 col-6 justify-content-center d-flex mt-3 flex-column"
         >
           <div className={clsx(styles.castContainer)}>
             <Link
@@ -155,8 +155,8 @@ function Detail() {
               >
                 <BsImage size="40" />
               </div>
-              <div className="text-center d-flex align-items-center justify-content-center flex-grow-1 p-1">
-                <p className="">{name}</p>
+              <div className="text-center text-nowrap d-flex align-items-center justify-content-center flex-grow-1 p-1">
+                <p className="text-truncate">{name}</p>
               </div>
             </Link>
           </div>
@@ -164,25 +164,23 @@ function Detail() {
       );
     }
     return (
-      <>
-        <div
-          key={i}
-          className="col-xl-2 col-sm-4 col-xs-12 justify-content-center d-flex mt-3"
-        >
-          <div className={clsx(styles.castContainer, "d-flex")}>
-            <Link
-              className="d-flex flex-column text-decoration-none color-inherit"
-              reloadDocument={true}
-              to={"/name/" + id}
-            >
-              <img className="mw-100" src={profileImgUrl} alt={name} />
-              <div className="text-center d-flex align-items-center justify-content-center flex-grow-1 p-1">
-                <p>{name}</p>
-              </div>
-            </Link>
-          </div>
+      <div
+        key={i}
+        className="col-xl-2 col-sm-4 col-6 justify-content-center d-flex mt-3 flex-column"
+      >
+        <div className={clsx(styles.castContainer)}>
+          <Link
+            className="d-flex flex-column text-decoration-none color-inherit"
+            reloadDocument={true}
+            to={"/name/" + id}
+          >
+            <img className="mw-100 w-100" src={profileImgUrl} alt={name} />
+            <div className="text-center text-nowrap d-flex align-items-center justify-content-center flex-grow-1 p-1">
+              <p className="text-truncate">{name}</p>
+            </div>
+          </Link>
         </div>
-      </>
+      </div>
     );
   }
 

@@ -10,11 +10,15 @@
 .carousel-control-prev {
     justify-content: start;
     padding-left: 10px;
+    position: absolute;
+    left: -80px;
 }
 
 .carousel-control-next {
     justify-content: end;
     padding-right: 10px;
+    position: absolute;
+    right: -80px;
 }
 
 .carousel-control-next,
@@ -26,4 +30,59 @@
 .carousel-control-prev-icon {
     width: 30px;
     height: 30px;
+}
+
+@media (max-width: 991.2px) {
+    .carousel-control-prev {
+        left: -60px;
+    }
+
+    .carousel-control-next {
+        justify-content: end;
+        right: -60px;
+    }
+}
+
+@media (max-width: 730px) {
+    .carousel-control-prev {
+        left: -55px;
+    }
+
+    .carousel-control-next {
+        justify-content: end;
+        right: -55px;
+    }
+}
+
+@media (max-width: 650px) {
+    .carousel-control-prev {
+        left: -45px;
+    }
+
+    .carousel-control-next {
+        justify-content: end;
+        right: -45px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-control-prev {
+        left: -35px;
+    }
+
+    .carousel-control-next {
+        justify-content: end;
+        right: -35px;
+    }
+}
+
+@media (max-width: 300px) {
+    .carousel-control-prev {
+        left: -10px;
+    }
+
+    .carousel-control-next {
+        justify-content: end;
+        right: -10px;
+    }
 }

@@ -59,6 +59,14 @@ const AddToList = tryCatch(async (req, res) => {
     throw new UnAuthenticatedError("User not authenticated!");
   }
 
+  const allLists = await List.find({ user: req.payload.user_id });
+
+  //Film watchliste mi eklendi kontrolü
+  const isAddingToWatchlist = allLists[0].id.toString() === list_id;
+
+  //Film watchedliste mi eklendi kontrolü
+  const isAddingToWatchedlist = allLists[2].id.toString() === list_id;
+
   const isContain = list.movies.find(
     (movie) => movie.movie.id === movieData.id
   );
@@ -67,6 +75,27 @@ const AddToList = tryCatch(async (req, res) => {
   if (!isContain) {
     list.movies.push({ movie: movieData });
     const updatedList = await list.save();
+
+    //Film watchtedliste ekleniyorsa watchlistten çıkar
+    if (isAddingToWatchedlist) {
+      const watchlist = allLists[0];
+      const filteredlist = watchlist.movies.filter(
+        (movie) => movie.movie.id !== movieData.id
+      );
+      watchlist.movies = filteredlist;
+      await watchlist.save();
+    }
+
+    //Film watchtliste ekleniyorsa watchedlistten çıkar
+    if (isAddingToWatchlist) {
+      const watchedlist = allLists[2];
+      const filteredlist = watchedlist.movies.filter(
+        (movie) => movie.movie.id !== movieData.id
+      );
+      watchedlist.movies = filteredlist;
+      await watchedlist.save();
+    }
+
     res.send(updatedList);
   }
 });

@@ -269,6 +269,19 @@ function Navbar() {
                       <p>Your Ratings</p>
                     </Link>
                   </div>
+                  <div>
+                    <Link
+                      className={clsx(
+                        styles.dropdownItem,
+                        styles.linkUrl,
+                        "dropdown-item p-3 d-flex justify-content-center"
+                      )}
+                      reloadDocument={true}
+                      to={"/user/" + user._id + "/watchedlist"}
+                    >
+                      <p>Watchedlist</p>
+                    </Link>
+                  </div>
                   {/* <div className="dropdown-divider"></div> */}
                   <div>
                     <Link

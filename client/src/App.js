@@ -82,6 +82,10 @@ function App() {
                   path="/user/:userId/ratings"
                   element={<List calledType="ratings" />}
                 />
+                <Route
+                  path="/user/:userId/watchedlist"
+                  element={<List calledType="watchedlist" />}
+                />
                 <Route path="/account-settings" element={<AccountSettings />} />
               </Route>
             </Routes>

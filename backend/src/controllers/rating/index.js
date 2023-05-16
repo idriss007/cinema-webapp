@@ -1,5 +1,6 @@
 //Models
 const Rating = require("../../models/rating");
+const List = require("../../models/list");
 
 //Utils
 const { tryCatch } = require("../../utils/tryCatch");
@@ -24,6 +25,19 @@ const AddRating = tryCatch(async (req, res) => {
   const foundRating = await ratingList.rating.find(
     (pair) => pair.movie_id === JSON.stringify(movie_id)
   );
+
+  //watchedlisti al ve puanlanan film watchedlistte yer alıyorsa watchedlistten sil.
+  const watchedlist = (await List.find({ user: req.payload.user_id }))?.[2];
+  const isContain = watchedlist.movies.find(
+    (movie) => movie.movie.id === movie_id
+  );
+  if (isContain) {
+    const filteredlist = watchedlist.movies.filter(
+      (movie) => movie.movie.id !== movie_id
+    );
+    watchedlist.movies = filteredlist;
+    await watchedlist.save();
+  }
 
   if (!foundRating) {
     // const newRating = await rating.create({ user: user_id, list: list_id, movie_id, ratingValue });

@@ -65,7 +65,7 @@ function NewList({ lists, movie }) {
 
               {lists &&
                 lists
-                  .slice(2)
+                  .slice(3)
                   .map((list, index) => (
                     <ListCard
                       key={index}

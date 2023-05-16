@@ -50,11 +50,14 @@ function Signup({ title }) {
           name: "Ratings",
         });
 
+        const watchedList = await postList({ name: "Watchedlist" });
+
         const ratingList = await createRatingList({
           user_id: registerResponse.user._id,
         });
 
         console.log(watchlist);
+        console.log(watchedList);
         console.log(ratedMoviesList);
         console.log(ratingList);
       } catch (err) {

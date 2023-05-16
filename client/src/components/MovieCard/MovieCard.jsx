@@ -18,17 +18,20 @@ import { GetRating } from "internalApi";
 function MovieCard({
   movie,
   user,
-  userId,
+  userIdOfListOwner,
   list,
   index,
   user_id,
   called,
   handleDeleteBtn,
+  isRatingList,
+  handleAddToWatchedlist,
+  isWatchlist,
 }) {
   const url = "https://image.tmdb.org/t/p/w185/" + movie.poster_path;
   let isPosterExist = true;
 
-  const isAdmin = user?._id === userId;
+  const isAdmin = user_id === userIdOfListOwner;
 
   if (!movie.poster_path) {
     isPosterExist = false;
@@ -42,9 +45,9 @@ function MovieCard({
 
   !movie.genre_ids && movie.genres.map((genre) => genres.push(genre.id));
 
-  const rating = useQuery(
+  const listOwnersRatings = useQuery(
     ["rating", movie.id],
-    () => GetRating({ user_id: userId, movie_id: movie.id }),
+    () => GetRating({ user_id: userIdOfListOwner, movie_id: movie.id }),
     { enabled: !isAdmin ? true : false }
   );
 
@@ -124,10 +127,10 @@ function MovieCard({
                 <BsStarFill className="mr-1" color="#F5C518" size="17" />
                 {parseFloat(movie.vote_average).toFixed(1)}
               </div>
-              {!isAdmin && document.title === "Ratings" && (
+              {!isAdmin && isRatingList && (
                 <div className="d-flex align-items-center mr-1">
                   <BsStarFill className="ml-3 mr-1" color="green" size="17" />
-                  {rating.data}
+                  {listOwnersRatings.data}
                 </div>
               )}
               <StarCard key={index} index={index} movie={movie} />
@@ -142,19 +145,31 @@ function MovieCard({
             </div>
           )}
 
-          {called === "List" &&
-            list.user === user_id &&
-            list.name !== "Rated" &&
-            list.name && (
-              <div className="row no gutters">
-                <button
-                  className="btn btn-danger col-auto ml-auto"
-                  onClick={() => handleDeleteBtn(movie)}
-                >
-                  Delete
-                </button>
-              </div>
-            )}
+          {isAdmin && (
+            <div className="row no-gutters justify-content-end">
+              {isWatchlist && isReleased && (
+                <div className="col-auto mr-2">
+                  <button
+                    className="btn btn-success"
+                    onClick={() => handleAddToWatchedlist(movie)}
+                  >
+                    Watched
+                  </button>
+                </div>
+              )}
+
+              {!isRatingList && (
+                <div className="col-auto">
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDeleteBtn(movie)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
