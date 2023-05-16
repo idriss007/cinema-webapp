@@ -61,8 +61,6 @@ const ChangeEmail = tryCatch(async (req, res) => {
     throw error;
   }
 
-  console.log(value.new_email, value.password);
-
   const foundUser = await User.findById(user_id);
 
   if (req.payload.user_id !== foundUser._id.toString()) {
@@ -77,7 +75,6 @@ const ChangeEmail = tryCatch(async (req, res) => {
 
   const isEmailInUse = await User.find({ email: value.new_email });
   if (isEmailInUse.length > 0) {
-    console.log(isEmailInUse);
     throw new BadRequestError("Email already using by someone else.");
   }
 
@@ -94,11 +91,7 @@ const ChangePassword = tryCatch(async (req, res) => {
     throw error;
   }
 
-  console.log(value.current_password, value.new_password);
-
   const foundUser = await User.findById(user_id);
-
-  console.log(foundUser);
 
   if (!foundUser) {
     throw new AppError("No user found!", 404);
@@ -122,4 +115,25 @@ const ChangePassword = tryCatch(async (req, res) => {
   res.send(updatedUser);
 });
 
-module.exports = { GetUser, ChangeName, ChangeEmail, ChangePassword };
+const ChangeProfileImage = tryCatch(async (req, res) => {
+  const { profile_image } = req.body;
+  const { user_id } = req.payload;
+
+  const foundUser = await User.findById(user_id);
+
+  if (req.payload.user_id !== foundUser._id.toString()) {
+    throw new UnAuthenticatedError("User not authenticated!");
+  }
+
+  foundUser.profile_image = profile_image;
+  const updatedUser = await foundUser.save();
+  res.send(updatedUser);
+});
+
+module.exports = {
+  GetUser,
+  ChangeName,
+  ChangeEmail,
+  ChangePassword,
+  ChangeProfileImage,
+};

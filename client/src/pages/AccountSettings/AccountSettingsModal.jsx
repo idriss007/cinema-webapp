@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import { useFormik } from "formik";
+import Avatar from "react-avatar-edit";
+
+//Local Api
+import { ChangeEmail, ChangeName, ChangePassword } from "internalApi";
 
 //React Bootstrap
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { ChangeEmail, ChangeName, ChangePassword } from "internalApi";
+
+import styles from "./accountsettingsmodal.module.css";
 
 function AccountSettingsModal({
   handleClose,
@@ -13,6 +18,11 @@ function AccountSettingsModal({
   show,
   setShow,
   callingOptions,
+  src,
+  setSrc,
+  onCrop,
+  onClose,
+  handleSubmitProfileImage,
 }) {
   const formikPassword = useFormik({
     initialValues: {
@@ -24,6 +34,7 @@ function AccountSettingsModal({
       try {
         await ChangePassword(values.currentPassword, values.newPassword);
         handleClose();
+        formikPassword.resetForm();
       } catch (err) {
         bag.setErrors({ general: err.response.data });
       }
@@ -40,14 +51,14 @@ function AccountSettingsModal({
         setShow(false);
         formikPassword.resetForm();
       }}
-      dialogClassName="setting-modal-dialog"
+      dialogClassName={styles.modalDialog}
       contentClassName="setting-modal-content"
     >
       <Modal.Header className="d-flex justify-content-center align-items-center">
         <Modal.Title>{callingOptions?.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="row no-gutters">
+        <div className="row no-gutters justify-content-center">
           {callingOptions?.calledFor === "password" && (
             <form onSubmit={formikPassword.handleSubmit}>
               <div className="form-group">
@@ -125,6 +136,7 @@ function AccountSettingsModal({
       try {
         await ChangeEmail(values.newEmail, values.currentPassword);
         handleClose();
+        formikEmail.resetForm();
       } catch (err) {
         bag.setErrors({ general: err.response.data });
       }
@@ -141,14 +153,14 @@ function AccountSettingsModal({
         setShow(false);
         formikEmail.resetForm();
       }}
-      dialogClassName="setting-modal-dialog"
+      dialogClassName={styles.modalDialog}
       contentClassName="setting-modal-content"
     >
       <Modal.Header className="d-flex justify-content-center align-items-center">
         <Modal.Title>{callingOptions?.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="row no-gutters">
+        <div className="row no-gutters justify-content-center">
           <form onSubmit={formikEmail.handleSubmit}>
             <div className="form-group">
               <div className="col-12">
@@ -224,6 +236,7 @@ function AccountSettingsModal({
       try {
         await ChangeName(values.newName, values.currentPassword);
         handleClose();
+        formikName.resetForm();
       } catch (err) {
         bag.setErrors({ general: err.response.data });
       }
@@ -240,14 +253,14 @@ function AccountSettingsModal({
         setShow(false);
         formikName.resetForm();
       }}
-      dialogClassName="setting-modal-dialog"
+      dialogClassName={styles.modalDialog}
       contentClassName="setting-modal-content"
     >
       <Modal.Header className="d-flex justify-content-center align-items-center">
         <Modal.Title>{callingOptions?.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="row no-gutters">
+        <div className="row no-gutters justify-content-center">
           <form onSubmit={formikName.handleSubmit}>
             <div className="form-group">
               <div className="col-12">
@@ -313,11 +326,68 @@ function AccountSettingsModal({
     </Modal>
   );
 
+  const changeProfileImage = (
+    <Modal
+      key="2"
+      className="d-flex justify-content-center"
+      centered
+      show={show}
+      dialogClassName={styles.modalDialog}
+      onHide={() => {
+        setShow(false);
+        // formikName.resetForm();
+      }}
+      contentClassName="setting-modal-content"
+    >
+      <Modal.Header className="d-flex justify-content-center align-items-center">
+        <Modal.Title>{callingOptions?.title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="row no-gutters">
+          <div className="col-12">
+            {/* <input type="file" /> */}
+            <Avatar
+              width="400"
+              height="300"
+              src={src}
+              onClose={onClose}
+              onCrop={onCrop}
+            />
+          </div>
+        </div>
+      </Modal.Body>
+      <Modal.Footer className="d-flex justify-content-center">
+        <Button
+          type="reset"
+          onClick={() => {
+            handleClose();
+            // formikName.resetForm();
+          }}
+        >
+          Close
+        </Button>
+        <Button
+          type="submit"
+          // onClick={() => formikName.handleSubmit()}
+          className="btn btn-dark"
+          onClick={() => {
+            handleSubmitProfileImage();
+            handleClose();
+          }}
+        >
+          Save
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+
   return callingOptions?.calledFor === "password"
     ? changePassword
     : callingOptions?.calledFor === "email"
     ? changeEmail
-    : changeName;
+    : callingOptions?.calledFor === "name"
+    ? changeName
+    : changeProfileImage;
   // <Modal
   //   className="d-flex justify-content-center"
   //   centered

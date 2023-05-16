@@ -226,12 +226,18 @@ export async function ChangeEmail(new_email, password) {
 export async function ChangePassword(current_password, new_password) {
   const url = "users/change-password";
 
-  console.log(current_password, new_password);
-
   const { data } = await internalApiAxios.post(url, {
     current_password,
     new_password,
   });
+
+  return data;
+}
+
+export async function ChangeProfileImage(profile_image) {
+  const url = "users/uploads";
+
+  const { data } = await internalApiAxios.post(url, { profile_image });
 
   return data;
 }

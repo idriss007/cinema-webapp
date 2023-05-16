@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
           setLoggedIn(true);
           setUser(me);
 
-          console.log("me " + JSON.stringify(me));
+          // console.log("me " + JSON.stringify(me));
         }
         setLoading(false);
       } catch (err) {

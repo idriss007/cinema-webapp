@@ -4,15 +4,35 @@ import React, { useContext, useState } from "react";
 import AuthContext from "context/AuthContext";
 import AccountSettingsModal from "./AccountSettingsModal";
 
+//Validation Schemas
 import passwordValidations from "./passwordValidations";
 import emailValidations from "./emailValidations";
 import nameValidations from "./nameValidations";
 
+//React Icons
+import { FaUserCircle } from "react-icons/fa";
+import { ChangeProfileImage } from "internalApi";
+
 function AccountSettings() {
   const { user } = useContext(AuthContext);
-  const { _id, name, email } = user;
+  const { _id, name, email, profile_image } = user;
 
   const [callingOptions, setCallingOptions] = useState();
+  const [src, setSrc] = useState();
+  const [preview, setPreview] = useState();
+
+  function onClose() {
+    setPreview(null);
+  }
+
+  function onCrop(view) {
+    setPreview(view);
+  }
+
+  async function handleSubmitProfileImage() {
+    await ChangeProfileImage(preview);
+    setSrc(preview);
+  }
 
   const [show, setShow] = useState(false);
 
@@ -30,59 +50,70 @@ function AccountSettings() {
   return (
     <>
       <div className="container customContainer">
-        <div className="row no-gutters">
-          <div className="col-12 h1 line-height-1">Account Settings</div>
-          <div className="col-12">
-            <div className="row no-gutters p-3 border rounded">
-              <div className="col-12 p-2">
-                {/* <input type="file" class="custom-file-input" id="customFile" />
-              <label class="custom-file-label" for="customFile">
-                Choose file
-              </label> */}
-                <input className="" type="file" />
-              </div>
+        <div className="row no-gutters h1 line-height-1">Account Settings</div>
+        <div className="p-3 border rounded">
+          <div className="row no-gutters justify-content-center">
+            <div className="col-10 col-sm-6 col-md-4 col-lg-2 d-flex justify-content-center flex-column align-items-center">
+              {profile_image ? (
+                <img className="w-75" src={profile_image} alt="avatar" />
+              ) : (
+                <FaUserCircle size="100" />
+              )}
+              <button
+                className="btn btn-outline-dark p-2 pl-3 pr-3 mt-3"
+                onClick={() => handleShow("Upload", "profile_image")}
+              >
+                Upload
+              </button>
+              {/* <input type="file" /> */}
+            </div>
+          </div>
 
-              <div className="col-12 d-flex justify-content-between align-items-center p-2">
-                <div className="">
-                  <span className="font-weight-bold">Name: </span>
-                  {name}
-                </div>
-                <button
-                  className="btn btn-outline-dark p-2 pl-3 pr-3"
-                  onClick={() =>
-                    handleShow("Edit Name", "name", nameValidations)
-                  }
-                >
-                  Edit
-                </button>
+          <div className="row no-gutters">
+            <div className="col-12 d-flex justify-content-between align-items-center p-2">
+              <div className="">
+                <span className="font-weight-bold">Name: </span>
+                {name}
               </div>
-              <div className="col-12 d-flex justify-content-between align-items-center p-2">
-                <div className="">
-                  <span className="font-weight-bold">Email: </span>
-                  {email}
-                </div>
-                <button
-                  className="btn btn-outline-dark p-2 pl-3 pr-3"
-                  onClick={() =>
-                    handleShow("Edit Email", "email", emailValidations)
-                  }
-                >
-                  Edit
-                </button>
+              <button
+                className="btn btn-outline-dark p-2 pl-3 pr-3"
+                onClick={() => handleShow("Edit Name", "name", nameValidations)}
+              >
+                Edit
+              </button>
+            </div>
+          </div>
+
+          <div className="row no-gutters">
+            <div className="col-12 d-flex justify-content-between align-items-center p-2">
+              <div className="">
+                <span className="font-weight-bold">Email: </span>
+                {email}
               </div>
-              <div className="col-12 d-flex justify-content-between align-items-center p-2">
-                <div className="">
-                  <span className="font-weight-bold">Password: </span>*****
-                </div>
-                <button
-                  className="btn btn-outline-dark p-2 pl-3 pr-3"
-                  onClick={() =>
-                    handleShow("Edit Password", "password", passwordValidations)
-                  }
-                >
-                  Edit
-                </button>
+              <button
+                className="btn btn-outline-dark p-2 pl-3 pr-3"
+                onClick={() =>
+                  handleShow("Edit Email", "email", emailValidations)
+                }
+              >
+                Edit
+              </button>
+            </div>
+          </div>
+
+          <div className="row no-gutters">
+            <div className="col-12 d-flex justify-content-between align-items-center p-2">
+              <div className="">
+                <span className="font-weight-bold">Password: </span>*****
               </div>
+              <button
+                className="btn btn-outline-dark p-2 pl-3 pr-3"
+                onClick={() =>
+                  handleShow("Edit Password", "password", passwordValidations)
+                }
+              >
+                Edit
+              </button>
             </div>
           </div>
         </div>
@@ -93,6 +124,11 @@ function AccountSettings() {
         show={show}
         setShow={setShow}
         callingOptions={callingOptions}
+        src={src}
+        setSrc={setSrc}
+        onClose={onClose}
+        onCrop={onCrop}
+        handleSubmitProfileImage={handleSubmitProfileImage}
       />
     </>
   );

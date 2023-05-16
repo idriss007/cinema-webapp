@@ -159,10 +159,19 @@ function Profile({ title }) {
 
   return (
     <div className="container customContainer">
-      <div className="row no-gutters">
-        <div className="col-12">
+      <div className="row no-gutters justify-content-center">
+        <div className="col-10 col-sm-6 col-md-4 col-lg-2">
           <div className="d-flex flex-column justify-content-center align-items-center">
-            <FaUserCircle size="100" />
+            {foundUser?.data?.profile_image ? (
+              <img
+                className="w-75"
+                src={foundUser?.data?.profile_image}
+                alt="avatar"
+              />
+            ) : (
+              <FaUserCircle size="100" />
+            )}
+            {/* <FaUserCircle size="150" /> */}
             <p className="mt-2 h5 font-weight-bold">{foundUser?.data?.name}</p>
           </div>
         </div>
