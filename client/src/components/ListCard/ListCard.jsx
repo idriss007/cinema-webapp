@@ -43,7 +43,7 @@ function ListCard({
           });
         }}
       >
-        {isInList.includes(index) ? "✓ " + list.name : "+ " + list.name}
+        {isInList.includes(index) ? `✓ ${list.name}` : `+ ${list.name}`}
       </button>
     </div>
   );

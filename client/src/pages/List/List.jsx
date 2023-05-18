@@ -23,8 +23,9 @@ function List({ calledType }) {
   const [isWatchlist, setIsWatchlist] = useState(null);
   const { user } = useContext(AuthContext);
 
-  //Kaldır yanlış bu. watchlist ve ratings listelerinde gidince userId olmayacak çünkü
-  const isAdmin = user._id === userId;
+  //watchlist, ratings ve watchedlist gibi default listelere gidilirken userId değişkeni olacak.
+  //Fakat eğer kullanıcı girişi yapılmamışsa user._id değişkeni olmayacak.
+  const isAdmin = user?._id === userId;
 
   const { data: lists } = useQuery(
     ["list"],
@@ -99,14 +100,18 @@ function List({ calledType }) {
       <div className="row no-gutters mb-4">
         <div className="col-12">
           <p className="display-4 line-height-1">
-            {isAdmin ? `Your ${list.name}` : list.name}
+            {
+              //isAdmin sadece eğer kullanıcı kendi ratings, watchlislist ve watchedlist e giderken ve kullanıcı
+              //giriş yapmışsa true olur.
+              isAdmin && userId ? `Your ${list.name}` : list.name
+            }
           </p>
         </div>
         <div className="col-12">
           <p className="text-muted">
             {list.movies.length > 1
-              ? list.movies.length + " titles"
-              : list.movies.length + " title"}
+              ? `${list.movies.length} titles`
+              : `${list.movies.length} title`}
           </p>
         </div>
       </div>

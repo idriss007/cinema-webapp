@@ -65,7 +65,6 @@ function AccountSettings() {
               >
                 Upload
               </button>
-              {/* <input type="file" /> */}
             </div>
           </div>
 

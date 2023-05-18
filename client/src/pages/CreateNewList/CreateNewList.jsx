@@ -26,7 +26,7 @@ function CreateNewList() {
         const { newList } = await postList({
           name: values.listName,
         });
-        navigate("/list/" + newList._id);
+        navigate(`/list/${newList._id}`);
       } catch (error) {
         bag.setErrors({ general: error.response.data });
       }

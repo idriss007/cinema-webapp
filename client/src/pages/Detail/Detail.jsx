@@ -15,7 +15,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 
 //Api
-import { getCredits, getDetail, getImages } from "api";
+import { getDetail } from "api";
 
 //Import components
 import Genre from "components/Genre";
@@ -32,31 +32,39 @@ import Comments from "pages/Comments/Comments";
 import AuthContext from "context/AuthContext";
 import ListContext from "context/ListContext";
 
+//Config File
+import configData from "config.json";
+
 //Css file
 import styles from "./detail.module.css";
+import FullPageImageModal from "components/FullPageImageModal/FullPageImageModal";
 
 function Detail() {
+  const { id } = useParams();
+
   const { loggedIn } = useContext(AuthContext);
   const { lists, handleAddWatchlistClicked } = useContext(ListContext);
 
-  const imageURL = "https://www.themoviedb.org/t/p/w780";
+  const [show, setShow] = useState(false);
+  const [showKey, setShowKey] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
-  const { id } = useParams();
+  function handleClose() {
+    setShow(false);
+  }
+  function handleShow(key, url) {
+    setShowKey(key);
+    setImageUrl(url);
+    setShow(true);
+  }
 
-  const [credits, setCredits] = useState(null);
   const [isInList, setIsInList] = useState();
   const [isInListLoading, setIsInListLoading] = useState(true);
 
+  const imageURL = configData.moviePosterw780;
+
   useEffect(() => {
     (async () => {
-      try {
-        //Film kadrosunu api ile çekme işlemi.
-        const credits = await getCredits(id);
-        setCredits(credits);
-      } catch (err) {
-        console.log(err.message);
-      }
-
       if (lists) {
         const isContainInList = lists[0].movies.find(
           (movieData) => movieData?.movie?.id === parseInt(id)
@@ -74,9 +82,13 @@ function Detail() {
   }, [id, isInListLoading, lists, loggedIn]);
 
   //Get movie information
-  const { data: details } = useQuery(
+  const {
+    isLoading,
+    isError,
+    data: details,
+  } = useQuery(
     ["movieDetail", parseInt(id)],
-    () => getDetail(id),
+    () => getDetail(id, "images,credits"),
     {
       onSuccess: (details) => {
         document.title = details.title;
@@ -84,14 +96,7 @@ function Detail() {
     }
   );
 
-  // Get Movie images
-  const { data: images } = useQuery({
-    enabled: details?.original_title !== null,
-    queryKey: ["images", parseInt(id)],
-    queryFn: () => getImages(id),
-  });
-
-  if (!details || !images) {
+  if (isLoading) {
     return (
       <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
         <SyncLoader size={35} />
@@ -100,21 +105,18 @@ function Detail() {
   }
 
   //Filmin fotoğraf url adreslerini diziye aktar.
-  const allImages = images?.images?.backdrops?.map((item) => item.file_path);
+  const allImages = details.images.backdrops.map((item) => item.file_path);
   //Filmin türlerini genreList isimli diziye aktar.
   const genreList = details.genres.map((genre) => genre.id);
-  const imdbUrl = "https://www.imdb.com/title/" + details.imdb_id;
+  const imdbUrl = `${configData.imdbTitleUrl}${details.imdb_id}`;
 
-  const directors = credits?.crew?.filter(
+  const directors = details.credits.crew.filter(
     (person) => person.job === "Director"
   );
-  const writers = credits?.crew?.filter((person) => {
+  const writers = details.credits.crew.filter((person) => {
     return person.job === "Screenplay" || person.job === "Writer";
   });
-  // const actingCrew = credits?.cast
-  //   ?.filter((people) => people.profile_path !== null)
-  //   .slice(0, 6);
-  const actingCrew = credits?.cast.slice(0, 6);
+  const actingCrew = details.credits.cast.slice(0, 6);
 
   function renderCrew(crew, i, length) {
     const { name, id } = crew;
@@ -134,7 +136,7 @@ function Detail() {
 
   function renderActingCrew(person, i) {
     const { profile_path, id, name } = person;
-    const profileImgUrl = `https://image.tmdb.org/t/p/w185${profile_path}`;
+    const profileImgUrl = `${configData.profilePosterUrlw342}${profile_path}`;
     if (!profile_path) {
       return (
         <div
@@ -247,14 +249,17 @@ function Detail() {
           <div className={clsx(styles.middleContainer, "mb-4")}>
             {details?.poster_path && (
               <img
+                onClick={() => handleShow("moviePoster", details.poster_path)}
                 className={clsx(styles.poster)}
-                src={imageURL + details?.poster_path}
+                src={`${imageURL}${details?.poster_path}`}
                 alt="movie poster"
               />
             )}
             {allImages.length > 0 && (
               <div className={styles.carouselContainer}>
-                {images && <Slider allImages={allImages} />}
+                {details.images && (
+                  <Slider handleShow={handleShow} allImages={allImages} />
+                )}
               </div>
             )}
           </div>
@@ -335,6 +340,14 @@ function Detail() {
           <Comments movie_id={details.id} />
         </Tab>
       </Tabs>
+
+      <FullPageImageModal
+        show={show}
+        setShow={setShow}
+        handleClose={handleClose}
+        showKey={showKey}
+        imageUrl={imageUrl}
+      />
     </div>
   );
 }

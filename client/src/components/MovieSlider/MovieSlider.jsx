@@ -4,6 +4,7 @@ import clsx from "clsx";
 
 //Components
 import MovieCardSmall from "components/MovieCardSmall/MovieCardSmall";
+import ImageNotFound from "components/ImageNotFound/ImageNotFound";
 
 //Stylesheets
 import styles from "./movieslider.module.css";
@@ -70,9 +71,6 @@ function MovieSlider({ movies, children, type }) {
   }
 
   function renderMovies(movie, key) {
-    if (!movie?.poster_path) {
-      return null;
-    }
     return <MovieCardSmall key={key} index={key} movie={movie} type={type} />;
   }
 

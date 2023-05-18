@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 
+//Config File
+import configData from "config.json";
+
 //Stylesheet
 import styles from "./slider.module.css";
 
-function Slider({ allImages }) {
+function Slider({ allImages, handleShow }) {
   const [currentIndex, setCurrentIndex] = useState(allImages[0]);
 
   function goToPrevious() {
@@ -38,9 +41,11 @@ function Slider({ allImages }) {
         {allImages.map((image, key) => {
           return (
             <img
+              onClick={() => handleShow("backdrop", currentIndex)}
               key={key}
               className={styles.slider}
-              src={"https://www.themoviedb.org/t/p/w1280" + currentIndex}
+              src={`${configData.backdropImageUrlw1280}${currentIndex}`}
+              alt=""
             ></img>
           );
         })}

@@ -5,6 +5,7 @@ const UnAuthenticatedError = require("../../errors/UnAuthenticatedError");
 
 //Models
 const List = require("../../models/list");
+const Rating = require("../../models/rating");
 
 //Utils
 const { tryCatch } = require("../../utils/tryCatch");
@@ -84,6 +85,15 @@ const AddToList = tryCatch(async (req, res) => {
       );
       watchlist.movies = filteredlist;
       await watchlist.save();
+
+      const ratingList = await Rating.findOne({ user_id: req.payload.user_id });
+
+      const filteredList = ratingList.rating.filter(
+        (pair) => pair.movie_id !== JSON.stringify(movieData.id)
+      );
+
+      ratingList.rating = filteredList;
+      await ratingList.save();
     }
 
     //Film watchtliste ekleniyorsa watchedlistten çıkar

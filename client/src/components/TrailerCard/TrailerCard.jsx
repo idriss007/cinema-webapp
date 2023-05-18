@@ -5,6 +5,9 @@ import clsx from "clsx";
 //External Api
 import { fetchTrailer } from "api";
 
+//Config File
+import configData from "config.json";
+
 //React Icons
 import { IoPlayCircleOutline } from "react-icons/io5";
 
@@ -34,7 +37,7 @@ function TrailerCard({ movie, handleTrailer, handleShow }) {
       }}
     >
       <img
-        src={"https://image.tmdb.org/t/p/w1280" + movie.backdrop_path}
+        src={`${configData.backdropImageUrlw1280}${movie.backdrop_path}`}
         className={clsx(styles.trailerImg, "d-block w-100 rounded")}
         alt="..."
       />

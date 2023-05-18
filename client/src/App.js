@@ -24,6 +24,7 @@ import { StatesProvider } from "./context/StatesContext";
 import Navbar from "./components/Navbar/Navbar";
 import TopRatedMovies from "pages/TopRatedMovies/TopRatedMovies";
 import AccountSettings from "pages/AccountSettings/AccountSettings";
+import PageNotFound from "components/PageNotFound/PageNotFound";
 
 function App() {
   return (
@@ -63,6 +64,15 @@ function App() {
                 <Route path=":pageId" element={<TopRatedMovies />} />
               </Route>
 
+              <Route path="/list" element={<List />}>
+                <Route path=":listId" element={<List />} />
+              </Route>
+
+              <Route
+                path="/user/:userId/ratings"
+                element={<List calledType="ratings" />}
+              />
+
               <Route element={<ProtectedRoute2 />}>
                 <Route path="/signup" element={<Signup title="Sign Up" />} />
                 <Route path="/login" element={<Signin title="Sign In" />} />
@@ -71,23 +81,20 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 {/* <Route path="/profile" element={<Profile title="Profile" />} /> */}
                 <Route path="/list/create" element={<CreateNewList />} />
-                <Route path="/list" element={<List />}>
-                  <Route path=":listId" element={<List />} />
-                </Route>
+
                 <Route
                   path="/user/:userId/watchlist"
                   element={<List calledType="watchlist" />}
                 />
-                <Route
-                  path="/user/:userId/ratings"
-                  element={<List calledType="ratings" />}
-                />
+
                 <Route
                   path="/user/:userId/watchedlist"
                   element={<List calledType="watchedlist" />}
                 />
                 <Route path="/account-settings" element={<AccountSettings />} />
               </Route>
+
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
           </ListProvider>
         </AuthProvider>

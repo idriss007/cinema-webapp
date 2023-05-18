@@ -16,6 +16,9 @@ import styles from "./profile.module.css";
 //Components
 import RecentlyRatedMovieCard from "components/RecentlyRatedMovieCard/RecentlyRatedMovieCard";
 
+//Config File
+import configData from "config.json";
+
 //React Icons
 import { FaUserCircle } from "react-icons/fa";
 import { TbError404 } from "react-icons/tb";
@@ -23,6 +26,7 @@ import { TbError404 } from "react-icons/tb";
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
 import UserCommentsSection from "components/UserCommentsSection/UserCommentsSection";
+import ImageNotFound from "components/ImageNotFound/ImageNotFound";
 
 function Profile({ title }) {
   const [lists, setLists] = useState();
@@ -30,14 +34,6 @@ function Profile({ title }) {
   const { user_id } = useParams();
 
   const isAdmin = user?._id === user_id;
-
-  // useEffect(() => {
-  //   document.title = title;
-  //   (async () => {
-  //     const data = await fetchLists(user_id);
-  //     setLists(data);
-  //   })();
-  // }, []);
 
   const listsData = useQuery(["lists", user_id], () => fetchLists(user_id), {
     onSuccess: (listsData) => setLists(listsData),
@@ -65,7 +61,7 @@ function Profile({ title }) {
     retry: false,
   });
 
-  if (listsData.isLoading || comments.isLoading || foundUser?.isLoading) {
+  if (listsData.isLoading || comments.isLoading || foundUser.isLoading) {
     return (
       <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
         <SyncLoader size={35} />
@@ -89,21 +85,24 @@ function Profile({ title }) {
         <div className="row no-gutters">
           {list?.movies?.length > 0 && (
             <div className="col-auto mr-2">
-              <img
-                className="w-100 rounded "
-                src={
-                  "https://www.themoviedb.org/t/p/w92/" +
-                  list?.movies[list.movies.length - 1]?.movie.poster_path
-                }
-                alt=""
-              />
+              {list?.movies[list.movies.length - 1]?.movie.poster_path ? (
+                <img
+                  className="w-100 rounded "
+                  src={`${configData.moviePosterwUrl92}${
+                    list?.movies[list.movies.length - 1]?.movie.poster_path
+                  }`}
+                  alt=""
+                />
+              ) : (
+                <ImageNotFound containerWidth="92px" containerHeight="138px" />
+              )}
             </div>
           )}
           <div className="col-auto">
             <Link
               style={{ color: "inherit" }}
               reloadDocument={true}
-              to={"/list/" + list._id}
+              to={`/list/${list._id}`}
             >
               <p className="h4 mb-0">{list.name}</p>
             </Link>
@@ -189,16 +188,16 @@ function Profile({ title }) {
           {listsData?.data[1]?.movies?.length > 1 ? " Ratings" : " Rating"}
         </div>
         <div className="col-12 col-sm-4 d-flex justify-content-center">
-          {comments.data.length ? comments.data.length : 0}
-          {comments.data.length > 1 ? " Comments" : " Comment"}
+          {comments?.data.length ? comments?.data.length : 0}
+          {comments?.data.length > 1 ? " Comments" : " Comment"}
         </div>
         <div className="col-12 col-sm-4 d-flex justify-content-center">
-          {listsData.data.length > 0 && listsData.data.length - 3}
-          {listsData.data.length > 4 ? " Lists" : " List"}
+          {listsData?.data.length > 0 && listsData?.data.length - 3}
+          {listsData?.data.length > 4 ? " Lists" : " List"}
         </div>
       </div>
 
-      {(isAdmin || lists[1]?.movies?.length > 0) && (
+      {lists && (isAdmin || lists[1]?.movies?.length > 0) && (
         <div className="row no-gutters border rounded p-3 mb-4">
           <div className="col-12">
             <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
@@ -207,11 +206,6 @@ function Profile({ title }) {
           </div>
 
           <div className={"col-12 mt-1 mb-1 p-3"}>
-            {/* {lists[1]?.movies.length > 0 && (
-            <p className="mb-2 font-weight-bold text-muted">
-              Most Recently Rated
-            </p>
-          )} */}
             {lists[1]?.movies?.length > 0 && (
               <div className="row">
                 <p className="col-12 mb-2 font-weight-bold text-muted">
@@ -242,7 +236,7 @@ function Profile({ title }) {
         </div>
       )}
 
-      {(isAdmin || lists.length > 2) && (
+      {(isAdmin || lists?.length > 3) && (
         <div className="row no-gutters border rounded p-3">
           <div className="col-12">
             <div className="row no-gutters align-items-center">
@@ -265,7 +259,7 @@ function Profile({ title }) {
             </div>
           </div>
 
-          {lists.length > 3 ? (
+          {lists?.length > 3 ? (
             lists.slice(3).map((list, key) => renderLists(list, key))
           ) : (
             <div className="mt-2 p-3 row no-gutters">
@@ -283,7 +277,7 @@ function Profile({ title }) {
         </div>
       )}
 
-      {comments?.data?.length > 0 && (
+      {(isAdmin || comments?.data?.length > 0) && (
         <div className="row no-gutters">
           <UserCommentsSection isAdmin={isAdmin} comments={comments} />
         </div>

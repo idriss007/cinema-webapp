@@ -8,6 +8,7 @@ import { fetchMovies } from "api";
 //Components
 import PaginationCard from "components/PaginationCard/PaginationCard";
 import MovieCard from "components/MovieCard/MovieCard";
+import PageNotFound from "components/PageNotFound/PageNotFound";
 
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
@@ -30,6 +31,10 @@ function Movies() {
 
   function renderMovies(item, key) {
     return <MovieCard key={key} index={key} movie={item} />;
+  }
+
+  if (pageId > movies?.data.total_pages || !query) {
+    return <PageNotFound />;
   }
 
   return (

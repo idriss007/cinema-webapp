@@ -146,7 +146,6 @@ function Comment({
                   />
                 </button>
               )}
-              {/* {canEdit && (<div className="btn btn-warning" onClick={handleUpdate}>Edit</div>)} */}
             </div>
           )}
 

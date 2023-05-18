@@ -30,15 +30,12 @@ function Navbar() {
   const [movies, setMovies] = useState();
   const [hidden, setHidden] = useState(false);
 
-  const imgPath = "https://www.themoviedb.org/t/p/w154";
-
   useEffect(() => {
     (async () => {
       if (searchQuery?.length > 0) {
         try {
           const moviesData = await fetchMovies(searchQuery);
-          const slicedMovies = moviesData.results;
-          setMovies(slicedMovies);
+          setMovies(moviesData.results);
         } catch (err) {
           console.log(err.message);
         }
@@ -114,7 +111,6 @@ function Navbar() {
             searchQuery={searchQuery}
             placeholder="Search a movie"
             movies={movies}
-            imgPath={imgPath}
             searchBoxInput={searchBoxInput}
           />
         </div>
@@ -212,7 +208,7 @@ function Navbar() {
                   styles.linkUrl,
                   "nav-item nav-link p-3"
                 )}
-                to={"user/" + user?._id + "/watchlist"}
+                to={`user/${user?._id}/watchlist`}
               >
                 Watchlist
               </Link>
@@ -264,7 +260,7 @@ function Navbar() {
                         "dropdown-item p-3 d-flex justify-content-center"
                       )}
                       reloadDocument={true}
-                      to={"/user/" + user._id + "/ratings"}
+                      to={`/user/${user._id}/ratings`}
                     >
                       <p>Your Ratings</p>
                     </Link>
@@ -277,7 +273,7 @@ function Navbar() {
                         "dropdown-item p-3 d-flex justify-content-center"
                       )}
                       reloadDocument={true}
-                      to={"/user/" + user._id + "/watchedlist"}
+                      to={`/user/${user._id}/watchedlist`}
                     >
                       <p>Watchedlist</p>
                     </Link>

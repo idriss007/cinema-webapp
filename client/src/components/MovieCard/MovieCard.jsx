@@ -7,6 +7,9 @@ import clsx from "clsx";
 import Genre from "components/Genre/Genre";
 import StarCard from "components/StarCard/StarCard";
 
+//Config File
+import configData from "config.json";
+
 //React Icons
 import { BsStarFill, BsImage } from "react-icons/bs";
 
@@ -28,7 +31,7 @@ function MovieCard({
   handleAddToWatchedlist,
   isWatchlist,
 }) {
-  const url = "https://image.tmdb.org/t/p/w185/" + movie.poster_path;
+  const url = `${configData.moviePosterwUrlw185}${movie.poster_path}`;
   let isPosterExist = true;
 
   const isAdmin = user_id === userIdOfListOwner;
@@ -64,7 +67,7 @@ function MovieCard({
               {/* {" "} */}
               {/* <p className={styles.title}> */}
               {isPosterExist ? (
-                <img loading="lazy" className={styles.image} src={url} />
+                <img loading="lazy" className={styles.image} src={url} alt="" />
               ) : (
                 <div
                   className={clsx(
@@ -90,7 +93,7 @@ function MovieCard({
             <Link
               reloadDocument={true}
               style={{ textDecoration: "none", color: "inherit" }}
-              to={"/detail/" + movie.id}
+              to={`/detail/${movie.id}`}
             >
               {" "}
               <p className={styles.title}> {movie.title} </p>{" "}
@@ -98,16 +101,6 @@ function MovieCard({
             <div className="ml-2 d-flex justify-content-center align-items-center">
               ({moment(movie.release_date).format("YYYY")})
             </div>
-            {/* {list.name !== "Rated" && (
-              <div className="col-auto ml-lg-auto">
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDeleteBtn(movie)}
-                >
-                  Delete
-                </button>
-              </div>
-            )} */}
           </div>
           <div className={clsx(styles.centerContainer, "row mb-1")}>
             {movie.genre_ids ? (

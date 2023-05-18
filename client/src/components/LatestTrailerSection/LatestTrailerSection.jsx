@@ -5,6 +5,9 @@ import clsx from "clsx";
 //Components
 import TrailerCard from "components/TrailerCard/TrailerCard";
 
+//Config File
+import configData from "config.json";
+
 //React Bootstrap
 import Modal from "react-bootstrap/Modal";
 
@@ -51,13 +54,10 @@ function LatestTrailerSection({ upcomingMovies }) {
                           className="d-flex justify-content-center"
                           reloadDocument={true}
                           style={{ textDecoration: "none", color: "inherit" }}
-                          to={"/detail/" + movie.id}
+                          to={`/detail/${movie.id}`}
                         >
                           <img
-                            src={
-                              "https://image.tmdb.org/t/p/w342" +
-                              movie.poster_path
-                            }
+                            src={`${configData.moviePosterUrlw342}${movie.poster_path}`}
                             className={clsx(
                               styles.poster,
                               "d-block rounded mh-100"

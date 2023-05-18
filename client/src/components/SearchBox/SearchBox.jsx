@@ -3,6 +3,9 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
+//Config File
+import configData from "config.json";
+
 //React Icons
 import { BsImage } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
@@ -21,9 +24,9 @@ function SearchBox({
   searchQuery,
   placeholder,
   movies,
-  imgPath,
   searchBoxInput,
 }) {
+  const imgPath = configData.moviePosterUrlw154;
   return (
     <>
       <div className={clsx(styles.searchInputs)}>
@@ -54,7 +57,7 @@ function SearchBox({
                     {movie?.poster_path ? (
                       <img
                         className={styles.resultMovieImg}
-                        src={imgPath + movie.poster_path}
+                        src={`${imgPath}${movie.poster_path}`}
                         alt=""
                       />
                     ) : (

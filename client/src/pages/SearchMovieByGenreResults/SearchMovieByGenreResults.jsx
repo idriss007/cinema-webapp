@@ -8,6 +8,7 @@ import { getGenreList, getMoviesByGenre } from "api";
 //Components
 import MovieCard from "components/MovieCard/MovieCard";
 import PaginationCard from "components/PaginationCard/PaginationCard";
+import PageNotFound from "components/PageNotFound/PageNotFound";
 
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
@@ -28,7 +29,7 @@ function SearchMovieByGenreResults() {
   const movies = useQuery(
     ["movies", genreName],
     () => getMoviesByGenre(genre.id, pageId),
-    { enabled: genre ? true : false }
+    { enabled: genre ? true : false, retry: false }
   );
 
   if (movies.isLoading || genreList.isLoading) {
@@ -39,13 +40,22 @@ function SearchMovieByGenreResults() {
     );
   }
 
+  // if (movies.isError) {
+  //   return <p>{movies.error.message}</p>;
+  // }
+
   if (movies.isError) {
-    return <p>{movies.error.message}</p>;
+    return <PageNotFound />;
   }
 
   function renderProduct(item, key) {
     return <MovieCard key={key} index={key} movie={item} />;
   }
+
+  // if (parseInt(pageId) > parseInt(movies?.data.total_pages)) {
+  //   console.log("hello");
+  //   return <PageNotFound />;
+  // }
 
   return (
     <div className="container customContainer">

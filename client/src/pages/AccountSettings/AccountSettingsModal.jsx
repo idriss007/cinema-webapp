@@ -388,41 +388,6 @@ function AccountSettingsModal({
     : callingOptions?.calledFor === "name"
     ? changeName
     : changeProfileImage;
-  // <Modal
-  //   className="d-flex justify-content-center"
-  //   centered
-  //   show={show}
-  //   onHide={() => setShow(false)}
-  //   dialogClassName="setting-modal-dialog"
-  //   contentClassName="setting-modal-content"
-  // >
-  //   <Modal.Header className="d-flex justify-content-center align-items-center">
-  //     <Modal.Title>{callingOptions?.title}</Modal.Title>
-  //   </Modal.Header>
-  //   <Modal.Body>
-  //     <div className="row no-gutters">
-  //       {callingOptions?.calledFor === "password" && (
-  //         <>
-  //           <div className="form-group col-12">
-  //             <label for="currentPassword">Current Password</label>
-  //             <input
-  //               type="password"
-  //               className="form-control"
-  //               id="currentPassword"
-  //             />
-  //           </div>
-  //           <div className="form-group col-12">
-  //             <label for="newPassord">New Password</label>
-  //             <input type="password" className="form-control" id="newPassord" />
-  //           </div>
-  //         </>
-  //       )}
-  //     </div>
-  //   </Modal.Body>
-  //   <Modal.Footer className="d-flex justify-content-center">
-  //     <Button onClick={() => handleClose()}>Close</Button>
-  //   </Modal.Footer>
-  // </Modal>
 }
 
 export default AccountSettingsModal;

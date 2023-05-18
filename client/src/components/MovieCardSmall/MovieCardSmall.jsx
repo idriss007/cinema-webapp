@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import moment from "moment";
 
+//External Api
+import { getCreditDetails, getDetail } from "api";
+
 //Components
 import StarCard from "components/StarCard/StarCard";
 import WatchlistCard from "components/WatchlistCard/WatchlistCard";
@@ -10,6 +13,10 @@ import WatchlistCard from "components/WatchlistCard/WatchlistCard";
 //Contexts
 import AuthContext from "context/AuthContext";
 import ListContext from "context/ListContext";
+import ImageNotFound from "components/ImageNotFound/ImageNotFound";
+
+//Config File
+import configData from "config.json";
 
 //React Icons
 import { BsStarFill } from "react-icons/bs";
@@ -17,7 +24,6 @@ import { BsStarFill } from "react-icons/bs";
 //Stylesheet
 import styles from "./moviecardsmall.module.css";
 import { useQuery } from "react-query";
-import { getCreditDetails } from "api";
 
 function MovieCardSmall({ movie, type, index }) {
   const { loggedIn } = useContext(AuthContext);
@@ -34,11 +40,9 @@ function MovieCardSmall({ movie, type, index }) {
     }
   );
 
-  // const job =
-  //   credit?.data?.job?.toLowerCase() === "actor" &&
-  //   credit.data.person.gender === 1
-  //     ? "Actress"
-  //     : "Actor";
+  const { data: movieDetails } = useQuery(["movieDetails", movie.id], () =>
+    getDetail(movie.id)
+  );
 
   useEffect(() => {
     (async () => {
@@ -46,13 +50,6 @@ function MovieCardSmall({ movie, type, index }) {
         const isContainInList = await lists[0].movies.find(
           (movieData) => movieData?.movie?.id === parseInt(movie?.id)
         );
-
-        // if (isContainInList) {
-        //   setIsInList(true);
-        // }
-        // if (!isContainInList) {
-        //   setIsInList(false);
-        // }
 
         setIsInList(isContainInList);
 
@@ -69,7 +66,7 @@ function MovieCardSmall({ movie, type, index }) {
     moment(new Date()).format("YYYYMMDD") >
     moment(movie.release_date).format("YYYYMMDD");
 
-  const poster = "https://www.themoviedb.org/t/p/w342/" + movie?.poster_path;
+  const poster = `${configData.moviePosterw342Url}${movie?.poster_path}`;
 
   return (
     <div className={clsx(styles.container, "row no-gutters")}>
@@ -77,9 +74,17 @@ function MovieCardSmall({ movie, type, index }) {
         <Link
           reloadDocument={true}
           style={{ textDecoration: "none", color: "inherit" }}
-          to={"/detail/" + movie.id}
+          to={`/detail/${movie.id}`}
         >
-          <img className={styles.poster} src={poster} />
+          {movie?.poster_path ? (
+            <img className={styles.poster} src={poster} alt="" />
+          ) : (
+            <ImageNotFound
+              size="40"
+              containerWidth="250px"
+              containerHeight="375px"
+            />
+          )}
         </Link>
       </div>
 
@@ -90,14 +95,16 @@ function MovieCardSmall({ movie, type, index }) {
             "d-flex pl-2 pr-2 col-auto justify-content-center align-items-center"
           )}
         >
-          {isReleased ? (
-            <BsStarFill className="mr-1" color="#F5C518" />
+          {isReleased || movieDetails?.status.toUpperCase() === "RELEASED" ? (
+            <>
+              <BsStarFill className="mr-1" color="#F5C518" />
+              {parseFloat(movie.vote_average).toFixed(1)}
+            </>
           ) : (
             <BsStarFill className="mr-1" color="#9E9E9E" />
           )}
-          {isReleased ? parseFloat(movie.vote_average).toFixed(1) : ""}
         </div>
-        {isReleased && (
+        {(isReleased || movieDetails?.status.toUpperCase() === "RELEASED") && (
           <div
             className={clsx(
               styles.ratingInfoContainer,
@@ -115,7 +122,7 @@ function MovieCardSmall({ movie, type, index }) {
         )}
       </div>
 
-      <div className={styles.title + " col-12 pl-2"}>
+      <div className={clsx(styles.title, "col-12 pl-2")}>
         {/* {movie.original_title} */}
         {movie.title}
       </div>

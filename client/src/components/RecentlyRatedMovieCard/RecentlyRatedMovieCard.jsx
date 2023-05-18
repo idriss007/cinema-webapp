@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 // import { GetRating } from "../../api";
 import { GetRating } from "internalApi";
 
+//Config File
+import configData from "config.json";
+
 //React Icons
 import { BsStarFill } from "react-icons/bs";
 
@@ -22,11 +25,11 @@ function RecentlyRatedMovieCard({ list, index, movie, userId }) {
         <Link
           reloadDocument={true}
           style={{ textDecoration: "none", color: "inherit" }}
-          to={"/detail/" + movie.id}
+          to={`/detail/${movie.id}`}
         >
           <img
             className="w-100 rounded"
-            src={"https://www.themoviedb.org/t/p/w342" + movie.poster_path}
+            src={`${configData.moviePosterw342Url}${movie.poster_path}`}
             alt=""
           />
         </Link>
@@ -36,7 +39,7 @@ function RecentlyRatedMovieCard({ list, index, movie, userId }) {
           className={styles.title}
           reloadDocument={true}
           style={{ textDecoration: "none", color: "inherit" }}
-          to={"/detail/" + movie.id}
+          to={`/detail/${movie.id}`}
         >
           <p className={styles.title}>
             {list.movies[list.movies.length - (index + 1)].movie.title}

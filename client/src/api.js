@@ -69,8 +69,10 @@ export async function getGenreList() {
   return data;
 }
 
-export async function getDetail(id) {
-  const url = `movie/${id}?api_key=${process.env.REACT_APP_API_URL}`;
+export async function getDetail(id, appendToResponse) {
+  const url = `movie/${id}?api_key=${process.env.REACT_APP_API_URL}${
+    appendToResponse ? `&append_to_response=${appendToResponse}` : ""
+  }`;
 
   const { data } = await externalApiAxios.get(url);
 

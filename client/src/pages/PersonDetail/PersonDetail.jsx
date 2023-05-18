@@ -11,6 +11,9 @@ import { getPersonCredit, getPersonDetail } from "api";
 import MovieSlider from "components/MovieSlider/MovieSlider";
 import ImdbCard from "components/ImdbCard/ImdbCard";
 
+//Config File
+import configData from "config.json";
+
 //React Icons
 import { BsImage } from "react-icons/bs";
 
@@ -58,7 +61,6 @@ function PersonDetail() {
   } = useQuery(["person", parseInt(name_id)], () => getPersonDetail(name_id), {
     onSuccess: (person) => (document.title = person.name),
   });
-  console.log(person);
 
   if (statusPerson)
     return (
@@ -70,11 +72,11 @@ function PersonDetail() {
         />
       </div>
     );
-  if (errorPerson) return "An error has occurred: " + errorPerson.message;
+  if (errorPerson) return `An error has occurred: ${errorPerson.message}`;
 
-  const profileImgUrl = "https://image.tmdb.org/t/p/h632" + person.profile_path;
+  const profileImgUrl = `${configData.profileImageUrlh632}${person.profile_path}`;
   const imdb_id = person.imdb_id;
-  const imdbUrl = "https://www.imdb.com/name/" + imdb_id;
+  const imdbUrl = `${configData.imdbNameUrl}${imdb_id}`;
   const job =
     person.known_for_department.toLowerCase() === "directing"
       ? "Director"
@@ -145,7 +147,7 @@ function PersonDetail() {
           </div>
         </div>
 
-        {allCredits && (
+        {allCredits && allCredits.length > 0 && (
           <div className="col-12">
             <MovieSlider movies={allCredits}>Known For</MovieSlider>
           </div>

@@ -39,7 +39,7 @@ function PaginationCard({ pageId, addToUrl, totalPages }) {
       {parseInt(pageId) > 2 && (
         <div className="col-auto">
           <Link
-            className={"btn rounded-0 " + styles.button}
+            className={clsx("btn rounded-0", styles.button)}
             reloadDocument={true}
             to={first}
           >

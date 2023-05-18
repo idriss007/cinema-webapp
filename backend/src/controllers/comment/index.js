@@ -55,6 +55,8 @@ const DeleteComment = tryCatch(async (req, res) => {
     const childs = await Comment.find({ parentId: deletedComment.parentId });
     if (childs.length <= 0 && parentComment.isDeleted) {
       await Comment.findByIdAndDelete(parentComment._id);
+      // const allComments = Comment.find({ user: req.payload.user_id });
+      // res.send({ allComments, deleteParent: true });
       return res.send({ deletedComment, deleteParent: true });
     }
     return res.send(deletedComment);

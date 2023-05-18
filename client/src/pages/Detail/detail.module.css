@@ -27,6 +27,7 @@
 
 .poster:hover {
     box-shadow: 2px 2px 15px 1px black;
+    cursor: pointer;
 }
 
 .carouselContainer {
@@ -38,6 +39,10 @@
     align-items: center;
     flex: 2.67;
     overflow: hidden;
+}
+
+.carouselContainer:hover {
+    cursor: pointer;
 }
 
 .castContainer {

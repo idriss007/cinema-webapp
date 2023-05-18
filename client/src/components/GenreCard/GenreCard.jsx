@@ -10,7 +10,7 @@ function GenreCard({ item }) {
     <Link
       reloadDocument={true}
       className={clsx(styles.container, "text-decoration-none mr-2 mb-2")}
-      to={"/genre/" + item.name.toLowerCase()}
+      to={`/genre/${item.name.toLowerCase()}`}
     >
       {item.name}
     </Link>
