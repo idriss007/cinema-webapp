@@ -14,26 +14,36 @@ import { BsStarFill } from "react-icons/bs";
 
 //Stylesheet
 import styles from "./recentlyratedmoviecard.module.css";
+import ImageNotFound from "components/ImageNotFound/ImageNotFound";
 
 function RecentlyRatedMovieCard({ list, index, movie, userId }) {
   const { data: rating } = useQuery(["movieRating", parseInt(movie.id)], () =>
-    GetRating({ user_id: userId, movie_id: movie.id })
+    GetRating(userId, movie.id)
   );
   return (
     <div className="col-3 d-flex justify-content-center align-items-center flex-column">
-      <div>
-        <Link
-          reloadDocument={true}
-          style={{ textDecoration: "none", color: "inherit" }}
-          to={`/detail/${movie.id}`}
-        >
+      {/* <div> */}
+      <Link
+        className="w-100 h-100"
+        reloadDocument={true}
+        style={{ textDecoration: "none", color: "inherit" }}
+        to={`/detail/${movie.id}`}
+      >
+        {movie.poster_path ? (
           <img
             className="w-100 rounded"
             src={`${configData.moviePosterw342Url}${movie.poster_path}`}
             alt=""
           />
-        </Link>
-      </div>
+        ) : (
+          <ImageNotFound
+            size="80"
+            containerWidth="100%"
+            containerHeight="100%"
+          />
+        )}
+      </Link>
+      {/* </div> */}
       <div className={"w-100 d-flex justify-content-center mt-2 p-1"}>
         <Link
           className={styles.title}

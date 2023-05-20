@@ -51,9 +51,11 @@ const DeleteComment = tryCatch(async (req, res) => {
     const deletedComment = await Comment.findByIdAndDelete(comment_id).populate(
       "user"
     );
+    deletedComment.isDeleted = true;
     const parentComment = await Comment.findById(deletedComment.parentId);
     const childs = await Comment.find({ parentId: deletedComment.parentId });
-    if (childs.length <= 0 && parentComment.isDeleted) {
+    //Ana yorumun alty yorumu var mı ve ana yorum silinmiş mi ona bakılır.
+    if (childs.length <= 0 && parentComment.isDeletedContent) {
       await Comment.findByIdAndDelete(parentComment._id);
       // const allComments = Comment.find({ user: req.payload.user_id });
       // res.send({ allComments, deleteParent: true });
@@ -62,13 +64,14 @@ const DeleteComment = tryCatch(async (req, res) => {
     return res.send(deletedComment);
   }
 
-  //Silinecek yorum paretn yani ana yorum ise önce alt yorumlar var mı diye kontrol edilir.
+  //Silinecek yorum parent yani ana yorum ise önce alt yorumlar var mı diye kontrol edilir.
   const childComments = await Comment.find({ parentId: foundComment._id });
 
+  //Eğer parent yorum silinmişse ve parent yorum alt yorumlara sahipse bu metod çalışır.
   if (childComments.length > 0) {
     foundComment.body = "This comment has been deleted by the author.";
     foundComment.updatedAt = new Date();
-    foundComment.isDeleted = true;
+    foundComment.isDeletedContent = true;
     //Aslında yorumu silmedik güncelledik.(Silinmiş olarak gözükecek.)
     const deletedComment = await (await foundComment.save()).populate("user");
 
@@ -77,6 +80,7 @@ const DeleteComment = tryCatch(async (req, res) => {
 
   //Ana yoruma yazılmış alt yorum yok ise direk ana yorumu sil.
   const deletedComment = await Comment.findByIdAndDelete(foundComment._id);
+  deletedComment.isDeleted = true;
   res.send(deletedComment);
 });
 

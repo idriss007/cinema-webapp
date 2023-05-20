@@ -138,8 +138,16 @@ export async function DeleteRating(input) {
   return data;
 }
 
-export async function GetRating({ user_id, movie_id }) {
+export async function GetRating(user_id, movie_id) {
   const url = `ratings/users/${user_id}/${movie_id}`;
+
+  const { data } = await internalApiAxios.get(url);
+
+  return data;
+}
+
+export async function GetAllRatings(user_id, movie_id) {
+  const url = `ratings/users/${user_id}`;
 
   const { data } = await internalApiAxios.get(url);
 

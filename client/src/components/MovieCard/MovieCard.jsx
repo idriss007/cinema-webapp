@@ -1,4 +1,5 @@
 import React from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import clsx from "clsx";
@@ -6,6 +7,12 @@ import clsx from "clsx";
 //Components
 import Genre from "components/Genre/Genre";
 import StarCard from "components/StarCard/StarCard";
+
+//Local Api
+import { GetRating } from "internalApi";
+
+//External Api
+import { getDetail } from "api";
 
 //Config File
 import configData from "config.json";
@@ -15,8 +22,6 @@ import { BsStarFill, BsImage } from "react-icons/bs";
 
 //Stylesheet
 import styles from "./moviecard.module.css";
-import { useQuery } from "react-query";
-import { GetRating } from "internalApi";
 
 function MovieCard({
   movie,
@@ -50,8 +55,12 @@ function MovieCard({
 
   const listOwnersRatings = useQuery(
     ["rating", movie.id],
-    () => GetRating({ user_id: userIdOfListOwner, movie_id: movie.id }),
-    { enabled: !isAdmin ? true : false }
+    () => GetRating(userIdOfListOwner, movie.id),
+    { enabled: !isAdmin && userIdOfListOwner ? true : false }
+  );
+
+  const { data: movieDetails } = useQuery(["movieDetails", movie.id], () =>
+    getDetail(movie.id)
   );
 
   return (
@@ -109,7 +118,8 @@ function MovieCard({
               <Genre genres={genres} />
             )}
           </div>
-          {isReleased && (
+          {(isReleased ||
+            movieDetails?.status?.toUpperCase() === "RELEASED") && (
             <div
               className={clsx(
                 styles.centerContainer,
@@ -132,7 +142,8 @@ function MovieCard({
           <div className="row mb-2">
             <p className={styles.detail}>{movie.overview}</p>
           </div>
-          {isReleased && (
+          {(isReleased ||
+            movieDetails?.status?.toUpperCase() === "RELEASED") && (
             <div className={clsx(styles.centerContainer, "row")}>
               Votes: {movie.vote_count.toLocaleString()}
             </div>
@@ -140,18 +151,20 @@ function MovieCard({
 
           {isAdmin && (
             <div className="row no-gutters justify-content-end">
-              {isWatchlist && isReleased && (
-                <div className="col-auto mr-2">
-                  <button
-                    className="btn btn-success"
-                    onClick={() => handleAddToWatchedlist(movie)}
-                  >
-                    Watched
-                  </button>
-                </div>
-              )}
+              {isWatchlist &&
+                (isReleased ||
+                  movieDetails?.status?.toUpperCase() === "RELEASED") && (
+                  <div className="col-auto mr-2">
+                    <button
+                      className="btn btn-success"
+                      onClick={() => handleAddToWatchedlist(movie)}
+                    >
+                      Watched
+                    </button>
+                  </div>
+                )}
 
-              {!isRatingList && (
+              {!isRatingList && handleDeleteBtn && (
                 <div className="col-auto">
                   <button
                     className="btn btn-danger"

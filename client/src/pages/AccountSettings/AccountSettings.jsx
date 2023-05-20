@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 //Contexts
 import AuthContext from "context/AuthContext";
@@ -18,8 +18,18 @@ function AccountSettings() {
   const { _id, name, email, profile_image } = user;
 
   const [callingOptions, setCallingOptions] = useState();
+  const [currentUser, setCurrentUser] = useState({});
   const [src, setSrc] = useState();
-  const [preview, setPreview] = useState();
+  const [preview, setPreview] = useState(null);
+
+  useEffect(() => {
+    setCurrentUser({
+      ...currentUser,
+      name: name,
+      email: email,
+      profile_image: profile_image,
+    });
+  }, []);
 
   function onClose() {
     setPreview(null);
@@ -30,8 +40,9 @@ function AccountSettings() {
   }
 
   async function handleSubmitProfileImage() {
-    await ChangeProfileImage(preview);
-    setSrc(preview);
+    const updatedUser = await ChangeProfileImage(preview);
+    setCurrentUser(updatedUser);
+    setSrc(null);
   }
 
   const [show, setShow] = useState(false);
@@ -54,8 +65,12 @@ function AccountSettings() {
         <div className="p-3 border rounded">
           <div className="row no-gutters justify-content-center">
             <div className="col-10 col-sm-6 col-md-4 col-lg-2 d-flex justify-content-center flex-column align-items-center">
-              {profile_image ? (
-                <img className="w-75" src={profile_image} alt="avatar" />
+              {currentUser?.profile_image ? (
+                <img
+                  className="w-75"
+                  src={currentUser?.profile_image}
+                  alt="avatar"
+                />
               ) : (
                 <FaUserCircle size="100" />
               )}
@@ -72,7 +87,7 @@ function AccountSettings() {
             <div className="col-12 d-flex justify-content-between align-items-center p-2">
               <div className="">
                 <span className="font-weight-bold">Name: </span>
-                {name}
+                {currentUser?.name}
               </div>
               <button
                 className="btn btn-outline-dark p-2 pl-3 pr-3"
@@ -87,7 +102,7 @@ function AccountSettings() {
             <div className="col-12 d-flex justify-content-between align-items-center p-2">
               <div className="">
                 <span className="font-weight-bold">Email: </span>
-                {email}
+                {currentUser.email}
               </div>
               <button
                 className="btn btn-outline-dark p-2 pl-3 pr-3"
@@ -128,6 +143,7 @@ function AccountSettings() {
         onClose={onClose}
         onCrop={onCrop}
         handleSubmitProfileImage={handleSubmitProfileImage}
+        setCurrentUser={setCurrentUser}
       />
     </>
   );

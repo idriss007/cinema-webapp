@@ -78,10 +78,27 @@ const GetRating = tryCatch(async (req, res) => {
   }
 
   const ratingList = await Rating.findOne({ user_id: user_id });
-  const rating = ratingList.rating.find(
+  const rating = ratingList?.rating?.find(
     (rating) => rating.movie_id === movie_id
   );
   res.send(rating?.ratingValue);
 });
 
-module.exports = { CreateRatingList, AddRating, DeleteRating, GetRating };
+const GetAllRatings = tryCatch(async (req, res) => {
+  const { user_id } = req.params;
+
+  if (!user_id) {
+    throw new BadRequestError("Wrong or missing data.");
+  }
+
+  const ratings = await Rating.find({ user_id: user_id });
+  res.send(ratings);
+});
+
+module.exports = {
+  CreateRatingList,
+  AddRating,
+  DeleteRating,
+  GetRating,
+  GetAllRatings,
+};

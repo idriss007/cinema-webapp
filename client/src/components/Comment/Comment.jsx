@@ -92,7 +92,7 @@ function Comment({
             />
           )}
 
-          {!comment.isDeleted && user && !isEditing && (
+          {!comment.isDeletedContent && user && !isEditing && (
             <div className="d-flex align-items-center mt-3">
               {canReply && (
                 <button

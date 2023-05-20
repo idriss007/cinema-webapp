@@ -257,7 +257,7 @@ export async function GetTopRatedMovies(page_number) {
 //   return data;
 // }
 
-// export async function GetRating({ user_id, movie_id }) {
+// export async function GetRating(user_id, movie_id) {
 //   const url = "http://localhost:4000/rating/" + user_id + "/" + movie_id;
 
 //   const { data } = await axios.get(url);

@@ -10,6 +10,7 @@ import { getPersonCredit, getPersonDetail } from "api";
 //Components
 import MovieSlider from "components/MovieSlider/MovieSlider";
 import ImdbCard from "components/ImdbCard/ImdbCard";
+import FullPageImageModal from "components/FullPageImageModal/FullPageImageModal";
 
 //Config File
 import configData from "config.json";
@@ -27,6 +28,19 @@ function PersonDetail() {
   const { name_id } = useParams();
 
   const [allCredits, setAllCredits] = useState();
+
+  const [show, setShow] = useState(false);
+  const [showKey, setShowKey] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+
+  function handleClose() {
+    setShow(false);
+  }
+  function handleShow(key, url) {
+    setShowKey(key);
+    setImageUrl(url);
+    setShow(true);
+  }
 
   const credits = useQuery(["credits"], () => getPersonCredit(name_id), {
     onSuccess: (credits) => {
@@ -103,7 +117,12 @@ function PersonDetail() {
         <div className="row mt-4 w-100">
           <div className="col-12 col-md-5 col-lg-3">
             {person.profile_path ? (
-              <img className="w-100 rounded" src={profileImgUrl} />
+              <img
+                className="w-100 rounded cursor-pointer-hover"
+                src={profileImgUrl}
+                onClick={() => handleShow("personImage", person.profile_path)}
+                alt=""
+              />
             ) : (
               <div
                 role="img"
@@ -157,6 +176,14 @@ function PersonDetail() {
           <ImdbCard imdbUrl={imdbUrl} size="40" color="black" />
         </div>
       </div>
+
+      <FullPageImageModal
+        show={show}
+        setShow={setShow}
+        handleClose={handleClose}
+        showKey={showKey}
+        imageUrl={imageUrl}
+      />
     </div>
   );
 }

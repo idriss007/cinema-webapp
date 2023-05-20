@@ -47,7 +47,7 @@ function MovieCardSmall({ movie, type, index }) {
   useEffect(() => {
     (async () => {
       if (lists) {
-        const isContainInList = await lists[0].movies.find(
+        const isContainInList = await lists[0]?.movies.find(
           (movieData) => movieData?.movie?.id === parseInt(movie?.id)
         );
 

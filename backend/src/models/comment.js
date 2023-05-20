@@ -33,6 +33,10 @@ const commentSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isDeletedContent: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("comment", commentSchema);

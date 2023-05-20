@@ -12,7 +12,7 @@ import ListCard from "components/ListCard/ListCard";
 //Stylesheet
 import styles from "./newlist.module.css";
 
-function NewList({ lists, movie }) {
+function AddToCustomListModal({ lists, movie }) {
   const [isInList, setIsInList] = useState([]);
 
   async function addToList(list_id, movie) {
@@ -86,4 +86,4 @@ function NewList({ lists, movie }) {
   );
 }
 
-export default NewList;
+export default AddToCustomListModal;

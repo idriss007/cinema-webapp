@@ -3,7 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 //Local Api
 // import { fetchMe, fetchAccessTokenByRefreshToken } from "../api";
-import { fetchMe, fetchAccessTokenByRefreshToken } from "internalApi";
+import {
+  fetchMe,
+  fetchAccessTokenByRefreshToken,
+  postList,
+  createRatingList,
+} from "internalApi";
 
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
@@ -54,13 +59,36 @@ export function AuthProvider({ children }) {
     })();
   }, []);
 
-  function login(data) {
-    setLoggedIn(true);
-    setUser(data.user);
+  async function handleFirstLogin(data) {
+    try {
+      const watchlist = await postList({
+        name: "Watchlist",
+      });
+
+      const ratedMoviesList = await postList({
+        name: "Ratings",
+      });
+
+      const watchedList = await postList({ name: "Watchedlist" });
+
+      const ratingList = await createRatingList({
+        user_id: data.user._id,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function login(data, isFirstLogin) {
     localStorage.setItem("access-token", data.accessToken);
     localStorage.setItem("refresh-token", data.refreshToken);
+    if (isFirstLogin) {
+      await handleFirstLogin(data);
+    }
     // state ? navigate(state.previousPath) : navigate("/user/" + data.user._id);
-    state ? navigate(state.previousPath) : navigate("/");
+    setUser(data.user);
+    setLoggedIn(true);
+    navigate("/");
   }
 
   async function logout() {

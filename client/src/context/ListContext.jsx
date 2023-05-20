@@ -4,10 +4,18 @@ import { useQuery } from "react-query";
 
 //Local Api
 // import { AddToList, RemoveFromList, fetchLists } from "../api";
-import { AddToList, RemoveFromList, fetchLists } from "internalApi";
+import {
+  AddToList,
+  GetAllRatings,
+  RemoveFromList,
+  fetchLists,
+} from "internalApi";
 
 //Contexts
 import AuthContext from "./AuthContext";
+
+import SyncLoader from "react-spinners/SyncLoader";
+import { IoLogoGoogle } from "react-icons/io5";
 
 const ListContext = createContext();
 
@@ -29,6 +37,12 @@ export function ListProvider({ children }) {
       //   }
       // },
     }
+  );
+
+  const { data: ratings, isLoading } = useQuery(
+    ["ratings"],
+    () => GetAllRatings(user._id),
+    { enabled: loggedIn }
   );
 
   function handleAddWatchlistClicked(isInList, setIsInList, movie) {
@@ -71,8 +85,17 @@ export function ListProvider({ children }) {
     addToList,
     removeFromList,
     lists: data,
+    ratings,
     handleAddWatchlistClicked,
   };
+
+  if (isLoading) {
+    return (
+      <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
+        <SyncLoader size={35} />
+      </div>
+    );
+  }
 
   return <ListContext.Provider value={values}>{children}</ListContext.Provider>;
 }

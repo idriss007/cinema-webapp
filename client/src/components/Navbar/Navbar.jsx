@@ -182,7 +182,7 @@ function Navbar() {
               >
                 Login<span className="sr-only">(current)</span>
               </Link>
-              <Link
+              {/* <Link
                 reloadDocument={true}
                 state={{ previousPath: pathname }}
                 className={clsx(
@@ -194,7 +194,7 @@ function Navbar() {
                 to="/signup"
               >
                 Sign Up
-              </Link>
+              </Link> */}
             </div>
           )}
 

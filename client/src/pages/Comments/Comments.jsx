@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useQuery } from "react-query";
 
 //Local Api
 // import {
@@ -31,24 +30,15 @@ function Comments({ movie_id }) {
   let rootComments = comments?.filter((comment) => comment.parentId === null);
 
   useEffect(() => {
-    comments?.map((comment) => {
-      const replies = getReplies(comment._id);
-      if (replies.length <= 0 && comment.isDeleted) {
-        setComments((prevValue) => {
-          prevValue = prevValue = prevValue.filter(
-            (oldComments) => oldComments._id !== comment._id
-          );
-          return prevValue;
-        });
+    (async () => {
+      try {
+        const allComments = await FetchAllComments(movie_id);
+        setComments(allComments);
+      } catch (error) {
+        console.log(error);
       }
-    });
-  }, [comments]);
-
-  const allComments = useQuery(["comments"], () => FetchAllComments(movie_id), {
-    onSuccess: (allComments) => {
-      setComments(allComments);
-    },
-  });
+    })();
+  }, []);
 
   //Parent id'si parametre olarak gönderilen comment id ile eşleşen commentleri al.
   function getReplies(comment_id) {
@@ -68,15 +58,37 @@ function Comments({ movie_id }) {
 
   async function deleteComment(comment_id, user_id) {
     if (window.confirm("Are you sure that you want to remove the comment?")) {
-      // navigate(0);
-
       const deletedComment = await DeleteComment(comment_id);
-      setComments((prevValue) => {
-        prevValue = prevValue.filter(
+
+      //Parent yorum silinmişse ve child yorum kalmamışsa bu metod çalışır.
+      if (deletedComment.deleteParent) {
+        let updatedComments = comments.filter(
+          (comment) => comment.id !== deletedComment.deletedComment._id
+        );
+        updatedComments = updatedComments.filter(
+          (comment) => comment._id !== deletedComment.deletedComment.parentId
+        );
+        return setComments(updatedComments);
+      }
+
+      //Herhangi bir yorum silinince bu metod çalışır.
+      if (deletedComment.isDeleted) {
+        const updatedComments = comments.filter(
           (comment) => comment._id !== deletedComment._id
         );
-        return prevValue;
-      });
+        return setComments(updatedComments);
+      }
+
+      //Parent yorumun child yorumu varsa ve parent yorum silinmişse bu metod çalışır.
+      if (deletedComment.isDeletedContent) {
+        const updatedComments = comments.map((comment) => {
+          if (comment._id === deletedComment._id) {
+            return deletedComment;
+          }
+          return comment;
+        });
+        setComments(updatedComments);
+      }
     }
   }
 

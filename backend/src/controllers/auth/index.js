@@ -11,6 +11,8 @@ const { validateLogin, validateRegister } = require("./validations");
 
 //Errors
 const AppError = require("../../errors/AppError");
+const UserNotFound = require("../../errors/UserNotFound");
+const UserAlreadyExist = require("../../errors/UserAlreadyExist");
 
 //Jwt Methods
 const {
@@ -29,7 +31,7 @@ const Register = tryCatch(async (req, res) => {
   const isExist = await User.exists({ email: value.email });
 
   if (isExist) {
-    throw new AppError("User already exist.", 404);
+    throw new UserAlreadyExist("User already exist!");
   }
 
   const encryptedPassword = await bcrypt.hash(value.password, 10);
@@ -63,7 +65,7 @@ const Login = tryCatch(async (req, res) => {
   if (
     !(findUser && (await bcrypt.compare(value.password, findUser.password)))
   ) {
-    throw new AppError("No user found!", 404);
+    throw new UserNotFound("User not found!");
   }
 
   const accessToken = signAccessToken({ user_id: findUser._id });

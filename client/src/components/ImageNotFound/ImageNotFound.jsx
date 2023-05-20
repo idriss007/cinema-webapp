@@ -13,17 +13,17 @@ function ImageNotFound({ size, containerWidth, containerHeight }) {
     height: containerHeight,
   };
   return (
-    <div className={clsx("row no-gutters")}>
-      <div
-        style={style}
-        className={clsx(
-          styles.container,
-          "d-flex justify-content-center align-items-center rounded"
-        )}
-      >
-        <BsImage size={size} />
-      </div>
+    // <div className={clsx("row no-gutters")}>
+    <div
+      style={style}
+      className={clsx(
+        styles.container,
+        "d-flex justify-content-center align-items-center rounded"
+      )}
+    >
+      <BsImage size={size} />
     </div>
+    // </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 
 //Local Api
@@ -94,7 +94,7 @@ function List({ calledType }) {
     });
     const response = await AddToList(lists[2]._id, movieData);
   }
-
+  console.log(list);
   return (
     <div className="container customContainer">
       <div className="row no-gutters mb-4">
@@ -107,7 +107,22 @@ function List({ calledType }) {
             }
           </p>
         </div>
-        <div className="col-12">
+        <div className="col-12 d-flex">
+          {!userId && (
+            <div className="d-flex text-muted">
+              by
+              <Link
+                className="ml-1"
+                reloadDocument={true}
+                to={`/user/${list.user._id}`}
+                style={{ color: "inherit" }}
+              >
+                <p>{`${list.user.name}`}</p>
+              </Link>
+            </div>
+          )}
+
+          {!userId && <p className="text-muted ml-2 mr-2">-</p>}
           <p className="text-muted">
             {list.movies.length > 1
               ? `${list.movies.length} titles`
@@ -125,7 +140,7 @@ function List({ calledType }) {
             handleDeleteBtn={handleDeleteBtn}
             handleAddToWatchedlist={handleAddToWatchedlist}
             called="List"
-            userIdOfListOwner={list?.user}
+            userIdOfListOwner={list?.user?._id}
             user_id={user?._id}
             isRatingList={isRatingList}
             isWatchedlist={isWatchedlist}

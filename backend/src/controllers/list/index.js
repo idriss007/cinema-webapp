@@ -33,7 +33,7 @@ const CreateList = tryCatch(async (req, res) => {
 const GetList = tryCatch(async (req, res) => {
   const { list_id } = req.params;
 
-  const list = await List.findById(list_id);
+  const list = await List.findById(list_id).populate("user");
   res.send(list);
 });
 
@@ -41,7 +41,7 @@ const GetList = tryCatch(async (req, res) => {
 const GetLists = tryCatch(async (req, res) => {
   const { user_id } = req.params;
 
-  const lists = await List.find({ user: user_id });
+  const lists = await List.find({ user: user_id }).populate("user");
   res.send(lists);
 });
 
@@ -80,20 +80,28 @@ const AddToList = tryCatch(async (req, res) => {
     //Film watchtedliste ekleniyorsa watchlistten çıkar
     if (isAddingToWatchedlist) {
       const watchlist = allLists[0];
-      const filteredlist = watchlist.movies.filter(
+      const ratingsList = allLists[1];
+      const filteredRatingsList = ratingsList.movies.filter(
         (movie) => movie.movie.id !== movieData.id
       );
-      watchlist.movies = filteredlist;
+      const filteredWatchlist = watchlist.movies.filter(
+        (movie) => movie.movie.id !== movieData.id
+      );
+      watchlist.movies = filteredWatchlist;
       await watchlist.save();
+      ratingsList.movies = filteredRatingsList;
+      await ratingsList.save();
 
-      const ratingList = await Rating.findOne({ user_id: req.payload.user_id });
-
-      const filteredList = ratingList.rating.filter(
+      const ratingValuesList = await Rating.findOne({
+        user_id: req.payload.user_id,
+      });
+      // console.log(ratingList.rating);
+      const filteredRatingValuesList = ratingValuesList.rating.filter(
         (pair) => pair.movie_id !== JSON.stringify(movieData.id)
       );
 
-      ratingList.rating = filteredList;
-      await ratingList.save();
+      ratingValuesList.rating = filteredRatingValuesList;
+      await ratingValuesList.save();
     }
 
     //Film watchtliste ekleniyorsa watchedlistten çıkar
@@ -137,8 +145,14 @@ const RemoveFromList = tryCatch(async (req, res) => {
     (movie) => movie.movie.id !== movieData.id
   );
 
-  list.movies = filteredlist;
-  const updatedList = await list.save();
+  const updatedList = await List.findByIdAndUpdate(
+    list_id,
+    { $set: { movies: filteredlist } },
+    { new: true }
+  );
+
+  // list.movies = filteredlist;
+  // const updatedList = await list.save();
   return res.send(updatedList);
 });
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import clsx from "clsx";
 
@@ -14,9 +14,15 @@ import AuthContext from "context/AuthContext";
 
 //Styleheet
 import styles from "./signup.module.css";
+import PasswordVisibilityIcon from "components/PasswordVisibilityIcon/PasswordVisibilityIcon";
+import { Link, useNavigate } from "react-router-dom";
 
 function Signup({ title }) {
   const { login } = useContext(AuthContext);
+
+  const [showPassword, setShowPassword] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = title;
@@ -39,32 +45,28 @@ function Signup({ title }) {
           passwordConfirm: values.passwordConfirm,
         });
         console.log(registerResponse);
-        login(registerResponse);
-
-        //Kullanıcı kayıt olunca default olarak her kullanıcıya watchlist listesi oluştur.
-        const watchlist = await postList({
-          name: "Watchlist",
-        });
-
-        const ratedMoviesList = await postList({
-          name: "Ratings",
-        });
-
-        const watchedList = await postList({ name: "Watchedlist" });
-
-        const ratingList = await createRatingList({
-          user_id: registerResponse.user._id,
-        });
-
-        console.log(watchlist);
-        console.log(watchedList);
-        console.log(ratedMoviesList);
-        console.log(ratingList);
+        login(registerResponse, true);
       } catch (err) {
         bag.setErrors({ general: err.response.data });
       }
     },
   });
+
+  function handleShowPassword(id) {
+    let x = document.getElementById(id);
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+    if (showPassword.includes(id)) {
+      const newArray = showPassword.filter((i) => i !== id);
+      return setShowPassword(newArray);
+    }
+    setShowPassword((prevValues) => {
+      return [...prevValues, id];
+    });
+  }
 
   return (
     <div className={styles.container}>
@@ -82,81 +84,122 @@ function Signup({ title }) {
               )}
 
               <label name="name">Your Name</label>
-              <input
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.name}
-                name="name"
-                type="text"
+              <div
                 className={clsx(
-                  formik.errors.name && formik.touched.name
-                    ? "border border-danger error-border"
-                    : null,
-                  "form-control form-control-lg"
+                  "border rounded",
+                  formik.errors.name &&
+                    formik.touched.name &&
+                    "border-danger error-border"
                 )}
-                placeholder="Enter your name"
-              />
+              >
+                <input
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.name}
+                  name="name"
+                  type="text"
+                  className={clsx(
+                    "form-control form-control-lg border-0 rounded"
+                  )}
+                  placeholder="Enter your name"
+                />
+              </div>
               {formik.errors.name && formik.touched.name && (
                 <p className="mt-1 text-danger">{formik.errors.name}</p>
               )}
             </div>
             <div className="form-group">
               <label name="email">Email</label>
-              <input
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.email}
-                name="email"
-                type="email"
+              <div
                 className={clsx(
-                  formik.errors.email && formik.touched.email
-                    ? "border border-danger error-border"
-                    : null,
-                  "form-control form-control-lg "
+                  "border rounded",
+                  formik.errors.email &&
+                    formik.touched.email &&
+                    "border-danger error-border"
                 )}
-                placeholder="Enter your email"
-              />
+              >
+                <input
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
+                  name="email"
+                  type="email"
+                  className={clsx(
+                    "form-control form-control-lg border-0 rounded"
+                  )}
+                  placeholder="Enter your email"
+                />
+              </div>
               {formik.errors.email && formik.touched.email && (
                 <p className="mt-1 text-danger">{formik.errors.email}</p>
               )}
             </div>
             <div className="form-group">
               <label name="password">Password</label>
-              <input
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.password}
-                name="password"
-                type="password"
+              <div
                 className={clsx(
-                  formik.errors.password && formik.touched.password
-                    ? "border border-danger error-border"
-                    : null,
-                  "form-control form-control-lg"
+                  "bg-white border rounded d-flex justify-content-center align-items-center",
+                  formik.errors.password &&
+                    formik.touched.password &&
+                    "border-danger error-border"
                 )}
-                placeholder="Enter your password"
-              />
+              >
+                <input
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.password}
+                  name="password"
+                  id="signupPassword"
+                  type="password"
+                  className={clsx(
+                    "form-control form-control-lg border-0 rounded"
+                  )}
+                  placeholder="Enter your password"
+                />
+                <div className="mr-2">
+                  <PasswordVisibilityIcon
+                    key="1"
+                    id="signupPassword"
+                    showPassword={showPassword}
+                    handleShowPassword={handleShowPassword}
+                  />
+                </div>
+              </div>
               {formik.errors.password && formik.touched.password && (
                 <p className="mt-1 text-danger">{formik.errors.password}</p>
               )}
             </div>
             <div className="form-group">
               <label name="passwordConfirm">Password Confirm</label>
-              <input
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.passwordConfirm}
-                name="passwordConfirm"
-                type="password"
+              <div
                 className={clsx(
+                  "bg-white border rounded d-flex justify-content-center align-items-center",
                   formik.errors.passwordConfirm &&
-                    formik.touched.passwordConfirm
-                    ? "border border-danger error-border"
-                    : null,
-                  "form-control form-control-lg"
+                    formik.touched.passwordConfirm &&
+                    "border-danger error-border"
                 )}
-                placeholder="Re-enter your password"
-              />
+              >
+                <input
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.passwordConfirm}
+                  name="passwordConfirm"
+                  id="signupPasswordConfirm"
+                  type="password"
+                  className={clsx(
+                    "form-control form-control-lg border-0 rounded"
+                  )}
+                  placeholder="Re-enter your password"
+                />
+                <div className="mr-2">
+                  <PasswordVisibilityIcon
+                    key="2"
+                    id="signupPasswordConfirm"
+                    showPassword={showPassword}
+                    handleShowPassword={handleShowPassword}
+                  />
+                </div>
+              </div>
               {formik.errors.passwordConfirm &&
                 formik.touched.passwordConfirm && (
                   <p className="mt-1 text-danger">
@@ -168,6 +211,12 @@ function Signup({ title }) {
               <button type="submit" className="btn btn-dark">
                 Sign Up
               </button>
+            </div>
+            <div className="d-flex justify-content-center mt-2">
+              You have an account?
+              <Link reloadDocument={true} to="/login" className="ml-1">
+                Login!
+              </Link>
             </div>
           </form>
         </div>

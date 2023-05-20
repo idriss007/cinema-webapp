@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 
 //Components
-import NewList from "components/NewList/NewList";
+import AddToCustomListModal from "components/AddToCustomListModal/AddToCustomListModal";
 
 //React Spinners
 import ClipLoader from "react-spinners/ClipLoader";
@@ -101,7 +101,7 @@ function WatchlistCard({
             )}
       </div>
 
-      {<NewList lists={lists} movie={movie} />}
+      {<AddToCustomListModal lists={lists} movie={movie} />}
     </>
   );
 }

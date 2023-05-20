@@ -23,6 +23,7 @@ import {
 
 //Contexts
 import AuthContext from "context/AuthContext";
+import ListContext from "context/ListContext";
 
 //React Bootstrap
 import Button from "react-bootstrap/Button";
@@ -42,9 +43,10 @@ import "./starcard.css";
 function StarCard({ movie, size, formOfCalling, index }) {
   const navigate = useNavigate();
 
-  const { user, loggedIn } = useContext(AuthContext);
+  const { loggedIn } = useContext(AuthContext);
+  const { lists, ratings } = useContext(ListContext);
 
-  const [lists, setLists] = useState(null);
+  // const [lists, setLists] = useState(null);
   const [rating, setRating] = useState(null);
   const [ratedValue, setRatedValue] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -56,35 +58,20 @@ function StarCard({ movie, size, formOfCalling, index }) {
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    (async () => {
-      if (loggedIn) {
-        try {
-          const ratedValue = await GetRating({
-            user_id: user._id,
-            movie_id: movie.id,
-          });
-          const listsData = await fetchLists(user._id);
-          setLists(listsData);
-          setRatedValue(ratedValue);
-          setLoading(false);
-        } catch (err) {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-        // setRating(null);
-        setRatedValue(null);
-      }
-    })();
-  }, [loggedIn, movie.id, user?._id]);
+    if (loggedIn) {
+      const ratedValue = ratings[0]?.rating.filter(
+        (movieItem) => movieItem.movie_id == movie.id
+      );
+      const ratingValue = ratedValue && ratedValue[0]?.ratingValue;
 
-  if (loading) {
-    return (
-      <div className="">
-        <ClipLoader size="15px" />
-      </div>
-    );
-  }
+      setRatedValue(ratingValue);
+      setLoading(false);
+    } else {
+      setLoading(false);
+      // setRating(null);
+      setRatedValue(null);
+    }
+  }, []);
 
   return (
     <>
@@ -201,7 +188,7 @@ function StarCard({ movie, size, formOfCalling, index }) {
               variant="primary"
               onClick={() => {
                 if (loggedIn) {
-                  AddToList(lists[1]._id, movie);
+                  AddToList(lists[1]?._id, movie);
                   addRating({
                     movie_id: movie.id,
                     ratingValue: rating,
