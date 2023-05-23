@@ -1,10 +1,10 @@
 import React from "react";
 import Lottie from "react-lottie";
-import animationData from "assets/404.json";
+import animationData from "assets/private.json";
 
-import styles from "./pagenotfound.module.css";
+import styles from "./privatelink.module.css";
 
-function PageNotFound() {
+function PrivateLink() {
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -17,9 +17,9 @@ function PageNotFound() {
   return (
     <div className={styles.container}>
       <Lottie options={defaultOptions} height={400} width={400} />
-      <p className="h2 font-weight-bold">Page not found!</p>
+      <p className="h2 font-weight-bold">This list is not public!</p>
     </div>
   );
 }
 
-export default PageNotFound;
+export default PrivateLink;

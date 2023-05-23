@@ -68,7 +68,7 @@ function WatchlistCard({
             <Link
               // reloadDocument={true}
               className="d-flex justify-content-center align-items-center text-nowrap text-decoration-none color-inherit no-hover"
-              to="/login"
+              to="/signin"
               state={{ previousPath: pathname }}
             >
               {isInList

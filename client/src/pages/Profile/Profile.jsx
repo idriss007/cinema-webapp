@@ -5,7 +5,13 @@ import clsx from "clsx";
 
 //Local Api
 // import { DeleteList, fetchLists } from "../../api";
-import { DeleteList, GetUser, GetUsersComments, fetchLists } from "internalApi";
+import {
+  DeleteList,
+  GetUser,
+  GetUsersComments,
+  SetRatingsPrivacy,
+  fetchLists,
+} from "internalApi";
 
 //Contexts
 import AuthContext from "context/AuthContext";
@@ -27,9 +33,13 @@ import { TbError404 } from "react-icons/tb";
 import SyncLoader from "react-spinners/SyncLoader";
 import UserCommentsSection from "components/UserCommentsSection/UserCommentsSection";
 import ImageNotFound from "components/ImageNotFound/ImageNotFound";
+import ListContext from "context/ListContext";
 
 function Profile({ title }) {
   const [lists, setLists] = useState();
+
+  useEffect(() => {}, []);
+
   const { user } = useContext(AuthContext);
   const { user_id } = useParams();
 
@@ -39,6 +49,11 @@ function Profile({ title }) {
     onSuccess: (listsData) => setLists(listsData),
     retry: false,
   });
+
+  //İlk 3 default liste(Watchlist, Watchedlist, Ratinglist) hariç, herkese açık listeler publicLists değişkenine atanıyor
+  const publicLists = lists
+    ? lists?.slice(3)?.filter((list) => list.isPrivate !== true)
+    : null;
 
   const comments = useQuery(
     ["comments", user_id],
@@ -79,7 +94,22 @@ function Profile({ title }) {
     );
   }
 
+  async function handleSetListPrivacy(listId) {
+    const updatedList = await SetRatingsPrivacy(listId);
+    const filteredList = lists.map((list) => {
+      if (list._id === updatedList._id) {
+        list.isPrivate = updatedList.isPrivate;
+      }
+      return list;
+    });
+
+    setLists(filteredList);
+  }
+
   function renderLists(list, key) {
+    if (!isAdmin && list.isPrivate) {
+      return null;
+    }
     return (
       <div key={key} className="col-12 mt-1 mb-1 p-3">
         <div className="row no-gutters">
@@ -112,7 +142,7 @@ function Profile({ title }) {
             </p>
           </div>
           {isAdmin && (
-            <div className="col-auto ml-auto text-white">
+            <div className="col-auto ml-auto text-white d-flex justify-content-center align-items-center">
               <button
                 className={clsx(styles.button, "p-2 rounded bg-danger")}
                 onClick={() => {
@@ -133,6 +163,15 @@ function Profile({ title }) {
                 }}
               >
                 Delete List
+              </button>
+              <button
+                onClick={() => handleSetListPrivacy(list._id)}
+                className={clsx(
+                  styles.button,
+                  "rounded p-2 border-0 bg-info ml-2"
+                )}
+              >
+                {list.isPrivate ? "Make public" : "Make private"}
               </button>
             </div>
           )}
@@ -197,46 +236,47 @@ function Profile({ title }) {
         </div>
       </div>
 
-      {lists && (isAdmin || lists[1]?.movies?.length > 0) && (
-        <div className="row no-gutters border rounded p-3 mb-4">
-          <div className="col-12">
-            <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
-              {isAdmin ? "Your Ratings" : "Ratings"}
-            </p>
-          </div>
+      {lists &&
+        (isAdmin || (lists[1]?.movies?.length > 0 && !lists[1]?.isPrivate)) && (
+          <div className="row no-gutters border rounded p-3 mb-4">
+            <div className="col-12">
+              <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
+                {isAdmin ? "Your Ratings" : "Ratings"}
+              </p>
+            </div>
 
-          <div className={"col-12 mt-1 mb-1 p-3"}>
-            {lists[1]?.movies?.length > 0 && (
-              <div className="row">
-                <p className="col-12 mb-2 font-weight-bold text-muted">
-                  Most Recently Rated
-                </p>
-                {lists[1]?.movies?.map(renderRecentlyRatedMovies)}
-              </div>
-            )}
-
-            {lists[1]?.movies?.length > 0 ? (
-              lists[1]?.movies?.length > 4 && (
-                <div className="mt-4">
-                  <Link
-                    style={{ color: "inherit" }}
-                    reloadDocument={true}
-                    to={"/user/" + user_id + "/ratings"}
-                  >
-                    <p>
-                      See all {lists[1]?.movies?.length} ratings {">>"}
-                    </p>
-                  </Link>
+            <div className={"col-12 mt-1 mb-1 p-3"}>
+              {lists[1]?.movies?.length > 0 && (
+                <div className="row">
+                  <p className="col-12 mb-2 font-weight-bold text-muted">
+                    Most Recently Rated
+                  </p>
+                  {lists[1]?.movies?.map(renderRecentlyRatedMovies)}
                 </div>
-              )
-            ) : (
-              <p>You haven't rated any titles yet.</p>
-            )}
-          </div>
-        </div>
-      )}
+              )}
 
-      {(isAdmin || lists?.length > 3) && (
+              {lists[1]?.movies?.length > 0 ? (
+                lists[1]?.movies?.length > 4 && (
+                  <div className="mt-4">
+                    <Link
+                      style={{ color: "inherit" }}
+                      reloadDocument={true}
+                      to={"/user/" + user_id + "/ratings"}
+                    >
+                      <p>
+                        See all {lists[1]?.movies?.length} ratings {">>"}
+                      </p>
+                    </Link>
+                  </div>
+                )
+              ) : (
+                <p>You haven't rated any titles yet.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+      {(isAdmin || (lists?.length > 3 && publicLists?.length > 0)) && (
         <div className="row no-gutters border rounded p-3">
           <div className="col-12">
             <div className="row no-gutters align-items-center">

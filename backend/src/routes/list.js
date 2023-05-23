@@ -13,6 +13,7 @@ router.post("/", list.CreateList);
 router.delete("/", list.DeleteList);
 router.post("/:list_id/:movie_id", list.AddToList);
 router.delete("/:list_id/:movie_id", list.RemoveFromList);
+router.post("/set-privacy", list.SetRatingsPrivacy);
 
 // router.post("/", list.CreateList);
 // router.delete("/", list.DeleteList);

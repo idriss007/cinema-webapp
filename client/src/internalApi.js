@@ -112,6 +112,14 @@ export async function DeleteList(list_id) {
   return data;
 }
 
+export async function SetRatingsPrivacy(listId) {
+  const url = "lists/set-privacy";
+
+  const { data } = await internalApiAxios.post(url, { listId });
+
+  return data;
+}
+
 //RatingList Methods
 
 export async function createRatingList(input) {

@@ -16,6 +16,10 @@ const listSchema = new mongoose.Schema({
       movie: Object,
     },
   ],
+  isPrivate: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("list", listSchema);

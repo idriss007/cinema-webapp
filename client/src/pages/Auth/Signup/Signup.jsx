@@ -214,8 +214,8 @@ function Signup({ title }) {
             </div>
             <div className="d-flex justify-content-center mt-2">
               You have an account?
-              <Link reloadDocument={true} to="/login" className="ml-1">
-                Login!
+              <Link reloadDocument={true} to="/signin" className="ml-1">
+                Sign in!
               </Link>
             </div>
           </form>

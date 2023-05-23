@@ -66,7 +66,7 @@ function Signin({ title }) {
     <div className={styles.container}>
       <div className="row no-gutters justify-content-center rounded p-5 form">
         <div className="col-12 d-flex justify-content-center">
-          <p className="h3 line-height-1 mb-4">Login</p>
+          <p className="h3 line-height-1 mb-4">Sign In</p>
         </div>
         <div className="col-auto w-100">
           <form onSubmit={formik.handleSubmit}>
@@ -106,7 +106,7 @@ function Signin({ title }) {
             <div className="form-group">
               <div className="d-flex justify-content-between mb-1">
                 <label>Password</label>
-                <Link>Forgot your password?</Link>
+                {/* <Link>Forgot your password?</Link> */}
               </div>
               <div
                 className={clsx(

@@ -11,16 +11,22 @@ import nameValidations from "./nameValidations";
 
 //React Icons
 import { FaUserCircle } from "react-icons/fa";
-import { ChangeProfileImage } from "internalApi";
+import { ChangeProfileImage, SetRatingsPrivacy } from "internalApi";
+import ListContext from "context/ListContext";
 
 function AccountSettings() {
   const { user } = useContext(AuthContext);
+  const { lists } = useContext(ListContext);
   const { _id, name, email, profile_image } = user;
 
   const [callingOptions, setCallingOptions] = useState();
   const [currentUser, setCurrentUser] = useState({});
+  const [isRatingsPrivate, setIsRatingsPrivate] = useState();
   const [src, setSrc] = useState();
   const [preview, setPreview] = useState(null);
+
+  // const isRatingsPrivate = lists && lists[1]?.isPrivate;
+  // console.log(isRatingsPrivate);
 
   useEffect(() => {
     setCurrentUser({
@@ -29,7 +35,8 @@ function AccountSettings() {
       email: email,
       profile_image: profile_image,
     });
-  }, []);
+    lists && setIsRatingsPrivate(lists[1]?.isPrivate);
+  }, [lists]);
 
   function onClose() {
     setPreview(null);
@@ -56,6 +63,19 @@ function AccountSettings() {
       validations: validations,
     });
     setShow(true);
+  }
+
+  async function handleRatingsPrivacy() {
+    if (
+      window.confirm(
+        `Are you sure that you want to make ratings ${
+          currentUser.isRatingsPrivate ? "public?" : "private?"
+        }?`
+      )
+    ) {
+      const updatedList = await SetRatingsPrivacy(lists[1]?._id);
+      setIsRatingsPrivate(updatedList.isPrivate);
+    }
   }
 
   return (
@@ -127,6 +147,21 @@ function AccountSettings() {
                 }
               >
                 Edit
+              </button>
+            </div>
+          </div>
+
+          <div className="row no-gutters">
+            <div className="col-12 d-flex justify-content-between align-items-center p-2">
+              <div className="">
+                <span className="font-weight-bold">Ratings: </span>
+                {isRatingsPrivate ? "Private" : "Public"}
+              </div>
+              <button
+                className="btn btn-outline-dark p-2 pl-3 pr-3"
+                onClick={() => handleRatingsPrivacy()}
+              >
+                Make ratings {isRatingsPrivate ? "Public" : "Private"}
               </button>
             </div>
           </div>

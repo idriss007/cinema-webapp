@@ -172,13 +172,18 @@ const DeleteList = tryCatch(async (req, res) => {
   res.send("Deleted the list.");
 });
 
-//Var olan listeye film ekleme
+const SetRatingsPrivacy = tryCatch(async (req, res) => {
+  const { listId } = req.body;
 
-//Var olan listeden film silme
+  if (!listId) {
+    throw new BadRequestError("List not found!");
+  }
 
-//Liste silme
-
-//
+  const foundList = await List.findById(listId);
+  foundList.isPrivate = !foundList.isPrivate;
+  const updatedList = await foundList.save();
+  res.send(updatedList);
+});
 
 module.exports = {
   CreateList,
@@ -187,4 +192,5 @@ module.exports = {
   AddToList,
   RemoveFromList,
   DeleteList,
+  SetRatingsPrivacy,
 };

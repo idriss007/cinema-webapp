@@ -14,6 +14,8 @@ import AuthContext from "context/AuthContext";
 
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
+import PageNotFound from "components/PageNotFound/PageNotFound";
+import PrivateLink from "components/PrivateLink/PrivateLink";
 
 function List({ calledType }) {
   const { listId, userId } = useParams();
@@ -36,6 +38,10 @@ function List({ calledType }) {
       },
     }
   );
+
+  if (list?.isPrivate) {
+    return <PrivateLink />;
+  }
 
   if (!list) {
     return (

@@ -61,7 +61,7 @@ export function ListProvider({ children }) {
     }
     //Kullanıcı giriş yapmamışsa login sayfasına yönlendirilsin
     if (!loggedIn) {
-      return navigate("/login");
+      return navigate("/signin");
     }
   }
 

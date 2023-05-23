@@ -195,7 +195,7 @@ function StarCard({ movie, size, formOfCalling, index }) {
                   });
                   setRatedValue(rating);
                 } else {
-                  navigate("/login");
+                  navigate("/signin");
                 }
                 handleClose();
               }}

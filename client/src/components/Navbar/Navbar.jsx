@@ -178,9 +178,9 @@ function Navbar() {
                   styles.linkUrl,
                   "dropdown-item p-3 d-flex justify-content-center"
                 )}
-                to="/login"
+                to="/signin"
               >
-                Login<span className="sr-only">(current)</span>
+                Sign In<span className="sr-only">(current)</span>
               </Link>
               {/* <Link
                 reloadDocument={true}
