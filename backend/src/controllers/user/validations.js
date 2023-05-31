@@ -18,6 +18,11 @@ const changePasswordSchema = Joi.object({
   new_password: Joi.string().trim().min(5).required(),
 });
 
+const resetPasswordSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
 exports.validateNewName = validator(changeNameSchema);
 exports.validateNewEmail = validator(changeEmailSchema);
 exports.validateNewPassword = validator(changePasswordSchema);
+exports.validateResetPassord = validator(resetPasswordSchema);

@@ -132,6 +132,7 @@ export async function createRatingList(input) {
 
 export async function addRating(input) {
   const url = "ratings";
+  console.log(input);
 
   const { data } = await internalApiAxios.put(url, input);
 
@@ -253,7 +254,23 @@ export async function ChangePassword(current_password, new_password) {
 export async function ChangeProfileImage(profile_image) {
   const url = "users/uploads";
 
-  const { data } = await internalApiAxios.post(url, { profile_image });
+  const { data } = await internalApiAxios.post(url, profile_image);
+
+  return data;
+}
+
+export async function sendResetPasswordLink(email) {
+  const url = "users/send-reset-password-link";
+
+  const { data } = await internalApiAxios.post(url, { email });
+
+  return data;
+}
+
+export async function resetPassword(user_id, token, password) {
+  const url = `users/reset-password/${user_id}/${token}`;
+
+  const { data } = await internalApiAxios.post(url, { password });
 
   return data;
 }

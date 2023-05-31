@@ -25,6 +25,8 @@ import Navbar from "./components/Navbar/Navbar";
 import TopRatedMovies from "pages/TopRatedMovies/TopRatedMovies";
 import AccountSettings from "pages/AccountSettings/AccountSettings";
 import PageNotFound from "components/PageNotFound/PageNotFound";
+import SendLink from "pages/ResetPassword/SendLink/SendLink";
+import Reset from "pages/ResetPassword/Reset/Reset";
 
 function App() {
   return (
@@ -73,7 +75,13 @@ function App() {
                 element={<List calledType="ratings" />}
               />
 
+              <Route
+                path="/reset-password/:user_id/:token"
+                element={<Reset />}
+              />
+
               <Route element={<ProtectedRoute2 />}>
+                <Route path="/reset-password" element={<SendLink />} />
                 <Route path="/signup" element={<Signup title="Sign Up" />} />
                 <Route path="/signin" element={<Signin title="Sign In" />} />
               </Route>

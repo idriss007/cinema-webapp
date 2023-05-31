@@ -83,7 +83,9 @@ function Signup({ title }) {
                 </div>
               )}
 
-              <label name="name">Your Name</label>
+              <label className="mb-1" name="name">
+                Your Name
+              </label>
               <div
                 className={clsx(
                   "border rounded",
@@ -109,7 +111,9 @@ function Signup({ title }) {
               )}
             </div>
             <div className="form-group">
-              <label name="email">Email</label>
+              <label className="mb-1" name="email">
+                Email
+              </label>
               <div
                 className={clsx(
                   "border rounded",
@@ -135,7 +139,9 @@ function Signup({ title }) {
               )}
             </div>
             <div className="form-group">
-              <label name="password">Password</label>
+              <label className="mb-1" name="password">
+                Password
+              </label>
               <div
                 className={clsx(
                   "bg-white border rounded d-flex justify-content-center align-items-center",
@@ -170,7 +176,9 @@ function Signup({ title }) {
               )}
             </div>
             <div className="form-group">
-              <label name="passwordConfirm">Password Confirm</label>
+              <label className="mb-1" name="passwordConfirm">
+                Password Confirm
+              </label>
               <div
                 className={clsx(
                   "bg-white border rounded d-flex justify-content-center align-items-center",

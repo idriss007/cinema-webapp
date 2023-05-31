@@ -1,4 +1,5 @@
 const AppError = require("../../src/errors/AppError");
+const ErrorMessage = require("../utils/constants");
 
 function errorHandler(error, req, res, next) {
   if (error.name === "ValidationError") {
@@ -15,7 +16,7 @@ function errorHandler(error, req, res, next) {
     return res.status(error.statusCode).send(error.message);
   }
   console.log(error);
-  return res.status(500).send("Something went wrong");
+  return res.status(500).send(ErrorMessage.SOMETHING_WENT_WRONG);
 }
 
 module.exports = errorHandler;

@@ -13,12 +13,14 @@ import nameValidations from "./nameValidations";
 import { FaUserCircle } from "react-icons/fa";
 import { ChangeProfileImage, SetRatingsPrivacy } from "internalApi";
 import ListContext from "context/ListContext";
+import { useQuery } from "react-query";
 
 function AccountSettings() {
   const { user } = useContext(AuthContext);
   const { lists } = useContext(ListContext);
   const { _id, name, email, profile_image } = user;
 
+  const [isRatingPrivacyLoading, setIsRatingPrivacyLoading] = useState(false);
   const [callingOptions, setCallingOptions] = useState();
   const [currentUser, setCurrentUser] = useState({});
   const [isRatingsPrivate, setIsRatingsPrivate] = useState();
@@ -73,8 +75,14 @@ function AccountSettings() {
         }?`
       )
     ) {
-      const updatedList = await SetRatingsPrivacy(lists[1]?._id);
-      setIsRatingsPrivate(updatedList.isPrivate);
+      try {
+        setIsRatingPrivacyLoading(true);
+        const updatedList = await SetRatingsPrivacy(lists[1]?._id);
+        setIsRatingsPrivate(updatedList.isPrivate);
+      } catch (error) {
+        console.log(error);
+      }
+      setIsRatingPrivacyLoading(false);
     }
   }
 
@@ -160,8 +168,11 @@ function AccountSettings() {
               <button
                 className="btn btn-outline-dark p-2 pl-3 pr-3"
                 onClick={() => handleRatingsPrivacy()}
+                disabled={isRatingPrivacyLoading}
               >
-                Make ratings {isRatingsPrivate ? "Public" : "Private"}
+                {isRatingPrivacyLoading
+                  ? "Loading..."
+                  : "Make ratings " + (isRatingsPrivate ? "Public" : "Private")}
               </button>
             </div>
           </div>

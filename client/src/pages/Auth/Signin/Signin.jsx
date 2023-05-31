@@ -106,7 +106,9 @@ function Signin({ title }) {
             <div className="form-group">
               <div className="d-flex justify-content-between mb-1">
                 <label>Password</label>
-                {/* <Link>Forgot your password?</Link> */}
+                <Link reloadDocument to="/reset-password">
+                  Forgot your password?
+                </Link>
               </div>
               <div
                 className={clsx(

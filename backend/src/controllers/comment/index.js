@@ -2,6 +2,8 @@
 const BadRequestError = require("../../errors/BadRequestError");
 const UnAuthenticatedError = require("../../errors/UnAuthenticatedError");
 
+const ErrorMessage = require("../../utils/constants");
+
 //Models
 const Comment = require("../../models/comment");
 
@@ -34,7 +36,7 @@ const DeleteComment = tryCatch(async (req, res) => {
   const { comment_id } = req.body;
 
   if (!comment_id || !req.payload.user_id) {
-    throw new BadRequestError("Wrong or missing data.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   //Get comment
@@ -42,7 +44,7 @@ const DeleteComment = tryCatch(async (req, res) => {
 
   //Check is delete request came from the comment writer
   if (req.payload.user_id !== foundComment.user.toString()) {
-    throw new UnAuthenticatedError("User not authenticated!");
+    throw new UnAuthenticatedError(ErrorMessage.UNAUTHENTICATED);
   }
 
   //Silinecek yorumun parentId'si var ise(yani yoruma yazılan bir yorum ise) direk silinir.
@@ -109,7 +111,7 @@ const GetAllComments = tryCatch(async (req, res) => {
   const { movie_id } = req.params;
 
   if (!movie_id) {
-    throw new BadRequestError("Wrong or missing data.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const comments = await Comment.find({ movie_id }).populate("user");
@@ -120,7 +122,7 @@ const GetUserComments = tryCatch(async (req, res) => {
   const { user_id } = req.params;
 
   if (!user_id) {
-    throw new BadRequestError("Wrong or missing data.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const comments = await Comment.find({

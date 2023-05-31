@@ -3,6 +3,8 @@ const ListNotFoundError = require("../../errors/ListNotFoundError");
 const BadRequestError = require("../../errors/BadRequestError");
 const UnAuthenticatedError = require("../../errors/UnAuthenticatedError");
 
+const ErrorMessage = require("../../utils/constants");
+
 //Models
 const List = require("../../models/list");
 const Rating = require("../../models/rating");
@@ -51,13 +53,13 @@ const AddToList = tryCatch(async (req, res) => {
   const { movieData } = req.body;
 
   if (!list_id || !movieData) {
-    throw new BadRequestError("Wrong or missing data.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const list = await List.findById(list_id);
 
   if (list.user.toString() !== req.payload.user_id) {
-    throw new UnAuthenticatedError("User not authenticated!");
+    throw new UnAuthenticatedError(ErrorMessage.UNAUTHENTICATED);
   }
 
   const allLists = await List.find({ user: req.payload.user_id });
@@ -123,13 +125,13 @@ const RemoveFromList = tryCatch(async (req, res) => {
   const { movieData } = req.body;
 
   if (!list_id || !movieData) {
-    throw new BadRequestError("Wrong or missing data.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const list = await List.findById(list_id);
 
   if (list.user.toString() !== req.payload.user_id) {
-    throw new UnAuthenticatedError("User not authenticated!");
+    throw new UnAuthenticatedError(ErrorMessage.UNAUTHENTICATED);
   }
 
   const isContain = list.movies.find(
@@ -138,7 +140,7 @@ const RemoveFromList = tryCatch(async (req, res) => {
 
   //Eklenilen dizi veritabanında listeye kayıtlı değilse hata gönder. Kayıtlıysa veritabanındaki listeden silinsin.
   if (!isContain) {
-    throw new BadRequestError("Movie is not in the list.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const filteredlist = list.movies.filter(
@@ -176,7 +178,7 @@ const SetRatingsPrivacy = tryCatch(async (req, res) => {
   const { listId } = req.body;
 
   if (!listId) {
-    throw new BadRequestError("List not found!");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const foundList = await List.findById(listId);

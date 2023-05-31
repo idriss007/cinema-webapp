@@ -8,6 +8,8 @@ const { tryCatch } = require("../../utils/tryCatch");
 //Errors
 const BadRequestError = require("../../errors/BadRequestError");
 
+const ErrorMessage = require("../../utils/constants");
+
 const CreateRatingList = tryCatch(async (req, res) => {
   const newList = await Rating.create({ user_id: req.payload.user_id });
   res.send(newList);
@@ -17,7 +19,7 @@ const AddRating = tryCatch(async (req, res) => {
   const { movie_id, ratingValue } = req.body;
 
   if (!movie_id || !ratingValue) {
-    throw new BadRequestError("Wrong or missing data.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const ratingList = await Rating.findOne({ user_id: req.payload.user_id });
@@ -56,7 +58,7 @@ const AddRating = tryCatch(async (req, res) => {
 const DeleteRating = tryCatch(async (req, res) => {
   const { movie_id } = req.body;
   if (!movie_id) {
-    throw new BadRequestError("Wrong or missing data.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const ratingList = await Rating.findOne({ user_id: req.payload.user_id });
@@ -74,7 +76,7 @@ const GetRating = tryCatch(async (req, res) => {
   const { user_id, movie_id } = req.params;
 
   if (!user_id || !movie_id) {
-    throw new BadRequestError("Wrong or missing data.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const ratingList = await Rating.findOne({ user_id: user_id });
@@ -88,7 +90,7 @@ const GetAllRatings = tryCatch(async (req, res) => {
   const { user_id } = req.params;
 
   if (!user_id) {
-    throw new BadRequestError("Wrong or missing data.");
+    throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
   const ratings = await Rating.find({ user_id: user_id });

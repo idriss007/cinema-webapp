@@ -27,7 +27,8 @@ function List({ calledType }) {
 
   //watchlist, ratings ve watchedlist gibi default listelere gidilirken userId değişkeni olacak.
   //Fakat eğer kullanıcı girişi yapılmamışsa user._id değişkeni olmayacak.
-  const isAdmin = user?._id === userId;
+  // const isAdmin = user?._id === userId;
+  const isAdmin = user?._id == list?.user?._id;
 
   const { data: lists } = useQuery(
     ["list"],
@@ -39,7 +40,7 @@ function List({ calledType }) {
     }
   );
 
-  if (list?.isPrivate) {
+  if (list?.isPrivate && !isAdmin) {
     return <PrivateLink />;
   }
 

@@ -10,9 +10,11 @@ const { tryCatch } = require("../../utils/tryCatch");
 const { validateLogin, validateRegister } = require("./validations");
 
 //Errors
-const AppError = require("../../errors/AppError");
+const InvalidToken = require("../../errors/InvalidToken");
 const UserNotFound = require("../../errors/UserNotFound");
 const UserAlreadyExist = require("../../errors/UserAlreadyExist");
+
+const ErrorMessage = require("../../utils/constants");
 
 //Jwt Methods
 const {
@@ -31,7 +33,7 @@ const Register = tryCatch(async (req, res) => {
   const isExist = await User.exists({ email: value.email });
 
   if (isExist) {
-    throw new UserAlreadyExist("User already exist!");
+    throw new UserAlreadyExist(ErrorMessage.ALREADY_EXIST);
   }
 
   const encryptedPassword = await bcrypt.hash(value.password, 10);
@@ -65,7 +67,7 @@ const Login = tryCatch(async (req, res) => {
   if (
     !(findUser && (await bcrypt.compare(value.password, findUser.password)))
   ) {
-    throw new UserNotFound("User not found!");
+    throw new UserNotFound(ErrorMessage.NOT_FOUND);
   }
 
   const accessToken = signAccessToken({ user_id: findUser._id });
@@ -81,7 +83,7 @@ const Login = tryCatch(async (req, res) => {
 const RefreshToken = tryCatch(async (req, res) => {
   const { refresh_token } = req.body;
   if (!refresh_token) {
-    throw new AppError("There is no refresh token", 400);
+    throw new InvalidToken(ErrorMessage.INVALID_TOKEN);
   }
 
   const user_id = await verifyRefreshToken(refresh_token);
@@ -93,7 +95,7 @@ const RefreshToken = tryCatch(async (req, res) => {
 
 const Me = tryCatch(async (req, res) => {
   const { user_id } = req.payload;
-  const user = await User.findById(user_id);
+  const user = await User.findById(user_id).select("-password");
   res.json(user);
 });
 
