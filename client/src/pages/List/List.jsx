@@ -101,7 +101,7 @@ function List({ calledType }) {
     });
     const response = await AddToList(lists[2]._id, movieData);
   }
-  console.log(list);
+
   return (
     <div className="container customContainer">
       <div className="row no-gutters mb-4">
@@ -138,6 +138,14 @@ function List({ calledType }) {
         </div>
       </div>
       <div className="row no-gutters">
+        {list.movies.length <= 0 && (
+          <>
+            <div className="mr-1">Get started! Add items to your list from</div>
+            <Link reloadDocument={true} to="/movies/top-rated">
+              Top Rated
+            </Link>
+          </>
+        )}
         {list.movies.map((movie, key) => (
           <MovieCard
             key={key}

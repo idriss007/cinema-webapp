@@ -17,6 +17,7 @@ import { useQuery } from "react-query";
 
 function AccountSettings() {
   const { user } = useContext(AuthContext);
+  console.log(user);
   const { lists } = useContext(ListContext);
   const { _id, name, email, profile_image } = user;
 
@@ -40,6 +41,9 @@ function AccountSettings() {
     lists && setIsRatingsPrivate(lists[1]?.isPrivate);
   }, [lists]);
 
+  user && console.log(user);
+  currentUser && console.log(currentUser);
+
   function onClose() {
     setPreview(null);
   }
@@ -50,8 +54,9 @@ function AccountSettings() {
 
   async function handleSubmitProfileImage() {
     const updatedUser = await ChangeProfileImage(preview);
+    user.profile_image = updatedUser.profile_image;
     setCurrentUser(updatedUser);
-    setSrc(null);
+    // setSrc(null);
   }
 
   const [show, setShow] = useState(false);
@@ -93,10 +98,10 @@ function AccountSettings() {
         <div className="p-3 border rounded">
           <div className="row no-gutters justify-content-center">
             <div className="col-10 col-sm-6 col-md-4 col-lg-2 d-flex justify-content-center flex-column align-items-center">
-              {currentUser?.profile_image ? (
+              {currentUser.profile_image ? (
                 <img
                   className="w-75"
-                  src={currentUser?.profile_image}
+                  src={currentUser.profile_image}
                   alt="avatar"
                 />
               ) : (

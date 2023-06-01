@@ -254,7 +254,7 @@ export async function ChangePassword(current_password, new_password) {
 export async function ChangeProfileImage(profile_image) {
   const url = "users/uploads";
 
-  const { data } = await internalApiAxios.post(url, profile_image);
+  const { data } = await internalApiAxios.post(url, { profile_image });
 
   return data;
 }
