@@ -20,6 +20,10 @@ function LatestTrailerSection({ upcomingMovies }) {
   const [show, setShow] = useState(false);
   const [activeTrailer, setActiveTrailer] = useState();
 
+  const filteredMovies =
+    upcomingMovies &&
+    upcomingMovies?.results.filter((movie) => movie.backdrop_path !== null);
+
   function handleShow() {
     setFullscreen(true);
     setShow(true);
@@ -32,7 +36,7 @@ function LatestTrailerSection({ upcomingMovies }) {
   return (
     <div className="row no-gutters d-flex justify-content-center">
       <div className="col-12">
-        {upcomingMovies && (
+        {filteredMovies && (
           <div
             id="carouselExampleControls"
             className="carousel slide"
@@ -40,47 +44,49 @@ function LatestTrailerSection({ upcomingMovies }) {
             data-interval="false"
           >
             <div className="carousel-inner">
-              {upcomingMovies.results.map((movie, key) => {
-                return movie.backdrop_path ? (
-                  <div
-                    key={key}
-                    className={
-                      key === 0 ? "carousel-item active" : "carousel-item"
-                    }
-                  >
-                    <div className="row">
-                      <div className="col-lg-2 col-md-12 d-flex justify-content-center align-items-center">
-                        <Link
-                          className="d-flex justify-content-center"
-                          reloadDocument={true}
-                          style={{ textDecoration: "none", color: "inherit" }}
-                          to={`/detail/${movie.id}`}
+              {filteredMovies.map((movie, key) => {
+                return (
+                  movie.backdrop_path && (
+                    <div
+                      key={key}
+                      className={
+                        key === 0 ? "carousel-item active" : "carousel-item"
+                      }
+                    >
+                      <div className="row">
+                        <div className="col-lg-2 col-md-12 d-flex justify-content-center align-items-center">
+                          <Link
+                            className="d-flex justify-content-center"
+                            reloadDocument={true}
+                            style={{ textDecoration: "none", color: "inherit" }}
+                            to={`/detail/${movie.id}`}
+                          >
+                            <img
+                              src={`${configData.moviePosterUrlw342}${movie.poster_path}`}
+                              className={clsx(
+                                styles.poster,
+                                "d-block rounded mh-100"
+                              )}
+                              alt="..."
+                            />
+                          </Link>
+                        </div>
+                        <div
+                          className={clsx(
+                            styles.trailerCardContainer,
+                            "col-lg-10 col-md-12"
+                          )}
                         >
-                          <img
-                            src={`${configData.moviePosterUrlw342}${movie.poster_path}`}
-                            className={clsx(
-                              styles.poster,
-                              "d-block rounded mh-100"
-                            )}
-                            alt="..."
+                          <TrailerCard
+                            movie={movie}
+                            handleTrailer={handleTrailer}
+                            handleShow={handleShow}
                           />
-                        </Link>
-                      </div>
-                      <div
-                        className={clsx(
-                          styles.trailerCardContainer,
-                          "col-lg-10 col-md-12"
-                        )}
-                      >
-                        <TrailerCard
-                          movie={movie}
-                          handleTrailer={handleTrailer}
-                          handleShow={handleShow}
-                        />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ) : null;
+                  )
+                );
               })}
             </div>
             <a
