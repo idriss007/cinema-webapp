@@ -23,6 +23,7 @@
     "nodemailer-sendgrid-transport": "^0.2.0"
   },
   "devDependencies": {
-    "eslint": "^8.37.0"
+    "eslint": "^8.37.0",
+    "nodemon": "^2.0.22"
   }
 }
