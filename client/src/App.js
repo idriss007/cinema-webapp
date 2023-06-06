@@ -27,6 +27,7 @@ import AccountSettings from "pages/AccountSettings/AccountSettings";
 import PageNotFound from "components/PageNotFound/PageNotFound";
 import SendLink from "pages/ResetPassword/SendLink/SendLink";
 import Reset from "pages/ResetPassword/Reset/Reset";
+import Footer from "components/Footer/Footer";
 
 function App() {
   return (
@@ -104,6 +105,7 @@ function App() {
 
               <Route path="*" element={<PageNotFound />} />
             </Routes>
+            <Footer />
           </ListProvider>
         </AuthProvider>
       </StatesProvider>

@@ -89,11 +89,19 @@ function Navbar() {
         >
           <Link
             reloadDocument={true}
-            style={{ color: "black", fontWeight: "bold" }}
-            className={clsx(styles.linkUrl, "btn bg-warning text-color-dark")}
+            style={{
+              color: "black",
+              fontWeight: "bold",
+              fontSize: "1.3rem",
+              backgroundColor: "rgb(245,197,24)",
+            }}
+            className={clsx(
+              styles.linkUrl,
+              "btn text-color-dark mt-0 mb-0 pt-0 pb-0"
+            )}
             to="/"
           >
-            Home
+            TMN
           </Link>
         </div>
 
