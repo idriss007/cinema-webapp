@@ -16,8 +16,6 @@ import {
   addRating,
   AddToList,
   DeleteRating,
-  fetchLists,
-  GetRating,
   RemoveFromList,
 } from "internalApi";
 

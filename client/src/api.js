@@ -1,4 +1,5 @@
-import axios, { all } from "axios";
+// import axios, { all } from "axios";
+import axios from "axios";
 
 const externalApiAxios = axios.create({
   baseURL: "https://api.themoviedb.org/3/",

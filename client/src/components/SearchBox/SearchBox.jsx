@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
@@ -8,7 +8,6 @@ import configData from "config.json";
 
 //React Icons
 import { BsImage } from "react-icons/bs";
-import { FaSearch } from "react-icons/fa";
 
 //Stylesheet
 import styles from "./searchbox.module.css";

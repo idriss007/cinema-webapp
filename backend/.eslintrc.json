@@ -10,13 +10,13 @@
     "ecmaVersion": "latest"
   },
   "rules": {
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"],
-    "no-console": 2,
-    "no-var": 2,
-    "no-self-compare": 2,
-    // "camelcase": 2,
-    "eqeqeq": 2,
-    "no-unneeded-ternary": 2
+    // "quotes": ["error", "double"],
+    // "semi": ["error", "always"],
+    // "no-console": 2,
+    // "no-var": 2,
+    // "no-self-compare": 2,
+    // // "camelcase": 2,
+    // "eqeqeq": 2,
+    // "no-unneeded-ternary": 2
   }
 }

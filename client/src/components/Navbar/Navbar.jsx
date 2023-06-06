@@ -23,7 +23,6 @@ function Navbar() {
   const { loggedIn, user, logout } = useContext(AuthContext);
   const { searchQuery, setSearchQuery } = useContext(StatesContext);
 
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const searchBoxInput = useRef(null);
 
