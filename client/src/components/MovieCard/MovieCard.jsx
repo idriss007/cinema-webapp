@@ -150,7 +150,7 @@ function MovieCard({
           )}
 
           {isAdmin && (
-            <div className="row no-gutters justify-content-end">
+            <div className="row no-gutters justify-content-end mt-3">
               {isWatchlist &&
                 (isReleased ||
                   movieDetails?.status?.toUpperCase() === "RELEASED") && (

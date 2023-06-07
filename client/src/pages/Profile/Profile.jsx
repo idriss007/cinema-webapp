@@ -142,7 +142,7 @@ function Profile({ title }) {
             </p>
           </div>
           {isAdmin && (
-            <div className="col-auto ml-auto text-white d-flex justify-content-center align-items-center">
+            <div className="col-auto ml-auto text-white d-flex justify-content-center align-items-center mt-3 mt-sm-0">
               <button
                 className={clsx(styles.button, "p-2 rounded bg-danger")}
                 onClick={() => {
