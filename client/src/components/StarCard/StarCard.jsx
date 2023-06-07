@@ -70,6 +70,9 @@ function StarCard({ movie, size, formOfCalling, index }) {
       setRatedValue(null);
     }
     ratings && lists ? setLoading(false) : setLoading(true);
+    if (!loggedIn) {
+      setLoading(false);
+    }
   }, [ratings, lists]);
 
   return (
