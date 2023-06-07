@@ -19,6 +19,7 @@ function WatchlistCard({
   movie,
   called,
   isInListLoading,
+  setIsInListLoading,
   width,
   lists,
 }) {
@@ -35,14 +36,6 @@ function WatchlistCard({
     addList = "+ Watchlist";
   }
 
-  // if (isInListLoading) {
-  //   return (
-  //     <div className="">
-  //       <ClipLoader />
-  //     </div>
-  //   );
-  // }
-
   return (
     <>
       <div className={clsx(width, "d-flex align-items-center")}>
@@ -52,9 +45,16 @@ function WatchlistCard({
             "d-flex align-items-center justify-content-center w-100",
             called === "DetailPage" ? "p-3" : "pl-3 pr-3 pt-2 pb-2"
           )}
-          onClick={() =>
-            handleAddWatchlistClicked(isInList, setIsInList, movie)
-          }
+          onClick={() => {
+            if (!isInListLoading) {
+              handleAddWatchlistClicked(
+                isInList,
+                setIsInList,
+                movie,
+                setIsInListLoading
+              );
+            }
+          }}
         >
           {isInListLoading ? (
             <div>

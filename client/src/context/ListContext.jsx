@@ -15,7 +15,6 @@ import {
 import AuthContext from "./AuthContext";
 
 import SyncLoader from "react-spinners/SyncLoader";
-import { IoLogoGoogle } from "react-icons/io5";
 
 const ListContext = createContext();
 
@@ -24,20 +23,9 @@ export function ListProvider({ children }) {
 
   const { loggedIn, user } = useContext(AuthContext);
 
-  const [lists, setLists] = useState();
-
-  const { data } = useQuery(
-    ["lists"],
-    () => fetchLists(user._id),
-    { enabled: loggedIn },
-    {
-      // onSuccess: (data) => {
-      //   if (loggedIn) {
-      //     setLists(data);
-      //   }
-      // },
-    }
-  );
+  const { data } = useQuery(["lists"], () => fetchLists(user._id), {
+    enabled: loggedIn,
+  });
 
   const { data: ratings, isLoading } = useQuery(
     ["ratings"],
@@ -45,16 +33,21 @@ export function ListProvider({ children }) {
     { enabled: loggedIn }
   );
 
-  function handleAddWatchlistClicked(isInList, setIsInList, movie) {
+  function handleAddWatchlistClicked(
+    isInList,
+    setIsInList,
+    movie,
+    setIsInListLoading
+  ) {
     //Kullanıcı giriş yapmışsa izleme listesine film ekleyip çıkarabilsin
     if (loggedIn === true) {
       if (isInList) {
-        removeFromList(data[0], movie);
+        removeFromList(data[0], movie, setIsInListLoading);
         setIsInList(false);
         return;
       }
       if (!isInList) {
-        addToList(data[0], movie);
+        addToList(data[0], movie, setIsInListLoading);
         setIsInList(true);
         return;
       }
@@ -65,17 +58,21 @@ export function ListProvider({ children }) {
     }
   }
 
-  async function addToList(list, movieData) {
+  async function addToList(list, movieData, setIsInListLoading) {
     try {
+      setIsInListLoading(true);
       await AddToList(list._id, movieData);
+      setIsInListLoading(false);
     } catch (err) {
       return console.log(err);
     }
   }
 
-  async function removeFromList(list, movieData) {
+  async function removeFromList(list, movieData, setIsInListLoading) {
     try {
+      setIsInListLoading(true);
       await RemoveFromList(list._id, movieData);
+      setIsInListLoading(false);
     } catch (err) {
       return console.log(err);
     }

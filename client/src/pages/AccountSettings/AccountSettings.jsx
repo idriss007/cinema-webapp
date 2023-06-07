@@ -13,36 +13,38 @@ import nameValidations from "./nameValidations";
 import { FaUserCircle } from "react-icons/fa";
 import { ChangeProfileImage, SetRatingsPrivacy } from "internalApi";
 import ListContext from "context/ListContext";
-import { useQuery } from "react-query";
 
 function AccountSettings() {
   const { user } = useContext(AuthContext);
-  console.log(user);
   const { lists } = useContext(ListContext);
   const { _id, name, email, profile_image } = user;
 
-  const [isRatingPrivacyLoading, setIsRatingPrivacyLoading] = useState(false);
   const [callingOptions, setCallingOptions] = useState();
   const [currentUser, setCurrentUser] = useState({});
+
+  const [isRatingPrivacyLoading, setIsRatingPrivacyLoading] = useState(false);
   const [isRatingsPrivate, setIsRatingsPrivate] = useState();
+
   const [src, setSrc] = useState();
   const [preview, setPreview] = useState(null);
 
-  // const isRatingsPrivate = lists && lists[1]?.isPrivate;
-  // console.log(isRatingsPrivate);
+  // const [ratingsPrivacyStatusText, setRatingsPrivacyStatusText] = useState(null);
 
   useEffect(() => {
+    setIsRatingPrivacyLoading(true);
     setCurrentUser({
       ...currentUser,
       name: name,
       email: email,
       profile_image: profile_image,
     });
+    // lists &&
+    //   (lists[1].isPrivate
+    //     ? setRatingsPrivacyStatusText("Public")
+    //     : setRatingsPrivacyStatusText("Private"));
     lists && setIsRatingsPrivate(lists[1]?.isPrivate);
+    lists && setIsRatingPrivacyLoading(false);
   }, [lists]);
-
-  user && console.log(user);
-  currentUser && console.log(currentUser);
 
   function onClose() {
     setPreview(null);
@@ -56,7 +58,6 @@ function AccountSettings() {
     const updatedUser = await ChangeProfileImage(preview);
     user.profile_image = updatedUser.profile_image;
     setCurrentUser(updatedUser);
-    // setSrc(null);
   }
 
   const [show, setShow] = useState(false);
@@ -95,7 +96,7 @@ function AccountSettings() {
     <>
       <div className="container customContainer">
         <div className="row no-gutters h1 line-height-1">Account Settings</div>
-        <div className="p-3 border rounded">
+        <div className="p-3 border rounded mb-5">
           <div className="row no-gutters justify-content-center">
             <div className="col-10 col-sm-6 col-md-4 col-lg-2 d-flex justify-content-center flex-column align-items-center">
               {currentUser.profile_image ? (
@@ -168,7 +169,11 @@ function AccountSettings() {
             <div className="col-12 d-flex justify-content-between align-items-center p-2">
               <div className="">
                 <span className="font-weight-bold">Ratings: </span>
-                {isRatingsPrivate ? "Private" : "Public"}
+                {isRatingPrivacyLoading
+                  ? "Loading"
+                  : isRatingsPrivate
+                  ? "Private"
+                  : "Public"}
               </div>
               <button
                 className="btn btn-outline-dark p-2 pl-3 pr-3"

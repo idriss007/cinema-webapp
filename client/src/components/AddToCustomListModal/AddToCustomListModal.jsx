@@ -14,13 +14,31 @@ import styles from "./newlist.module.css";
 
 function AddToCustomListModal({ lists, movie }) {
   const [isInList, setIsInList] = useState([]);
+  const [isInListLoading, setIsInListLoading] = useState([]);
 
-  async function addToList(list_id, movie) {
-    await AddToList(list_id, movie);
+  async function addToList(list_id, movie, index) {
+    try {
+      setIsInListLoading([...isInListLoading, index]);
+      await AddToList(list_id, movie);
+      setIsInList([...isInList, index]);
+    } catch (error) {
+      console.log(error);
+    }
+    const updatedLoadingList = isInListLoading.filter((i) => i !== index);
+    setIsInListLoading(updatedLoadingList);
   }
 
-  async function removeFromList(list_id, movie) {
-    await RemoveFromList(list_id, movie);
+  async function removeFromList(list_id, movie, index) {
+    try {
+      setIsInListLoading([...isInListLoading, index]);
+      await RemoveFromList(list_id, movie);
+      const upsatedIsInList = isInList.filter((i) => i !== index);
+      setIsInList(upsatedIsInList);
+    } catch (error) {
+      console.log(error);
+    }
+    const updatedLoadingList = isInListLoading.filter((i) => i !== index);
+    setIsInListLoading(updatedLoadingList);
   }
   return (
     <div
@@ -76,6 +94,7 @@ function AddToCustomListModal({ lists, movie }) {
                       movie={movie}
                       addToList={addToList}
                       removeFromList={removeFromList}
+                      isInListLoading={isInListLoading}
                     />
                   ))}
             </div>

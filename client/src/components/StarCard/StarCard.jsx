@@ -56,20 +56,21 @@ function StarCard({ movie, size, formOfCalling, index }) {
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && ratings) {
       const ratedValue = ratings[0]?.rating.filter(
         (movieItem) => movieItem.movie_id == movie.id
       );
       const ratingValue = ratedValue && ratedValue[0]?.ratingValue;
 
       setRatedValue(ratingValue);
-      setLoading(false);
+      // setLoading(false);
     } else {
-      setLoading(false);
+      // setLoading(false);
       // setRating(null);
       setRatedValue(null);
     }
-  }, []);
+    ratings && lists ? setLoading(false) : setLoading(true);
+  }, [ratings, lists]);
 
   return (
     <>
@@ -145,7 +146,7 @@ function StarCard({ movie, size, formOfCalling, index }) {
                   />
 
                   <BsStarFill
-                    size="35"
+                    size="30"
                     className={styles.star}
                     color={
                       ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"
@@ -161,14 +162,19 @@ function StarCard({ movie, size, formOfCalling, index }) {
         <Modal.Footer className={styles.container}>
           {(ratedValue || rating) && (
             <Button
+              disabled={loading}
               className="btn btn-danger"
               variant="secondary"
               onClick={() => {
                 if (loggedIn) {
-                  DeleteRating({ movie_id: movie.id });
-                  RemoveFromList(lists[1]?._id, movie);
-                  setRating(null);
-                  setRatedValue(null);
+                  try {
+                    DeleteRating({ movie_id: movie.id });
+                    RemoveFromList(lists[1]?._id, movie);
+                    setRating(null);
+                    setRatedValue(null);
+                  } catch (error) {
+                    console.log(error);
+                  }
                 }
                 handleClose();
               }}
@@ -183,15 +189,21 @@ function StarCard({ movie, size, formOfCalling, index }) {
 
           {rating && (
             <Button
+              disabled={loading}
               variant="primary"
               onClick={() => {
                 if (loggedIn) {
-                  AddToList(lists[1]?._id, movie);
-                  addRating({
-                    movie_id: movie.id,
-                    ratingValue: rating,
-                  });
-                  setRatedValue(rating);
+                  try {
+                    AddToList(lists[1]?._id, movie);
+                    addRating({
+                      movie_id: movie.id,
+                      ratingValue: rating,
+                    });
+                    setRatedValue(rating);
+                    setLoading(false);
+                  } catch (error) {
+                    console.log(error);
+                  }
                 } else {
                   navigate("/signin");
                 }

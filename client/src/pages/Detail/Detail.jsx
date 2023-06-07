@@ -66,8 +66,8 @@ function Detail() {
   useEffect(() => {
     (async () => {
       if (lists) {
-        const isContainInList = lists[0].movies.find(
-          (movieData) => movieData?.movie?.id === parseInt(id)
+        const isContainInList = await lists[0]?.movies.find(
+          (movieData) => movieData?.movie?.id == id
         );
 
         setIsInList(isContainInList);
@@ -79,7 +79,7 @@ function Detail() {
         setIsInListLoading(false);
       }
     })();
-  }, [id, isInListLoading, lists, loggedIn]);
+  }, [id, lists, loggedIn]);
 
   //Get movie information
   const {

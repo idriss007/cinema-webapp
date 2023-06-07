@@ -50,7 +50,6 @@ function MovieCardSmall({ movie, type, index }) {
         const isContainInList = await lists[0]?.movies.find(
           (movieData) => movieData?.movie?.id === parseInt(movie?.id)
         );
-
         setIsInList(isContainInList);
 
         setIsInListLoading(false);
@@ -143,6 +142,7 @@ function MovieCardSmall({ movie, type, index }) {
           setIsInList={setIsInList}
           called="MovieCardSmall"
           isInListLoading={isInListLoading}
+          setIsInListLoading={setIsInListLoading}
           width="w-100"
         />
       </div>
