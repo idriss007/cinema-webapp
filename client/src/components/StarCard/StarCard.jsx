@@ -78,7 +78,7 @@ function StarCard({ movie, size, formOfCalling, index }) {
   return (
     <>
       <button
-        disabled={!lists}
+        // disabled={!lists}
         className={clsx(
           styles.starBtn,
           "d-flex align-align-items-center justify-content-center"

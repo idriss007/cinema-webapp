@@ -189,19 +189,6 @@ function Navbar() {
               >
                 Sign In<span className="sr-only">(current)</span>
               </Link>
-              {/* <Link
-                reloadDocument={true}
-                state={{ previousPath: pathname }}
-                className={clsx(
-                  styles.dropdownItem,
-                  styles.navBtn,
-                  styles.linkUrl,
-                  "dropdown-item p-3 d-flex justify-content-center"
-                )}
-                to="/signup"
-              >
-                Sign Up
-              </Link> */}
             </div>
           )}
 
@@ -219,7 +206,8 @@ function Navbar() {
               >
                 Watchlist
               </Link>
-              <div className={"nav-item dropdown z-index-1"}>
+
+              <div className="nav-item dropdown">
                 <a
                   className={clsx(
                     styles.navbarDropdown,
@@ -227,11 +215,9 @@ function Navbar() {
                     "nav-link dropdown-toggle d-flex align-items-center p-3"
                   )}
                   href="/"
-                  id={"navbarDropdown"}
+                  id="navbarDropdown"
                   role="button"
                   data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
                 >
                   <div style={{ height: "16px" }}>
                     <FaUserCircle size="18" className="mr-1" />

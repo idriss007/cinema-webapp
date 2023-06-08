@@ -19,7 +19,7 @@
   background-color: inherit;
   border: 1px solid black;
   transition: 0.2s;
-  /* color: white; */
+  color: black;
 }
 
 .closeBtn:hover {
@@ -34,6 +34,7 @@
   border: 1px solid black;
   padding: 10px;
   transition: 0.2s;
+  color: black;
 }
 
 .removeBtn:hover {
@@ -60,6 +61,7 @@
   border: 1px solid black;
   padding: 10px;
   transition: 0.2s;
+  color: black;
 }
 
 .saveBtn:hover {
