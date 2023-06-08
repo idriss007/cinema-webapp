@@ -36,7 +36,8 @@
 
 .changePrivacyBtn:disabled {
     background-color: inherit;
-    border-color: black;
+    border-color: gray;
+    color: gray
 }
 
 .avatarContainer {

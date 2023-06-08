@@ -186,7 +186,7 @@ function Profile({ title }) {
               >
                 {isPrivacyChanging.includes(index) ? (
                   <div className="pr-4 pl-4">
-                    <ClipLoader size="12px" />
+                    <ClipLoader size="12px" color="gray" />
                   </div>
                 ) : list.isPrivate ? (
                   "Make public"

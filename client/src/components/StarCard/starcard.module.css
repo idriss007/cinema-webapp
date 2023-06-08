@@ -51,8 +51,8 @@
 
 .removeBtn:disabled {
   background-color: inherit;
-  border: 1px solid black;
-  color: black;
+  border: 1px solid gray;
+  color: gray;
 }
 
 .saveBtn {
@@ -76,7 +76,8 @@
 
 .saveBtn:disabled {
   background-color: inherit;
-  border: 1px solid black;
+  border: 1px solid gray;
+  color: gray;
 }
 
 .starBtn:hover {
