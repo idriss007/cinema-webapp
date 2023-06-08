@@ -76,7 +76,11 @@ function SendLink() {
                 )}
               </div>
               <div className="d-flex justify-content-center">
-                <button type="submit" className="btn btn-dark">
+                <button
+                  disabled={isLinkSent}
+                  type="submit"
+                  className="btn btn-dark"
+                >
                   Submit
                 </button>
               </div>
