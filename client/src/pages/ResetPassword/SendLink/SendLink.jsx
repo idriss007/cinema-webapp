@@ -8,10 +8,14 @@ import validationSchema from "./validation";
 //Local Api
 import { sendResetPasswordLink } from "internalApi";
 
+//React Spinners
+import ClipLoader from "react-spinners/ClipLoader";
+
 //Stylesheet
 import styles from "./sendlink.module.css";
 
 function SendLink() {
+  const [linkSentText, setLinkSentText] = useState(null);
   const [isLinkSent, setIsLinkSent] = useState(false);
 
   const formik = useFormik({
@@ -21,9 +25,13 @@ function SendLink() {
     validationSchema,
     onSubmit: async (values, bag) => {
       try {
-        await sendResetPasswordLink(values.email);
         setIsLinkSent(true);
+        await sendResetPasswordLink(values.email);
+        setLinkSentText(
+          "Password reset link has been sent to your email address."
+        );
       } catch (err) {
+        setIsLinkSent(false);
         bag.setErrors({ general: err.response.data });
       }
     },
@@ -36,9 +44,9 @@ function SendLink() {
           <p className="h3 line-height-1 mb-4">Send Reset Link</p>
         </div>
         <div className="col-auto w-100">
-          {isLinkSent ? (
+          {linkSentText ? (
             <div className="h4 d-flex justify-content-center align-items-center">
-              Password reset link has been sent to your email address.
+              {linkSentText}
             </div>
           ) : (
             <form onSubmit={formik.handleSubmit}>
@@ -81,7 +89,13 @@ function SendLink() {
                   type="submit"
                   className="btn btn-dark"
                 >
-                  Submit
+                  {isLinkSent ? (
+                    <div className="pl-4 pr-4">
+                      <ClipLoader size="12px" color="white" />
+                    </div>
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
               </div>
             </form>

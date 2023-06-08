@@ -9,11 +9,16 @@ import PasswordVisibilityIcon from "components/PasswordVisibilityIcon/PasswordVi
 import { useParams } from "react-router-dom";
 import { resetPassword } from "internalApi";
 
+//React Spinners
+import ClipLoader from "react-spinners/ClipLoader";
+
 function Reset() {
   const { user_id, token } = useParams();
 
   const [showPassword, setShowPassword] = useState([]);
+
   const [isReseted, setIsReseted] = useState(false);
+  const [resetedText, setResetedText] = useState(null);
 
   function handleShowPassword(id) {
     let x = document.getElementById(id);
@@ -38,9 +43,11 @@ function Reset() {
     validationSchema,
     onSubmit: async (values, bag) => {
       try {
-        await resetPassword(user_id, token, values.password);
         setIsReseted(true);
+        await resetPassword(user_id, token, values.password);
+        setResetedText("Password has been reseted.");
       } catch (err) {
+        setIsReseted(false);
         bag.setErrors({ general: err.response.data });
       }
     },
@@ -52,9 +59,9 @@ function Reset() {
         <div className="col-12 d-flex justify-content-center">
           <p className="h3 line-height-1 mb-4">Reset Password</p>
         </div>
-        {isReseted ? (
+        {resetedText ? (
           <div className="h4 d-flex justify-content-center align-items-center">
-            Password has been reseted.
+            {resetedText}
           </div>
         ) : (
           <div className="col-auto w-100">
@@ -102,8 +109,18 @@ function Reset() {
                 )}
               </div>
               <div className="d-flex justify-content-center">
-                <button type="submit" className="btn btn-dark">
-                  Submit
+                <button
+                  disabled={isReseted}
+                  type="submit"
+                  className="btn btn-dark"
+                >
+                  {isReseted ? (
+                    <div className="pl-4 pr-4">
+                      <ClipLoader size="12px" color="white" />
+                    </div>
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
               </div>
             </form>
