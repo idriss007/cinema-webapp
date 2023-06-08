@@ -43,15 +43,19 @@ function Movies() {
         <div className="col-12 h1">{`Search results for: ${query}`}</div>
         {movies.data.results.map(renderMovies)}
 
-        <div className="col-12 justify-content-center d-flex margin-end-to-page">
-          <div className="row no-gutters">
-            <PaginationCard
-              addToUrl={query}
-              pageId={pageId}
-              totalPages={movies.data.total_pages}
-            />
+        {movies?.data?.results?.length > 0 ? (
+          <div className="col-12 justify-content-center d-flex margin-end-to-page">
+            <div className="row no-gutters">
+              <PaginationCard
+                addToUrl={query}
+                pageId={pageId}
+                totalPages={movies.data.total_pages}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          "No results for search query."
+        )}
       </div>
     </div>
   );

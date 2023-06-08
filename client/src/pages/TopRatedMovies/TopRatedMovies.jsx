@@ -1,5 +1,6 @@
 import { GetTopRatedMovies } from "api";
 import MovieCard from "components/MovieCard/MovieCard";
+import PageNotFound from "components/PageNotFound/PageNotFound";
 import PaginationCard from "components/PaginationCard/PaginationCard";
 import React from "react";
 import { useQuery } from "react-query";
@@ -21,6 +22,10 @@ function TopRatedMovies() {
         <SyncLoader size={35} />
       </div>
     );
+  }
+
+  if (topRatedMovies.isError) {
+    return <PageNotFound />;
   }
 
   function renderMovies(item, key) {

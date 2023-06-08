@@ -156,7 +156,7 @@ function MovieCard({
                   movieDetails?.status?.toUpperCase() === "RELEASED") && (
                   <div className="col-auto mr-2">
                     <button
-                      className="btn btn-success"
+                      className={clsx(styles.watchedBtn, styles.deleteBtn)}
                       onClick={() => handleAddToWatchedlist(movie)}
                     >
                       Watched
@@ -167,7 +167,7 @@ function MovieCard({
               {!isRatingList && handleDeleteBtn && (
                 <div className="col-auto">
                   <button
-                    className="btn btn-danger"
+                    className={clsx(styles.deleteBtn)}
                     onClick={() => handleDeleteBtn(movie)}
                   >
                     Delete

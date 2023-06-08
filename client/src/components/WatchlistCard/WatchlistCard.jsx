@@ -39,7 +39,8 @@ function WatchlistCard({
   return (
     <>
       <div className={clsx(width, "d-flex align-items-center")}>
-        <div
+        <button
+          disabled={isInListLoading}
           className={clsx(
             styles.addToWatchlistBtn,
             "d-flex align-items-center justify-content-center w-100",
@@ -80,7 +81,7 @@ function WatchlistCard({
                 : "+  Watchlist"}
             </Link>
           )}
-        </div>
+        </button>
 
         {isInListLoading
           ? null

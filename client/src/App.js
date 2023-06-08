@@ -76,13 +76,12 @@ function App() {
                 element={<List calledType="ratings" />}
               />
 
-              <Route
-                path="/reset-password/:user_id/:token"
-                element={<Reset />}
-              />
-
               <Route element={<ProtectedRoute2 />}>
                 <Route path="/reset-password" element={<SendLink />} />
+                <Route
+                  path="/reset-password/:user_id/:token"
+                  element={<Reset />}
+                />
                 <Route path="/signup" element={<Signup title="Sign Up" />} />
                 <Route path="/signin" element={<Signin title="Sign In" />} />
               </Route>

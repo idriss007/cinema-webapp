@@ -21,6 +21,8 @@ import styles from "./profile.module.css";
 
 //Components
 import RecentlyRatedMovieCard from "components/RecentlyRatedMovieCard/RecentlyRatedMovieCard";
+import UserCommentsSection from "components/UserCommentsSection/UserCommentsSection";
+import ImageNotFound from "components/ImageNotFound/ImageNotFound";
 
 //Config File
 import configData from "config.json";
@@ -31,12 +33,12 @@ import { TbError404 } from "react-icons/tb";
 
 //React Spinners
 import SyncLoader from "react-spinners/SyncLoader";
-import UserCommentsSection from "components/UserCommentsSection/UserCommentsSection";
-import ImageNotFound from "components/ImageNotFound/ImageNotFound";
-import ListContext from "context/ListContext";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function Profile({ title }) {
   const [lists, setLists] = useState();
+
+  const [isPrivacyChanging, setIsPrivacyChanging] = useState([]);
 
   useEffect(() => {}, []);
 
@@ -94,24 +96,33 @@ function Profile({ title }) {
     );
   }
 
-  async function handleSetListPrivacy(listId) {
-    const updatedList = await SetRatingsPrivacy(listId);
-    const filteredList = lists.map((list) => {
-      if (list._id === updatedList._id) {
-        list.isPrivate = updatedList.isPrivate;
-      }
-      return list;
-    });
+  async function handleSetListPrivacy(listId, listIndex) {
+    setIsPrivacyChanging([...isPrivacyChanging, listIndex]);
+    try {
+      const updatedList = await SetRatingsPrivacy(listId);
+      const filteredList = lists.map((list) => {
+        if (list._id === updatedList._id) {
+          list.isPrivate = updatedList.isPrivate;
+        }
+        return list;
+      });
+      setLists(filteredList);
+    } catch (error) {
+      console.log(error);
+    }
 
-    setLists(filteredList);
+    const filteredIsPrivacyChanging = isPrivacyChanging.filter(
+      (i) => i !== listIndex
+    );
+    setIsPrivacyChanging(filteredIsPrivacyChanging);
   }
 
-  function renderLists(list, key) {
+  function renderLists(list, index) {
     if (!isAdmin && list.isPrivate) {
       return null;
     }
     return (
-      <div key={key} className="col-12 mt-1 mb-1 p-3">
+      <div key={index} className="col-12 mt-1 mb-1 p-3">
         <div className="row no-gutters">
           {list?.movies?.length > 0 && (
             <div className="col-auto mr-2">
@@ -144,7 +155,7 @@ function Profile({ title }) {
           {isAdmin && (
             <div className="col-auto ml-auto text-white d-flex justify-content-center align-items-center mt-3 mt-sm-0">
               <button
-                className={clsx(styles.button, "p-2 rounded bg-danger")}
+                className={clsx(styles.deleteBtn, "p-2")}
                 onClick={() => {
                   if (
                     window.confirm(
@@ -165,13 +176,23 @@ function Profile({ title }) {
                 Delete List
               </button>
               <button
-                onClick={() => handleSetListPrivacy(list._id)}
+                disabled={isPrivacyChanging.includes(index)}
+                onClick={() => handleSetListPrivacy(list._id, index)}
                 className={clsx(
-                  styles.button,
-                  "rounded p-2 border-0 bg-info ml-2"
+                  styles.deleteBtn,
+                  styles.changePrivacyBtn,
+                  "p-2 ml-2"
                 )}
               >
-                {list.isPrivate ? "Make public" : "Make private"}
+                {isPrivacyChanging.includes(index) ? (
+                  <div className="pr-4 pl-4">
+                    <ClipLoader size="12px" />
+                  </div>
+                ) : list.isPrivate ? (
+                  "Make public"
+                ) : (
+                  "Make private"
+                )}
               </button>
             </div>
           )}

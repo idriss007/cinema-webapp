@@ -12,8 +12,8 @@ import { fetchLogin } from "internalApi";
 //Context
 import AuthContext from "context/AuthContext";
 
-//React Icons
-import { AiFillEye, AiOutlineEyeInvisible } from "react-icons/ai";
+//React Spinners
+import ClipLoader from "react-spinners/ClipLoader";
 
 //Stylesheet
 import styles from "../Signup/signup.module.css";
@@ -24,6 +24,8 @@ function Signin({ title }) {
   const { login } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState([]);
+
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
 
   useEffect(() => {
     document.title = title;
@@ -37,10 +39,12 @@ function Signin({ title }) {
     validationSchema,
     onSubmit: async (values, bag) => {
       try {
+        setIsLoginLoading(true);
         const loginResponse = await fetchLogin(values);
         console.log(loginResponse);
         login(loginResponse);
       } catch (err) {
+        setIsLoginLoading(false);
         bag.setErrors({ invalidLogin: err.response.data });
       }
     },
@@ -144,8 +148,18 @@ function Signin({ title }) {
               )}
             </div>
             <div className="d-flex justify-content-center">
-              <button type="submit" className="btn btn-dark">
-                Login
+              <button
+                disabled={isLoginLoading}
+                type="submit"
+                className="btn btn-dark"
+              >
+                {isLoginLoading ? (
+                  <div className="pl-3 pr-3">
+                    <ClipLoader size="12px" color="white" />
+                  </div>
+                ) : (
+                  "Login"
+                )}
               </button>
             </div>
             <div className="d-flex justify-content-center mt-2">

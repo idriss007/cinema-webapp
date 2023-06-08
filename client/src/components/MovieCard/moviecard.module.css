@@ -1,5 +1,4 @@
 .container {
-  /* background-color: rgb(26, 26, 26); */
   background-color: rgb(246, 246, 246);
   border-radius: 3px;
 }
@@ -10,13 +9,8 @@
 
 .image {
   width: 100%;
-  /* object-fit: contain; */
   border-radius: 3px;
 }
-
-/* .cardDetail {
-  margin-top: 20px;
-} */
 
 .titleLink {
   text-decoration: none;
@@ -26,6 +20,38 @@
 .title {
   font-size: 20px;
   font-weight: bold;
+}
+
+.deleteBtn {
+  border: none;
+  background-color: inherit;
+  border: 1px solid black;
+  padding: 10px;
+  transition: 0.2s;
+}
+
+.deleteBtn:hover {
+  background-color: rgb(222, 79, 79);
+  color: white;
+  border-color: rgb(222, 79, 79);
+}
+
+.deleteBtn:active {
+  background-color: rgb(227, 37, 37);
+  color: white;
+  border-color: rgb(227, 37, 37);
+}
+
+.watchedBtn:hover {
+  background-color: rgb(112, 226, 112);
+  border-color: rgb(112, 226, 112);
+  color: black;
+}
+
+.watchedBtn:active {
+  background-color: rgb(51, 206, 51);
+  border-color: rgb(51, 206, 51);
+  color: black;
 }
 
 .posterNotFound {

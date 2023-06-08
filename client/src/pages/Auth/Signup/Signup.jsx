@@ -1,9 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import clsx from "clsx";
 
 //Validation Schema
 import validationSchema from "./validations";
+
+//Components
+import PasswordVisibilityIcon from "components/PasswordVisibilityIcon/PasswordVisibilityIcon";
 
 //Local Api
 // import { createRatingList, fetchRegister, postList } from "../../../api";
@@ -12,15 +16,18 @@ import { createRatingList, fetchRegister, postList } from "internalApi";
 //Context
 import AuthContext from "context/AuthContext";
 
+//React Spinners
+import ClipLoader from "react-spinners/ClipLoader";
+
 //Styleheet
 import styles from "./signup.module.css";
-import PasswordVisibilityIcon from "components/PasswordVisibilityIcon/PasswordVisibilityIcon";
-import { Link, useNavigate } from "react-router-dom";
 
 function Signup({ title }) {
   const { login } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState([]);
+
+  const [isRegisterLoading, setIsRegisterLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -38,6 +45,7 @@ function Signup({ title }) {
     validationSchema,
     onSubmit: async (values, bag) => {
       try {
+        setIsRegisterLoading(true);
         const registerResponse = await fetchRegister({
           name: values.name,
           email: values.email,
@@ -47,6 +55,7 @@ function Signup({ title }) {
         console.log(registerResponse);
         login(registerResponse, true);
       } catch (err) {
+        setIsRegisterLoading(false);
         bag.setErrors({ general: err.response.data });
       }
     },
@@ -216,8 +225,18 @@ function Signup({ title }) {
                 )}
             </div>
             <div className="d-flex justify-content-center">
-              <button type="submit" className="btn btn-dark">
-                Sign Up
+              <button
+                disabled={isRegisterLoading}
+                type="submit"
+                className="btn btn-dark"
+              >
+                {isRegisterLoading ? (
+                  <div className="pl-3 pr-3">
+                    <ClipLoader size="12px" color="white" />
+                  </div>
+                ) : (
+                  "Sign Up"
+                )}
               </button>
             </div>
             <div className="d-flex justify-content-center mt-2">

@@ -77,7 +77,8 @@ function StarCard({ movie, size, formOfCalling, index }) {
 
   return (
     <>
-      <div
+      <button
+        disabled={!lists}
         className={clsx(
           styles.starBtn,
           "d-flex align-align-items-center justify-content-center"
@@ -118,7 +119,7 @@ function StarCard({ movie, size, formOfCalling, index }) {
             )}
           </div>
         )}
-      </div>
+      </button>
 
       <Modal
         centered
@@ -128,10 +129,19 @@ function StarCard({ movie, size, formOfCalling, index }) {
         contentClassName="starcard-modal-content"
         dialogClassName="starcard-dialog"
       >
-        <Modal.Header className={styles.container}>
-          <Modal.Title className={styles.modalRatingTxt}>
+        <Modal.Header className={clsx(styles.container)}>
+          <Modal.Title className={clsx(styles.modalRatingTxt)}>
             {rating ? rating : "Puanla"}
           </Modal.Title>
+          <button
+            className={clsx(
+              "justify-content-end mr-3 rounded pt-2 pb-2 pr-3 pl-3",
+              styles.closeBtn
+            )}
+            onClick={handleClose}
+          >
+            X
+          </button>
         </Modal.Header>
         <Modal.Body className={styles.container}>
           <div className="row no-gutters">
@@ -164,10 +174,9 @@ function StarCard({ movie, size, formOfCalling, index }) {
         </Modal.Body>
         <Modal.Footer className={styles.container}>
           {(ratedValue || rating) && (
-            <Button
+            <button
               disabled={loading}
-              className="btn btn-danger"
-              variant="secondary"
+              className={clsx("rounded-0", styles.removeBtn)}
               onClick={() => {
                 if (loggedIn) {
                   try {
@@ -183,17 +192,13 @@ function StarCard({ movie, size, formOfCalling, index }) {
               }}
             >
               Remove Rating
-            </Button>
+            </button>
           )}
 
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-
           {rating && (
-            <Button
-              disabled={loading}
-              variant="primary"
+            <button
+              className={clsx(styles.saveBtn)}
+              disabled={loading || (ratedValue && rating == ratedValue)}
               onClick={() => {
                 if (loggedIn) {
                   try {
@@ -213,8 +218,8 @@ function StarCard({ movie, size, formOfCalling, index }) {
                 handleClose();
               }}
             >
-              Save Changes
-            </Button>
+              Rate
+            </button>
           )}
         </Modal.Footer>
       </Modal>

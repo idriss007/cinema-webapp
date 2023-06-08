@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import clsx from "clsx";
@@ -10,11 +10,16 @@ import { postList } from "internalApi";
 //Validation Schema
 import validationSchema from "./validations";
 
+//React Spinners
+import ClipLoader from "react-spinners/ClipLoader";
+
 //Stylesheet
 import styles from "./createnewlist.module.css";
 
 function CreateNewList() {
   const navigate = useNavigate();
+
+  const [isListCreating, setIsListCreating] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -23,11 +28,13 @@ function CreateNewList() {
     validationSchema,
     onSubmit: async (values, bag) => {
       try {
+        setIsListCreating(true);
         const { newList } = await postList({
           name: values.listName,
         });
         navigate(`/list/${newList._id}`);
       } catch (error) {
+        setIsListCreating(false);
         bag.setErrors({ general: error.response.data });
       }
     },
@@ -74,8 +81,18 @@ function CreateNewList() {
               )}
             </div>
             <div className="d-flex justify-content-center">
-              <button type="submit" class="btn btn-dark font-weight-bold">
-                Create
+              <button
+                disabled={isListCreating}
+                type="submit"
+                class="btn btn-dark font-weight-bold"
+              >
+                {isListCreating ? (
+                  <div className="pl-4 pr-4">
+                    <ClipLoader size="12px" color="white" />
+                  </div>
+                ) : (
+                  "Create"
+                )}
               </button>
             </div>
           </form>

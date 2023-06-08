@@ -3,17 +3,39 @@
     font-size: 2rem;
 }
 
-.button {
-    color: inherit;
+.deleteBtn {
     border: none;
+    background-color: inherit;
+    border: 1px solid black;
+    padding: 10px;
+    transition: 0.2s;
 }
 
-.button:hover {
-    background-color: rgb(49, 49, 49);
+.deleteBtn:hover {
+    background-color: rgb(222, 79, 79);
+    color: white;
+    border-color: rgb(222, 79, 79);
 }
 
-.button:active {
-    background-color: rgb(103, 103, 103);
+.deleteBtn:active {
+    background-color: rgb(227, 37, 37);
+    color: white;
+    border-color: rgb(227, 37, 37);
+}
+
+.changePrivacyBtn:hover {
+    background-color: rgb(100, 100, 240);
+    border-color: rgb(100, 100, 240);
+}
+
+.changePrivacyBtn:active {
+    background-color: rgb(52, 52, 134);
+    border-color: rgb(52, 52, 134);
+}
+
+.changePrivacyBtn:disabled {
+    background-color: inherit;
+    border-color: black;
 }
 
 .avatarContainer {

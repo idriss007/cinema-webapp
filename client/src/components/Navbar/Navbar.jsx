@@ -219,7 +219,7 @@ function Navbar() {
               >
                 Watchlist
               </Link>
-              <div className={"nav-item dropdown"}>
+              <div className={"nav-item dropdown z-index-1"}>
                 <a
                   className={clsx(
                     styles.navbarDropdown,
