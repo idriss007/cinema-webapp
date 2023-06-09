@@ -21,7 +21,7 @@ function RecentlyRatedMovieCard({ list, index, movie, userId }) {
     GetRating(userId, movie.id)
   );
   return (
-    <div className="col-6 col-sm-3 d-flex justify-content-center align-items-center flex-column">
+    <div className="col-6 col-sm-3 mb-2 mb-sm-0 d-flex justify-content-center align-items-center flex-column">
       {/* <div> */}
       <Link
         className="w-100 h-100"

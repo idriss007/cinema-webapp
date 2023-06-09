@@ -59,7 +59,8 @@ function AccountSettings() {
   });
 
   const userLists = useQuery(["userLists"], () => fetchLists(user._id), {
-    onSuccess: (userLists) => setRatingList(userLists[1]),
+    onSuccess: (userLists) =>
+      ratingList === null && setRatingList(userLists[1]),
   });
 
   function onClose() {
