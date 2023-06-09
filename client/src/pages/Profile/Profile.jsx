@@ -240,9 +240,7 @@ function Profile({ title }) {
       </div>
 
       {listsData.isLoading || comments.isLoading ? (
-        <div className="row no-gutters justify-content-around p-3 border mb-3">
-          <ClipLoader size="20px" />
-          <ClipLoader size="20px" />
+        <div className="row no-gutters justify-content-center p-3 border mb-3">
           <ClipLoader size="20px" />
         </div>
       ) : (
@@ -271,10 +269,7 @@ function Profile({ title }) {
               {isAdmin ? "Your Ratings" : "Ratings"}
             </p>
           </div>
-          <div className="d-flex justify-content-around p-5 w-100">
-            <ClipLoader size="20px" />
-            <ClipLoader size="20px" />
-            <ClipLoader size="20px" />
+          <div className="d-flex justify-content-center p-5 w-100">
             <ClipLoader size="20px" />
           </div>
         </div>
