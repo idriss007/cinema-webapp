@@ -531,15 +531,21 @@ function AccountSettingsModal({
           Close
         </Button>
         <Button
+          disabled={isChangingSettings.includes("4")}
           type="submit"
-          className="btn btn-dark"
+          className="btn btn-dark d-flex"
           onClick={() => {
-            handleSubmitProfileImage();
+            handleSubmitProfileImage(isChangingSettings, setIsChangingSettings);
             handleClose();
             onClose();
           }}
         >
-          Save
+          Save{" "}
+          {isChangingSettings.includes("4") && (
+            <div className="ml-2">
+              <ClipLoader size="12px" />
+            </div>
+          )}
         </Button>
       </Modal.Footer>
     </Modal>

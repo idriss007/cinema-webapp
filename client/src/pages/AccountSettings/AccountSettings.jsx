@@ -70,8 +70,14 @@ function AccountSettings() {
     setPreview(view);
   }
 
-  async function handleSubmitProfileImage() {
+  async function handleSubmitProfileImage(
+    isChangingSettings,
+    setIsChangingSettings
+  ) {
+    setIsChangingSettings([...isChangingSettings, "4"]);
     const updatedUser = await ChangeProfileImage(preview);
+    const updatedChangingSettings = isChangingSettings.filter((i) => i !== "2");
+    setIsChangingSettings(updatedChangingSettings);
     user.profile_image = updatedUser.profile_image;
     setCurrentUser(updatedUser);
   }
