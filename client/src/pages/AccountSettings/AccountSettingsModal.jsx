@@ -6,12 +6,17 @@ import Avatar from "react-avatar-edit";
 //Local Api
 import { ChangeEmail, ChangeName, ChangePassword } from "internalApi";
 
+//Components
+import PasswordVisibilityIcon from "components/PasswordVisibilityIcon/PasswordVisibilityIcon";
+
 //React Bootstrap
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 import styles from "./accountsettingsmodal.module.css";
-import PasswordVisibilityIcon from "components/PasswordVisibilityIcon/PasswordVisibilityIcon";
+
+//React Spinners
+import ClipLoader from "react-spinners/ClipLoader";
 
 function AccountSettingsModal({
   handleClose,
@@ -27,6 +32,8 @@ function AccountSettingsModal({
   setCurrentUser,
 }) {
   const [showPassword, setShowPassword] = useState([]);
+
+  const [isChangingSettings, setIsChangingSettings] = useState([]);
 
   function handleShowPassword(id) {
     let x = document.getElementById(id);
@@ -52,12 +59,17 @@ function AccountSettingsModal({
     validationSchema: callingOptions?.validations,
     onSubmit: async (values, bag) => {
       try {
+        setIsChangingSettings([...isChangingSettings, "3"]);
         await ChangePassword(values.currentPassword, values.newPassword);
         handleClose();
         formikPassword.resetForm();
       } catch (err) {
         bag.setErrors({ general: err.response.data });
       }
+      const updatedChangingSettings = isChangingSettings.filter(
+        (i) => i !== "3"
+      );
+      setIsChangingSettings(updatedChangingSettings);
     },
   });
 
@@ -172,11 +184,17 @@ function AccountSettingsModal({
       <Modal.Footer className="d-flex justify-content-center">
         <Button onClick={() => handleClose()}>Close</Button>
         <button
+          disabled={isChangingSettings.includes("3")}
           type="submit"
-          className="btn btn-dark"
+          className="btn btn-dark d-flex"
           onClick={() => formikPassword.handleSubmit()}
         >
-          Save
+          Save{" "}
+          {isChangingSettings.includes("3") && (
+            <div className="ml-2">
+              <ClipLoader size="12px" />
+            </div>
+          )}
         </button>
       </Modal.Footer>
     </Modal>
@@ -190,6 +208,7 @@ function AccountSettingsModal({
     validationSchema: callingOptions?.validations,
     onSubmit: async (values, bag) => {
       try {
+        setIsChangingSettings([...isChangingSettings, "1"]);
         const updatedeUser = await ChangeEmail(
           values.newEmail,
           values.currentPassword
@@ -200,6 +219,10 @@ function AccountSettingsModal({
       } catch (err) {
         bag.setErrors({ general: err.response.data });
       }
+      const updatedChangingSettings = isChangingSettings.filter(
+        (i) => i !== "1"
+      );
+      setIsChangingSettings(updatedChangingSettings);
     },
   });
 
@@ -303,11 +326,17 @@ function AccountSettingsModal({
       <Modal.Footer className="d-flex justify-content-center">
         <Button onClick={() => handleClose()}>Close</Button>
         <button
+          disabled={isChangingSettings.includes("1")}
           type="submit"
-          className="btn btn-dark"
+          className="btn btn-dark d-flex"
           onClick={() => formikEmail.handleSubmit()}
         >
-          Save
+          Save{" "}
+          {isChangingSettings.includes("1") && (
+            <div className="ml-2">
+              <ClipLoader size="12px" />
+            </div>
+          )}
         </button>
       </Modal.Footer>
     </Modal>
@@ -321,6 +350,7 @@ function AccountSettingsModal({
     validationSchema: callingOptions?.validations,
     onSubmit: async (values, bag) => {
       try {
+        setIsChangingSettings([...isChangingSettings, "2"]);
         const updatedeUser = await ChangeName(
           values.newName,
           values.currentPassword
@@ -331,6 +361,10 @@ function AccountSettingsModal({
       } catch (err) {
         bag.setErrors({ general: err.response.data });
       }
+      const updatedChangingSettings = isChangingSettings.filter(
+        (i) => i !== "2"
+      );
+      setIsChangingSettings(updatedChangingSettings);
     },
   });
 
@@ -441,11 +475,17 @@ function AccountSettingsModal({
           Close
         </Button>
         <Button
+          disabled={isChangingSettings.includes("2")}
           type="submit"
           onClick={() => formikName.handleSubmit()}
-          className="btn btn-dark"
+          className="btn btn-dark d-flex"
         >
-          Save
+          Save{" "}
+          {isChangingSettings.includes("2") && (
+            <div className="ml-2">
+              <ClipLoader size="12px" />
+            </div>
+          )}
         </Button>
       </Modal.Footer>
     </Modal>
@@ -453,7 +493,7 @@ function AccountSettingsModal({
 
   const changeProfileImage = (
     <Modal
-      key="2"
+      key="4"
       className="d-flex justify-content-center"
       centered
       show={show}

@@ -1,23 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 //Contexts
 import AuthContext from "context/AuthContext";
 import AccountSettingsModal from "./AccountSettingsModal";
+import ListContext from "context/ListContext";
 
 //Validation Schemas
 import passwordValidations from "./passwordValidations";
 import emailValidations from "./emailValidations";
 import nameValidations from "./nameValidations";
 
+//Local Api
+import {
+  ChangeProfileImage,
+  GetUser,
+  SetRatingsPrivacy,
+  fetchLists,
+} from "internalApi";
+
 //React Icons
 import { FaUserCircle } from "react-icons/fa";
-import { ChangeProfileImage, SetRatingsPrivacy } from "internalApi";
-import ListContext from "context/ListContext";
+
+//React Spinners
+import ClipLoader from "react-spinners/ClipLoader";
 
 function AccountSettings() {
   const { user } = useContext(AuthContext);
-  const { lists } = useContext(ListContext);
-  const { _id, name, email, profile_image } = user;
+
+  const [ratingList, setRatingList] = useState(null);
 
   const [callingOptions, setCallingOptions] = useState();
   const [currentUser, setCurrentUser] = useState({});
@@ -28,23 +39,28 @@ function AccountSettings() {
   const [src, setSrc] = useState();
   const [preview, setPreview] = useState(null);
 
-  // const [ratingsPrivacyStatusText, setRatingsPrivacyStatusText] = useState(null);
-
   useEffect(() => {
     setIsRatingPrivacyLoading(true);
-    setCurrentUser({
-      ...currentUser,
-      name: name,
-      email: email,
-      profile_image: profile_image,
-    });
-    // lists &&
-    //   (lists[1].isPrivate
-    //     ? setRatingsPrivacyStatusText("Public")
-    //     : setRatingsPrivacyStatusText("Private"));
-    lists && setIsRatingsPrivate(lists[1]?.isPrivate);
-    lists && setIsRatingPrivacyLoading(false);
-  }, [lists]);
+    ratingList && setIsRatingsPrivate(ratingList.isPrivate);
+    ratingList && setIsRatingPrivacyLoading(false);
+  }, [ratingList]);
+
+  const foundUser = useQuery(["user", user._id], () => GetUser(user._id), {
+    onSuccess: (foundUser) => {
+      document.title = foundUser.name;
+      setCurrentUser({
+        ...currentUser,
+        name: foundUser.name,
+        email: foundUser.email,
+        profile_image: foundUser.profile_image,
+      });
+    },
+    retry: false,
+  });
+
+  const userLists = useQuery(["userLists"], () => fetchLists(user._id), {
+    onSuccess: (userLists) => setRatingList(userLists[1]),
+  });
 
   function onClose() {
     setPreview(null);
@@ -83,8 +99,9 @@ function AccountSettings() {
     ) {
       try {
         setIsRatingPrivacyLoading(true);
-        const updatedList = await SetRatingsPrivacy(lists[1]?._id);
-        setIsRatingsPrivate(updatedList.isPrivate);
+        const updatedList = await SetRatingsPrivacy(ratingList._id);
+        // setIsRatingsPrivate(updatedList.isPrivate);
+        setRatingList(updatedList);
       } catch (error) {
         console.log(error);
       }
@@ -96,97 +113,106 @@ function AccountSettings() {
     <>
       <div className="container customContainer">
         <div className="row no-gutters h1 line-height-1">Account Settings</div>
-        <div className="p-3 border rounded mb-5">
-          <div className="row no-gutters justify-content-center">
-            <div className="col-10 col-sm-6 col-md-4 col-lg-2 d-flex justify-content-center flex-column align-items-center">
-              {currentUser.profile_image ? (
-                <img
-                  className="w-75"
-                  src={currentUser.profile_image}
-                  alt="avatar"
-                />
-              ) : (
-                <FaUserCircle size="100" />
-              )}
-              <button
-                className="btn btn-outline-dark p-2 pl-3 pr-3 mt-3"
-                onClick={() => handleShow("Upload", "profile_image")}
-              >
-                Upload
-              </button>
-            </div>
+        {foundUser.isLoading ? (
+          <div className="w-100 d-flex justify-content-center align-items-center p-5 border rounded mb-5">
+            <ClipLoader size="30px" />
           </div>
-
-          <div className="row no-gutters">
-            <div className="col-12 d-flex justify-content-between align-items-center p-2">
-              <div className="">
-                <span className="font-weight-bold">Name: </span>
-                {currentUser?.name}
+        ) : (
+          <div className="p-3 border rounded mb-5">
+            <div className="row no-gutters justify-content-center">
+              <div className="col-10 col-sm-6 col-md-4 col-lg-2 d-flex justify-content-center flex-column align-items-center">
+                {currentUser.profile_image ? (
+                  <img
+                    className="w-75"
+                    src={currentUser.profile_image}
+                    alt="avatar"
+                  />
+                ) : (
+                  <FaUserCircle size="100" />
+                )}
+                <button
+                  className="btn btn-outline-dark p-2 pl-3 pr-3 mt-3"
+                  onClick={() => handleShow("Upload", "profile_image")}
+                >
+                  Upload
+                </button>
               </div>
-              <button
-                className="btn btn-outline-dark p-2 pl-3 pr-3"
-                onClick={() => handleShow("Edit Name", "name", nameValidations)}
-              >
-                Edit
-              </button>
             </div>
-          </div>
 
-          <div className="row no-gutters">
-            <div className="col-12 d-flex justify-content-between align-items-center p-2">
-              <div className="">
-                <span className="font-weight-bold">Email: </span>
-                {currentUser.email}
+            <div className="row no-gutters">
+              <div className="col-12 d-flex justify-content-between align-items-center p-2">
+                <div className="">
+                  <span className="font-weight-bold">Name: </span>
+                  {currentUser?.name}
+                </div>
+                <button
+                  className="btn btn-outline-dark p-2 pl-3 pr-3"
+                  onClick={() =>
+                    handleShow("Edit Name", "name", nameValidations)
+                  }
+                >
+                  Edit
+                </button>
               </div>
-              <button
-                className="btn btn-outline-dark p-2 pl-3 pr-3"
-                onClick={() =>
-                  handleShow("Edit Email", "email", emailValidations)
-                }
-              >
-                Edit
-              </button>
             </div>
-          </div>
 
-          <div className="row no-gutters">
-            <div className="col-12 d-flex justify-content-between align-items-center p-2">
-              <div className="">
-                <span className="font-weight-bold">Password: </span>*****
+            <div className="row no-gutters">
+              <div className="col-12 d-flex justify-content-between align-items-center p-2">
+                <div className="">
+                  <span className="font-weight-bold">Email: </span>
+                  {currentUser.email}
+                </div>
+                <button
+                  className="btn btn-outline-dark p-2 pl-3 pr-3"
+                  onClick={() =>
+                    handleShow("Edit Email", "email", emailValidations)
+                  }
+                >
+                  Edit
+                </button>
               </div>
-              <button
-                className="btn btn-outline-dark p-2 pl-3 pr-3"
-                onClick={() =>
-                  handleShow("Edit Password", "password", passwordValidations)
-                }
-              >
-                Edit
-              </button>
             </div>
-          </div>
 
-          <div className="row no-gutters">
-            <div className="col-12 d-flex justify-content-between align-items-center p-2">
-              <div className="">
-                <span className="font-weight-bold">Ratings: </span>
-                {isRatingPrivacyLoading
-                  ? "Loading"
-                  : isRatingsPrivate
-                  ? "Private"
-                  : "Public"}
+            <div className="row no-gutters">
+              <div className="col-12 d-flex justify-content-between align-items-center p-2">
+                <div className="">
+                  <span className="font-weight-bold">Password: </span>*****
+                </div>
+                <button
+                  className="btn btn-outline-dark p-2 pl-3 pr-3"
+                  onClick={() =>
+                    handleShow("Edit Password", "password", passwordValidations)
+                  }
+                >
+                  Edit
+                </button>
               </div>
-              <button
-                className="btn btn-outline-dark p-2 pl-3 pr-3"
-                onClick={() => handleRatingsPrivacy()}
-                disabled={isRatingPrivacyLoading}
-              >
-                {isRatingPrivacyLoading
-                  ? "Loading..."
-                  : "Make ratings " + (isRatingsPrivate ? "Public" : "Private")}
-              </button>
+            </div>
+
+            <div className="row no-gutters">
+              <div className="col-12 d-flex justify-content-between align-items-center p-2">
+                <div className="">
+                  <span className="font-weight-bold">Ratings: </span>
+                  {isRatingPrivacyLoading
+                    ? "Loading"
+                    : isRatingsPrivate
+                    ? "Private"
+                    : "Public"}
+                </div>
+                <button
+                  className="btn btn-outline-dark p-2 pl-3 pr-3"
+                  onClick={() => handleRatingsPrivacy()}
+                  disabled={isRatingPrivacyLoading}
+                >
+                  {isRatingPrivacyLoading
+                    ? "Loading..."
+                    : "Make ratings " +
+                      (isRatingsPrivate ? "Public" : "Private")}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
       <AccountSettingsModal
         handleClose={handleClose}

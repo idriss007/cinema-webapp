@@ -6,8 +6,8 @@ import clsx from "clsx";
 import styles from "./usercommentssection.module.css";
 
 function UserCommentsSection({ comments, isAdmin }) {
-  function renderComment(comment) {
-    return <UserCommentCard comment={comment} />;
+  function renderComment(comment, index) {
+    return <UserCommentCard key={index} comment={comment} />;
   }
 
   return (
@@ -21,7 +21,7 @@ function UserCommentsSection({ comments, isAdmin }) {
       </button>
       <div className="p-3 collapse" id="collapseComments">
         {comments.data.length > 0
-          ? comments.data.map((comment) => renderComment(comment))
+          ? comments.data.map((comment, index) => renderComment(comment, index))
           : "You haven't commented any titles yet."}
       </div>
     </div>

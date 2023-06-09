@@ -44,9 +44,10 @@ function SearchBox({
 
       {movies?.length > 0 ? (
         <div className={styles.queryResultContainer}>
-          {movies?.slice(0, 5).map((movie) => {
+          {movies?.slice(0, 5).map((movie, index) => {
             return (
               <Link
+                key={index}
                 reloadDocument={true}
                 style={linkStyle}
                 to={"detail/" + movie.id}

@@ -23,7 +23,7 @@ export function ListProvider({ children }) {
 
   const { loggedIn, user } = useContext(AuthContext);
 
-  const { data } = useQuery(["lists"], () => fetchLists(user._id), {
+  const { data: lists } = useQuery(["lists"], () => fetchLists(user._id), {
     enabled: loggedIn,
   });
 
@@ -42,12 +42,12 @@ export function ListProvider({ children }) {
     //Kullanıcı giriş yapmışsa izleme listesine film ekleyip çıkarabilsin
     if (loggedIn === true) {
       if (isInList) {
-        removeFromList(data[0], movie, setIsInListLoading);
+        removeFromList(lists[0], movie, setIsInListLoading);
         setIsInList(false);
         return;
       }
       if (!isInList) {
-        addToList(data[0], movie, setIsInListLoading);
+        addToList(lists[0], movie, setIsInListLoading);
         setIsInList(true);
         return;
       }
@@ -81,7 +81,7 @@ export function ListProvider({ children }) {
   const values = {
     addToList,
     removeFromList,
-    lists: data,
+    lists,
     ratings,
     handleAddWatchlistClicked,
   };

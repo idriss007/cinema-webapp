@@ -31,7 +31,7 @@ const GetUser = tryCatch(async (req, res) => {
     throw new BadRequestError(ErrorMessage.BAD_REQUEST);
   }
 
-  const foundUser = await User.findById(user_id);
+  const foundUser = await User.findById(user_id).select("-password");
   res.send(foundUser);
 });
 
