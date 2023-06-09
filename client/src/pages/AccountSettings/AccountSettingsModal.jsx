@@ -515,7 +515,7 @@ function AccountSettingsModal({
               src={src}
               onClose={onClose}
               onCrop={onCrop}
-              exportSize="1000"
+              exportSize="200"
             />
           </div>
         </div>

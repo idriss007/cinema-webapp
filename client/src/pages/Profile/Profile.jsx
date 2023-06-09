@@ -239,7 +239,7 @@ function Profile({ title }) {
         </div>
       </div>
 
-      {listsData.isLoading ? (
+      {listsData.isLoading || comments.isLoading ? (
         <div className="row no-gutters justify-content-around p-3 border mb-3">
           <ClipLoader size="20px" />
           <ClipLoader size="20px" />
