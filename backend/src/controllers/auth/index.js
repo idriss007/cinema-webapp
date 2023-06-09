@@ -70,11 +70,15 @@ const Login = tryCatch(async (req, res) => {
     throw new UserNotFound(ErrorMessage.NOT_FOUND);
   }
 
+  const userData = findUser.toObject();
+  delete userData.password;
+  delete userData.profile_image;
+
   const accessToken = signAccessToken({ user_id: findUser._id });
   const refreshToken = signRefreshToken({ user_id: findUser._id });
 
   return res.json({
-    user: findUser,
+    user: userData,
     accessToken,
     refreshToken,
   });
@@ -87,7 +91,7 @@ const RefreshToken = tryCatch(async (req, res) => {
   }
 
   const user_id = await verifyRefreshToken(refresh_token);
-  const user = await User.findById(user_id);
+  const user = await User.findById(user_id).select("-password -profile_image");
   const accessToken = signAccessToken({ user_id });
   const refreshToken = signRefreshToken({ user_id });
   res.json({ user, accessToken, refreshToken });
@@ -95,7 +99,7 @@ const RefreshToken = tryCatch(async (req, res) => {
 
 const Me = tryCatch(async (req, res) => {
   const { user_id } = req.payload;
-  const user = await User.findById(user_id).select("-password");
+  const user = await User.findById(user_id).select("-password -profile_image");
   res.json(user);
 });
 
