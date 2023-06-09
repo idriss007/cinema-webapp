@@ -78,7 +78,7 @@ function Profile({ title }) {
     retry: false,
   });
 
-  if (listsData.isLoading || comments.isLoading || foundUser.isLoading) {
+  if (foundUser.isLoading) {
     return (
       <div className="d-flex position-absolute h-100 w-100 justify-content-center align-items-center top0">
         <SyncLoader size={35} />
@@ -163,7 +163,6 @@ function Profile({ title }) {
                     )
                   ) {
                     DeleteList(list._id);
-
                     setLists(() => {
                       const newLists = lists.filter(
                         (listItem) => listItem._id !== list._id
@@ -240,24 +239,46 @@ function Profile({ title }) {
         </div>
       </div>
 
-      <div className="row no-gutters justify-content-around p-3 border mb-3">
-        <div className="col-12 col-sm-4 d-flex justify-content-center">
-          {listsData?.data[1]?.movies?.length > 0
-            ? listsData?.data[1]?.movies?.length
-            : 0}
-          {listsData?.data[1]?.movies?.length > 1 ? " Ratings" : " Rating"}
+      {listsData.isLoading ? (
+        <div className="row no-gutters justify-content-around p-3 border mb-3">
+          <ClipLoader size="20px" />
+          <ClipLoader size="20px" />
+          <ClipLoader size="20px" />
         </div>
-        <div className="col-12 col-sm-4 d-flex justify-content-center">
-          {comments?.data.length ? comments?.data.length : 0}
-          {comments?.data.length > 1 ? " Comments" : " Comment"}
+      ) : (
+        <div className="row no-gutters justify-content-around p-3 border mb-3">
+          <div className="col-12 col-sm-4 d-flex justify-content-center">
+            {listsData?.data[1]?.movies?.length > 0
+              ? listsData?.data[1]?.movies?.length
+              : 0}
+            {listsData?.data[1]?.movies?.length > 1 ? " Ratings" : " Rating"}
+          </div>
+          <div className="col-12 col-sm-4 d-flex justify-content-center">
+            {comments?.data.length ? comments?.data.length : 0}
+            {comments?.data.length > 1 ? " Comments" : " Comment"}
+          </div>
+          <div className="col-12 col-sm-4 d-flex justify-content-center">
+            {listsData?.data.length > 0 && listsData?.data.length - 3}
+            {listsData?.data.length > 4 ? " Lists" : " List"}
+          </div>
         </div>
-        <div className="col-12 col-sm-4 d-flex justify-content-center">
-          {listsData?.data.length > 0 && listsData?.data.length - 3}
-          {listsData?.data.length > 4 ? " Lists" : " List"}
-        </div>
-      </div>
+      )}
 
-      {lists &&
+      {listsData.isLoading ? (
+        <div className="row no-gutters border rounded p-3 mb-4">
+          <div className="col-12">
+            <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
+              {isAdmin ? "Your Ratings" : "Ratings"}
+            </p>
+          </div>
+          <div className="d-flex justify-content-around p-5 w-100">
+            <ClipLoader size="20px" />
+            <ClipLoader size="20px" />
+            <ClipLoader size="20px" />
+            <ClipLoader size="20px" />
+          </div>
+        </div>
+      ) : (
         (isAdmin || (lists[1]?.movies?.length > 0 && !lists[1]?.isPrivate)) && (
           <div className="row no-gutters border rounded p-3 mb-4">
             <div className="col-12">
@@ -295,53 +316,80 @@ function Profile({ title }) {
               )}
             </div>
           </div>
-        )}
-
-      {(isAdmin || (lists?.length > 3 && publicLists?.length > 0)) && (
-        <div className="row no-gutters border rounded p-3">
-          <div className="col-12">
-            <div className="row no-gutters align-items-center">
-              <div className="col-auto mr-auto">
-                <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
-                  {isAdmin ? "Your Lists" : "Lists"}
-                </p>
-              </div>
-              {isAdmin && (
-                <div className="col-auto">
-                  <Link
-                    reloadDocument={true}
-                    style={{ color: "inherit" }}
-                    to="/list/create"
-                  >
-                    <p>Create a List</p>
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {lists?.length > 3 ? (
-            lists.slice(3).map((list, key) => renderLists(list, key))
-          ) : (
-            <div className="mt-2 p-3 row no-gutters">
-              <p className="col-auto">Create your own movie list.</p>
-              <Link
-                className="col-auto ml-1"
-                reloadDocument={true}
-                style={{ color: "inherit" }}
-                to="/list/create"
-              >
-                <p>Get started!</p>
-              </Link>
-            </div>
-          )}
-        </div>
+        )
       )}
 
-      {(isAdmin || comments?.data?.length > 0) && (
-        <div className="row no-gutters">
-          <UserCommentsSection isAdmin={isAdmin} comments={comments} />
+      {listsData.isLoading ? (
+        <div className="row no-gutters border rounded p-3">
+          <div className="col-12 mr-auto">
+            <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
+              {isAdmin ? "Your Lists" : "Lists"}
+            </p>
+          </div>
+          <div className="d-flex justify-content-center align-items-center p-3 w-100">
+            <ClipLoader size="20px" />
+          </div>
         </div>
+      ) : (
+        (isAdmin || (lists?.length > 3 && publicLists?.length > 0)) && (
+          <div className="row no-gutters border rounded p-3">
+            <div className="col-12">
+              <div className="row no-gutters align-items-center">
+                <div className="col-auto mr-auto">
+                  <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
+                    {isAdmin ? "Your Lists" : "Lists"}
+                  </p>
+                </div>
+                {isAdmin && (
+                  <div className="col-auto">
+                    <Link
+                      reloadDocument={true}
+                      style={{ color: "inherit" }}
+                      to="/list/create"
+                    >
+                      <p>Create a List</p>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {lists?.length > 3 ? (
+              lists.slice(3).map((list, key) => renderLists(list, key))
+            ) : (
+              <div className="mt-2 p-3 row no-gutters">
+                <p className="col-auto">Create your own movie list.</p>
+                <Link
+                  className="col-auto ml-1"
+                  reloadDocument={true}
+                  style={{ color: "inherit" }}
+                  to="/list/create"
+                >
+                  <p>Get started!</p>
+                </Link>
+              </div>
+            )}
+          </div>
+        )
+      )}
+
+      {comments.isLoading ? (
+        <div className="row no-gutters border rounded p-3">
+          <div className="col-12 mr-auto">
+            <p className={clsx(styles.yourListstxt, "font-weight-bold")}>
+              {isAdmin ? "Your Comments" : "Comments"}
+            </p>
+          </div>
+          <div className="d-flex justify-content-center align-items-center p-3">
+            <ClipLoader size="20px" />
+          </div>
+        </div>
+      ) : (
+        (isAdmin || comments?.data?.length > 0) && (
+          <div className="row no-gutters">
+            <UserCommentsSection isAdmin={isAdmin} comments={comments} />
+          </div>
+        )
       )}
     </div>
   );
