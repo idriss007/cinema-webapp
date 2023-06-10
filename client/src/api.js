@@ -14,7 +14,7 @@ externalApiAxios.interceptors.request.use(function (config) {
 // axios.defaults.baseURL = "https://api.themoviedb.org/3/";
 
 export async function fetchMovies(query, page_number) {
-  const url = `search/movie?api_key=${
+  const url = `search/movie?include_adult=false&api_key=${
     process.env.REACT_APP_API_URL
   }&query=${query}&page=${page_number ? page_number : 1}`;
 
