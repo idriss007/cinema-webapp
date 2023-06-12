@@ -4,7 +4,7 @@
 <p></p>
 <p>Cinema web app is a project for users can keep track of movies.</p>
 <p>Project is uses third party API by The Movie Database to get movies data.</p>
-<p>Live: <a href="https://the-movie-notebook.netlify.app/" target="_blank">The Movie Notebook</a></p>
+<p>Live: <a href="https://the-movie-notebook.netlify.app/" target="blank">The Movie Notebook</a></p>
 <h4>Features Include (must be logged in in order use these features):</h4>
 <ul>
   <li>Adding and deleting movies to watchlist and custom list that user can create for other purposes,</li>
@@ -51,4 +51,4 @@
 <img src="https://github.com/idriss007/cinema-webapp/assets/80454923/c27d15f9-98c5-4c6b-aa71-0ff0e27071c1" />
 
 ## Licence
-<a href="https://github.com/idriss007/cinema-webapp/blob/master/LICENSE" target="_blank">MIT</a>
+<a href="https://github.com/idriss007/cinema-webapp/blob/master/LICENSE" target="blank">MIT</a>
