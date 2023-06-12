@@ -4,6 +4,7 @@
 <p></p>
 <p>Cinema web app is a project for users can keep track of movies.</p>
 <p>Project is uses third party API by The Movie Database to get movies data.</p>
+<p>Live: <a href="https://the-movie-notebook.netlify.app/" target="_blank">The Movie Notebook</a></p>
 <h4>Features Include (must be logged in in order use these features):</h4>
 <ul>
   <li>Adding and deleting movies to watchlist and custom list that user can create for other purposes,</li>
